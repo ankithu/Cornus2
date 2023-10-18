@@ -4,11 +4,17 @@
 #include "log.hpp"
 #include "types.hpp"
 #include <mutex>
+#include "configReader.hpp"
+#include <random>
 
 class LogManager {
 public:
 
+    //prevents creating an implicit conversion between Config and LogManager objects...
+    explicit LogManager(Config c) : failureRate(c.failureRate) {}
+
     std::string& LOG_ONCE(LogAddress& address, std::string& data){
+        simulateFailure();
         auto& logPair = getLogPair(address);
         std::cout << "writing '" << data << "' once on " << address << std::endl;
         if (address.type == LogType::DataLog){
@@ -20,6 +26,7 @@ public:
     }
 
     std::string& LOG_READ(LogAddress& address, std::string& data){
+        simulateFailure();
         auto& logPair = getLogPair(address);
         std::cout << "reading from " << address << std::endl;
         if (address.type == LogType::DataLog){
@@ -31,6 +38,7 @@ public:
     }
 
     std::string& LOG_WRITE(LogAddress& address, std::string& data){
+        simulateFailure();
         auto& logPair = getLogPair(address);
         std::cout << "writing '" << data << "' to " << address << std::endl;
         if (address.type == LogType::DataLog){
@@ -53,8 +61,17 @@ private:
         return logPair;
     }
 
+    void simulateFailure(){
+        if (std::rand() % 1000 > failureRate * 1000){
+            //failure routine here... somehow stall out or block out the request
+        }
+    }
+
+
+
     TransactionLogStore_t logs;
     std::mutex logMutex;
+    double failureRate;
 };
 
 
