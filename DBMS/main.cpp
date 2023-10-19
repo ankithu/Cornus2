@@ -1,7 +1,6 @@
 #include "include/httplib.hpp"
 #include "include/logManager.hpp"
 #include "include/types.hpp"
-#include "include/configReader.hpp"
 #include <iostream>
 
 LogAddress getLogAddress(const httplib::Request& req){
@@ -25,14 +24,14 @@ LogAddress getLogAddress(const httplib::Request& req){
 
 
 int main(int argc, char** argv){
-    std::string confFile = "config/dbms.config";
+    std::string confFile = "~/Documents/umich/EECS591/Cornus2/DBMS/config/dbms.config";
     if (argc > 1){
         confFile = std::string(argv[1]);
     }
 
-    Config conf(confFile);
+
     httplib::Server svr;
-    LogManager manager(conf);
+    LogManager manager;
 
     std::string emptyString = "";
 
@@ -64,5 +63,6 @@ int main(int argc, char** argv){
                  res.set_content(manager.LOG_ONCE(address, body), "text/plain");
              });
 
+    std::cout << "starting server..." << std::endl;
     svr.listen("localhost", 1234);
 }
