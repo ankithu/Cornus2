@@ -1,0 +1,24 @@
+/TRANSACTION
+body: json {
+    participants: []
+    operation: string
+}
+Purpose: external client makes a request to perform an atomic transaction
+
+/VOTEREQ/:txID
+Purpose: internal coordinator sends to all participants to get their vote
+
+/VOTEYES/:txID
+Purpose: internal participant responds yes to coordinator for particular transaction
+
+/ABORT/:txID
+Purpose: internal participant responds that transaction has been aborted to coordinator
+
+/WILLVOTEYES/:txID
+Purpose: internal participant sends to F other participants notifying them of how it respond to a transaction
+
+/VOTEYESCOMPLETED/:txID
+Purpose: internal participant follows up with F other participants that the request has been completed
+
+TODO: add more methods for inter node communication to determine which node 
+will log in the case that VOTEYESCOMPLETED is never sent (original node failed log)

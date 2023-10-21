@@ -7,21 +7,26 @@
 #include <queue>
 #include <condition_variable>
 
-enum class Decision {};
-
+using Decision = std::string;
 using TransactionId = uint64_t;
 
-class CornusNode {
+class CornusNode
+{
 public:
-    Decision terminationProtocol(TransactionId txid);
+    Decision terminationProtocol(TransactionId txid)
+    {
+        return "";
+    }
 
-    void handle(Request request);
+    void handle(Request request)
+    {
+        return;
+    }
 
-    virtual Decision handleTransaction(TransactionId txid) = 0;
+    virtual Decision handleTransaction(Request request) = 0;
 
 private:
     MessageQueue<Request> messages;
-
 };
 
-#endif //CORNUS_CORNUSNODE_HPP
+#endif // CORNUS_CORNUSNODE_HPP

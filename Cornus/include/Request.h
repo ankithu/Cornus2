@@ -1,6 +1,27 @@
 #ifndef CORNUS_REQUEST_H
 #define CORNUS_REQUEST_H
 
-struct Request {};
+#include "httplib.hpp"
 
-#endif //CORNUS_REQUEST_H
+enum RequestType
+{
+    transaction,
+    voteReq,
+    voteYes,
+    voteAbort,
+    willVoteYes,
+    voteYesCompleted
+};
+
+struct Request
+{
+    Request(RequestType type_in, uint64_t txid, const httplib::Request &req)
+        : type(type_in), txid(txid), req(req)
+    {
+    }
+    RequestType type;
+    uint64_t txid;
+    httplib::Request req;
+};
+
+#endif // CORNUS_REQUEST_H

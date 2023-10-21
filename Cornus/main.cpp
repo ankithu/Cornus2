@@ -1,8 +1,10 @@
 #include <iostream>
-#include "include/MessageHandler.hpp"
+#include "include/GlobalMessageHandler.hpp"
 
-//TODO: setup http lib server, and link it to instance of global message handler
-int main() {
-    std::cout << "Hello, World!" << std::endl;
-    return 0;
+int main(int argc, char **argv)
+{
+    // TODO: add error checking or automatic node ID assignment
+    uint16_t nodeId = atoi(argv[1]);
+
+    GlobalMessageHandler handler(nodeId);
 }
