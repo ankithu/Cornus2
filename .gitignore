@@ -1,3 +1,4 @@
 DBMS/cmake-build-debug/*
 Cornus/cmake-build-debug/*
 *.idea*
+build/*

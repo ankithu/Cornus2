@@ -1,8 +1,0 @@
-[
-{
-  "directory": "/Users/lukelesh/Documents/programs/Cornus2/build",
-  "command": "/usr/bin/clang++   -g -std=gnu++2b -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX14.0.sdk -o CMakeFiles/Cornus.dir/main.cpp.o -c /Users/lukelesh/Documents/programs/Cornus2/Cornus/main.cpp",
-  "file": "/Users/lukelesh/Documents/programs/Cornus2/Cornus/main.cpp",
-  "output": "CMakeFiles/Cornus.dir/main.cpp.o"
-}
-]
