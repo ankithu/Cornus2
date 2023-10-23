@@ -3,8 +3,10 @@
 
 #include "Coordinator.h"
 #include "Participant.h"
+#include "Replicator.h"
 #include <thread>
 #include <mutex>
+#include <functional>
 
 // onRequest function, in class or in global namespace, takes HTTP request object
 
@@ -18,47 +20,42 @@ public:
         svr.Post("/TRANSACTION", [&](const httplib::Request &req, httplib::Response &res)
                  { onExternalRequest(req, res); });
         svr.Post("/VOTEREQ/:txid", [&](const httplib::Request &req, httplib::Response &res)
-                 { onInternalRequest(req, res, RequestType::voteReq); });
+                 { std::thread process(&GlobalMessageHandler::onNewInternalRequest<Participant>, this, &req, RequestType::voteReq); process.detach(); });
         svr.Post("/VOTEYES/:txid", [&](const httplib::Request &req, httplib::Response &res)
-                 { onInternalRequest(req, res, RequestType::voteYes); });
+                 { std::thread process(&GlobalMessageHandler::onOldInternalRequest, this, &req, RequestType::voteYes); process.detach(); });
         svr.Post("/ABORT/:txid", [&](const httplib::Request &req, httplib::Response &res)
-                 { onInternalRequest(req, res, RequestType::voteAbort); });
+                 { std::thread process(&GlobalMessageHandler::onOldInternalRequest, this, &req, RequestType::voteAbort); process.detach(); });
         svr.Post("/WILLVOTEYES/:txid", [&](const httplib::Request &req, httplib::Response &res)
-                 { onInternalRequest(req, res, RequestType::willVoteYes); });
+                 { std::thread process(&GlobalMessageHandler::onNewInternalRequest<Replicator>, this, &req, RequestType::willVoteYes); process.detach(); });
         svr.Post("/VOTEYESCOMPLETED/:txid", [&](const httplib::Request &req, httplib::Response &res)
-                 { onInternalRequest(req, res, RequestType::voteYesCompleted); });
+                 { std::thread process(&GlobalMessageHandler::onOldInternalRequest, this, &req, RequestType::voteYesCompleted);process.detach(); });
         svr.listen("localhost", 1234);
     }
 
-    void onInternalRequest(const httplib::Request &req, httplib::Response &res, RequestType type)
+    template <class Node>
+    void onNewInternalRequest(const httplib::Request *req, RequestType type)
     {
 
-        // TODO potentially split up this function to handle the requests that
-        // need to be send to replicator
+        TransactionId txid = getTxId(*req);
+        Request request = Request(type, txid, *req);
+        Node *p = createNode<Node>(txid);
+        p->handleTransaction(request);
+        removeFromMap(txid);
+    }
 
-        // IDEA: split into first time request (create cornus node), second/repeat
-        // requests, and external requests (those require a response)
-        auto txid_in = req.path_params.at("txid");
-        TransactionId txid = std::stoul(txid_in);
-        Request request = Request(type, txid, req);
-        if (type == RequestType::voteReq)
-        {
-            Participant *p = createParticipant(txid);
-            p->handleTransaction(request);
-            removeFromMap(txid);
-        }
-        else
-        {
-            sendMessage(txid, request);
-        }
+    void onOldInternalRequest(const httplib::Request *req, RequestType type)
+    {
+
+        TransactionId txid = getTxId(*req);
+        Request request = Request(type, txid, *req);
+        sendMessage(txid, request);
     }
 
     void onExternalRequest(const httplib::Request &req, httplib::Response &res)
     {
-        auto txid_in = req.path_params.at("txid");
-        TransactionId txid = std::stoul(txid_in);
+        TransactionId txid = getUniqueTransactionId();
         Request request = Request(RequestType::transaction, txid, req);
-        Coordinator *c = createCoordinator(txid);
+        Coordinator *c = createNode<Coordinator>(txid);
         Decision d = c->handleTransaction(request);
         res.set_content(d, "text/plain");
         removeFromMap(txid);
@@ -73,21 +70,20 @@ private:
         return newID;
     }
 
-    Participant *createParticipant(TransactionId txid)
+    TransactionId getTxId(const httplib::Request &req)
     {
-        std::unique_lock lockMutex(mapMutex);
-
-        Participant *p = new Participant();
-        transactions[txid] = p;
-        return p;
+        auto txid_in = req.path_params.at("txid");
+        TransactionId txid = std::stoul(txid_in);
+        return txid;
     }
 
-    Coordinator *createCoordinator(TransactionId txid)
+    template <class Node>
+    Node *createNode(TransactionId txid)
     {
         std::unique_lock lockMutex(mapMutex);
-        Coordinator *c = new Coordinator();
-        transactions[txid] = c;
-        return c;
+        Node *p = new Node();
+        transactions[txid] = p;
+        return p;
     }
 
     void removeFromMap(TransactionId txid)
