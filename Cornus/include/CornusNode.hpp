@@ -21,11 +21,28 @@ public:
     Decision terminationProtocol(TransactionId txid){
         //wait for failure detection timeout and alternative node to complete log
         //TODO
-
         for (auto otherParticipantId : config.otherIds){
             Request logReq = createLogReq(otherParticipantId);
-            Response r = DBMSInterface::LOG_ONCE(logReq);
+            DBMSInterface::LOG_ONCE(logReq);
         }
+        //wait for responses
+        bool done = false;
+        while (!done){
+            //TODO: integrate timeout to exit
+            Request response = messages.waitForNextMessage();
+            LogResponse logResponse = incomingRequestToLogResponse(response);
+            switch (logResponse.resp){
+                case TransactionLogResponse::ABORT:
+                    //need someway to tell mess
+                    break;
+                case TransactionLogResponse::COMMIT:
+                    break;
+                case TransactionLogResponse::VOTE_YES:
+                    break;
+            }
+        }
+
+
     }
 
     void handle(Request request){

@@ -7,6 +7,7 @@
 struct NodeConfig {
     NodeId id;
     std::vector<int> otherIds;
+    std::chrono::duration<double> timeout;
 };
 
 #endif //CORNUS_NODECONFIG_H

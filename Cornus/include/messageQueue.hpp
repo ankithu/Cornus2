@@ -15,14 +15,21 @@ public:
         cv.notify_one();
     }
 
-    T waitForNextMessage(){
+    T waitForNextMessage(std::chrono::duration<double> timeout){
         //blocks until message is available
         auto lock = std::unique_lock(mutex);
         if (!q.empty()){
             return popFront();
         }
+        //TODO: change this to a wait until timeout
         cv.wait(lock, [this]{return !q.empty();});
         return popFront();
+    }
+
+    void setTimeoutStart(){
+        auto lock = std::unique_lock(mutex);
+        //set timeoutStart
+        //timeoutStart = std::chrono::steady_clock::now();
     }
 
 private:
@@ -37,6 +44,7 @@ private:
     std::queue<T> q;
     std::condition_variable cv;
     std::mutex mutex;
+    std::chrono::time_point<std::chrono::system_clock, >()> timeoutStart;
 };
 
 #endif //CORNUS_MESSAGEQUEUE_HPP

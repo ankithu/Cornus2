@@ -5,6 +5,21 @@
 #include "Request.h"
 #include "mutex"
 
+enum class TransactionLogResponse {
+    ABORT = 0,
+    VOTE_YES = 1,
+    COMMIT = 2
+};
+
+
+struct LogResponse {
+    NodeId node;
+    TransactionLogResponse resp;
+};
+
+LogResponse incomingRequestToLogResponse(Request& r){
+
+}
 //LogImpl now describes any type that has a LOG_ONCE, LOG_WRITE, and LOG_READ function
 template <class T>
 concept LogImpl = requires(T candidateImpl, Request& r, Response res){
