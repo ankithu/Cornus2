@@ -1,9 +1,9 @@
 #ifndef CORNUS_PARTICIPANT_H
 #define CORNUS_PARTICIPANT_H
 
-#include "CornusNode.hpp"
+#include "TransactionHandler.hpp"
 
-class Participant : public CornusNode
+class Participant : public TransactionHandler
 {
 public:
     virtual Decision handleTransaction(Request request) override

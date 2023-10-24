@@ -3,5 +3,5 @@ project(Cornus)
 
 set(CMAKE_CXX_STANDARD 23)
 
-add_executable(Cornus main.cpp include/CornusNode.hpp include/Coordinator.h include/Participant.h include/messageQueue.hpp include/MessageHandler.hpp include/httplib.hpp include/NodeConfig.h include/types.hpp include/loglib.hpp include/Response.hpp)
+add_executable(Cornus main.cpp include/TransactionHandler.hpp include/Coordinator.h include/Participant.h include/messageQueue.hpp include/MessageHandler.hpp include/httplib.hpp include/TransactionConfig.h include/types.hpp include/loglib.hpp include/Response.hpp)
 

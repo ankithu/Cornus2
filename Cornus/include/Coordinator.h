@@ -1,9 +1,9 @@
 #ifndef CORNUS_COORDINATOR_H
 #define CORNUS_COORDINATOR_H
 
-#include "CornusNode.hpp"
+#include "TransactionHandler.hpp"
 
-class Coordinator : public CornusNode
+class Coordinator : public TransactionHandler
 {
 public:
     virtual Decision handleTransaction(Request request) override

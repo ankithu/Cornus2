@@ -1,22 +1,22 @@
-#ifndef CORNUS_CORNUSNODE_HPP
-#define CORNUS_CORNUSNODE_HPP
+#ifndef CORNUS_TRANSACTIONHANDLER_HPP
+#define CORNUS_TRANSACTIONHANDLER_HPP
 
 #include "Request.h"
 #include "messageQueue.hpp"
 #include <queue>
 #include <condition_variable>
 #include "types.hpp"
-#include "NodeConfig.h"
+#include "TransactionConfig.h"
 #include "loglib.hpp"
 
 
 using Decision = std::string;
 using TransactionId = uint64_t;
 
-class CornusNode
+class TransactionHandler
 {
 public:
-    explicit CornusNode(NodeConfig& config) : config(config){}
+    explicit TransactionHandler(TransactionConfig& config) : config(config){}
 
     Decision terminationProtocol(TransactionId txid){
         //wait for failure detection timeout and alternative node to complete log
@@ -53,8 +53,8 @@ public:
 
 private:
     MessageQueue<Request> messages;
-    NodeConfig config;
+    TransactionConfig config;
     Request createLogReq(NodeId otherNode);
 };
 
-#endif // CORNUS_CORNUSNODE_HPP
+#endif // CORNUS_TRANSACTIONHANDLER_HPP

@@ -81,7 +81,9 @@ private:
     Node *createNode(TransactionId txid)
     {
         std::unique_lock lockMutex(mapMutex);
-        Node *p = new Node();
+        TransactionConfig conf;
+        //TODO fill conf
+        Node *p = new Node(conf);
         transactions[txid] = p;
         return p;
     }
@@ -89,7 +91,7 @@ private:
     void removeFromMap(TransactionId txid)
     {
         std::unique_lock lockMutex(mapMutex);
-        CornusNode *n = transactions[txid];
+        TransactionHandler *n = transactions[txid];
         // delete n;
         transactions.erase(txid);
     }
@@ -107,7 +109,7 @@ private:
     u_int16_t nodeId;
     u_int32_t transactionCounter = 0;
     std::mutex mapMutex;
-    std::map<TransactionId, CornusNode *> transactions;
+    std::map<TransactionId, TransactionHandler *> transactions;
 };
 
 #endif // CORNUS_MESSAGEHANDLER_HPP
