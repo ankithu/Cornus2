@@ -21,7 +21,7 @@ struct Request
     }
     RequestType type;
     uint64_t txid;
-    httplib::Request req;
+    const httplib::Request req;
 };
 
 #endif // CORNUS_REQUEST_H

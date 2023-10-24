@@ -1,15 +1,24 @@
-#ifndef CORNUS_PARTICIPANT_H
-#define CORNUS_PARTICIPANT_H
+#ifndef CORNUS_REPLICATOR_H
+#define CORNUS_REPLICATOR_H
 
 #include "CornusNode.hpp"
+#include <condition_variable>
 
-class Participant : public CornusNode
+class Replicator : public CornusNode
 {
 public:
     virtual Decision handleTransaction(Request request) override
     {
         return "";
     }
+
+    void duplicateLog()
+    {
+        // TODO
+        return;
+    }
+
+private:
 };
 
-#endif // CORNUS_PARTICIPANT_H
+#endif // CORNUS_REPLICATOR_H
