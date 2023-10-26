@@ -1,5 +1,7 @@
 """
-Running the script: python3 run.py test1.json nodes.json
+Purpose: Makes a series of client transaction requests and prints the responses
+
+Running the script: python3 client.py test1.json nodes.json
 
 The test file is an array where each element is a transaction request of the following form: 
 { "coordinator": index int, "participants": [index int, ...], "operation": string }
@@ -12,6 +14,8 @@ The index int refers to the corresponding element in the nodes file.
 import argparse
 import json
 import requests
+
+
 
 def run_test(test_file, nodes_file):
     with open(test_file, 'r') as file:
@@ -34,11 +38,11 @@ def run_test(test_file, nodes_file):
                 print("INVALID TEST CASE: participant index out of range")
                 exit(1)
         
-        body = {"participants": [], "operation": request["operation"]}
+        body = {"coordinator": nodes[coordinator], "participants": []}
         for i in range(len(participants)):
             body["participants"].append(nodes[participants[i]])
 
-        response = requests.post("http://"+nodes[coordinator] +"/TRANSACTIONS", json=body)
+        response = requests.post("http://"+nodes[coordinator] +"/TRANSACTION", json=body)
         print(response)
 
 if __name__ == "__main__":

@@ -16,14 +16,13 @@ using json = nlohmann::json;
 class GlobalMessageHandler
 {
 public:
-    GlobalMessageHandler(u_int16_t nodeId_in)
-        : nodeId(nodeId_in)
+    GlobalMessageHandler(u_int16_t nodeId, std::string host, int port) : nodeId(nodeId)
     {
         httplib::Server::Handler handler;
         svr.Post("/TRANSACTION", [&](const httplib::Request &req, httplib::Response &res)
-                 { std::thread process(&GlobalMessageHandler::onNewRequest<Coordinator>, this, &req, &res, RequestType::transaction); process.detach(); });
+                 { std::thread process(&GlobalMessageHandler::onClientRequest, this, &req, &res, RequestType::transaction); process.detach(); });
         svr.Post("/VOTEREQ/:txid", [&](const httplib::Request &req, httplib::Response &res)
-                 { std::thread process(&GlobalMessageHandler::onNewRequest<Participant>, this, &req, &res, RequestType::voteReq); process.detach(); });
+                 { std::thread process(&GlobalMessageHandler::onNewRequest<Participant>, this, &req, RequestType::voteReq); process.detach(); });
         svr.Post("/VOTEYES/:txid", [&](const httplib::Request &req, httplib::Response &res)
                  { std::thread process(&GlobalMessageHandler::onOldRequest, this, &req, RequestType::voteYes); process.detach(); });
         svr.Post("/ABORT/:txid", [&](const httplib::Request &req, httplib::Response &res)
@@ -31,20 +30,32 @@ public:
         /*
         only relevant to new protocol, will uncomment later
         svr.Post("/WILLVOTEYES/:txid", [&](const httplib::Request &req, httplib::Response &res)
-                 { std::thread process(&GlobalMessageHandler::onNewRequest<Replicator>, this, &req,&res, RequestType::willVoteYes); process.detach(); });
+                 { std::thread process(&GlobalMessageHandler::onNewRequest<Replicator>, this, &req, RequestType::willVoteYes); process.detach(); });
         svr.Post("/VOTEYESCOMPLETED/:txid", [&](const httplib::Request &req, httplib::Response &res)
                  { std::thread process(&GlobalMessageHandler::onOldRequest, this, &req, RequestType::voteYesCompleted);process.detach(); });
         */
-        svr.listen("localhost", 1234);
+        std::cout << "Starting server..." << std::endl;
+        if (!svr.listen(host, port))
+        {
+            std::cout << "SERVER FAILED TO START" << std::endl;
+        }
     }
 
     template <class Node>
-    void onNewRequest(const httplib::Request *req, httplib::Response *res, RequestType type)
+    void onNewRequest(const httplib::Request *req, RequestType type)
     {
-
         TransactionId txid = getTxId(*req);
         Request request = Request(type, txid, *req);
         Node *n = createNode<Node>(txid, *req);
+        Decision d = n->handleTransaction(request);
+        removeFromMap(txid);
+    }
+
+    void onClientRequest(const httplib::Request *req, httplib::Response *res, RequestType type)
+    {
+        TransactionId txid = getUniqueTransactionId();
+        Request request = Request(type, txid, *req);
+        Coordinator *n = createNode<Coordinator>(txid, *req);
         Decision d = n->handleTransaction(request);
         res->set_content(d, "text/plain");
         removeFromMap(txid);
@@ -78,7 +89,9 @@ private:
     Node *createNode(TransactionId txid, const httplib::Request &req)
     {
         std::unique_lock lockMutex(mapMutex);
-        json body = json(req.body);
+        std::stringstream ss;
+        ss << req.body;
+        json body = json::parse(ss);
         TransactionConfig conf(body["coordinator"], body["participants"]);
         Node *p = new Node(conf);
         transactions[txid] = p;
