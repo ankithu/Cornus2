@@ -13,7 +13,7 @@ enum class TransactionLogResponse {
 
 
 struct LogResponse {
-    NodeId node;
+    HostID host;
     TransactionLogResponse resp;
 };
 

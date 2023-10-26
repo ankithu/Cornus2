@@ -21,23 +21,32 @@ public:
     Decision terminationProtocol(TransactionId txid){
         //wait for failure detection timeout and alternative node to complete log
         //TODO
-        for (auto otherParticipantId : config.otherIds){
+        size_t requestCount = 0;
+        for (auto otherParticipantId : config.participants){
             Request logReq = createLogReq(otherParticipantId);
             DBMSInterface::LOG_ONCE(logReq);
+            ++requestCount;
         }
         //wait for responses
-        bool done = false;
-        while (!done){
-            //TODO: integrate timeout to exit
-            Request response = messages.waitForNextMessage();
+        size_t responseCount = 0;
+        while (true){
+            std::optional<Request> responseOpt = messages.waitForNextMessage(config.timeout);
+            if (!responseOpt){
+                //hopefully optimized with tail recursive call
+                return terminationProtocol(txid);
+            }
+            auto& response = *responseOpt;
             LogResponse logResponse = incomingRequestToLogResponse(response);
             switch (logResponse.resp){
                 case TransactionLogResponse::ABORT:
-                    //need someway to tell mess
-                    break;
+                    return "ABORT";
                 case TransactionLogResponse::COMMIT:
-                    break;
+                    return "COMMIT";
                 case TransactionLogResponse::VOTE_YES:
+                    ++responseCount;
+                    if (responseCount == requestCount){
+                        return "COMMIT";
+                    }
                     break;
             }
         }
@@ -54,7 +63,7 @@ public:
 private:
     MessageQueue<Request> messages;
     TransactionConfig config;
-    Request createLogReq(NodeId otherNode);
+    Request createLogReq(HostID otherNode);
 };
 
 #endif // CORNUS_TRANSACTIONHANDLER_HPP
