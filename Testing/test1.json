@@ -1,0 +1,8 @@
+[
+  { "coordinator": 0, "participants": [2, 3, 4], "operation": "hello" },
+  { "coordinator": 1, "participants": [2, 3, 4], "operation": "hello" },
+  { "coordinator": 2, "participants": [3, 4], "operation": "hello" },
+  { "coordinator": 3, "participants": [0, 1, 2, 4], "operation": "hello" },
+  { "coordinator": 4, "participants": [2, 3, 1, 0], "operation": "hello" },
+  { "coordinator": 1, "participants": [4], "operation": "hello" }
+]
