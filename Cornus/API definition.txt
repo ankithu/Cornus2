@@ -1,6 +1,6 @@
 /TRANSACTION
 body: json {
-    participants: []
+    participants: [{host: string, port: int}],
     operation: string
 }
 Purpose: external client makes a request to perform an atomic transaction

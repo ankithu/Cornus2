@@ -82,7 +82,7 @@ private:
     {
         std::unique_lock lockMutex(mapMutex);
         TransactionConfig conf;
-        //TODO fill conf
+        // TODO fill conf
         Node *p = new Node(conf);
         transactions[txid] = p;
         return p;
@@ -91,15 +91,21 @@ private:
     void removeFromMap(TransactionId txid)
     {
         std::unique_lock lockMutex(mapMutex);
-        TransactionHandler *n = transactions[txid];
-        // delete n;
-        transactions.erase(txid);
+        if (transactions.find(txid) != transactions.end())
+        {
+            TransactionHandler *n = transactions[txid];
+            delete n;
+            transactions.erase(txid);
+        }
     }
 
     void sendMessage(TransactionId txid, Request request)
     {
         std::unique_lock lockMutex(mapMutex);
-        transactions[txid]->handle(request);
+        if (transactions.find(txid) != transactions.end())
+        {
+            transactions[txid]->handle(request);
+        }
     }
 
     httplib::Server svr;
