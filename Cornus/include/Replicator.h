@@ -7,6 +7,7 @@
 class Replicator : public TransactionHandler
 {
 public:
+    explicit Replicator(TransactionConfig &config) : TransactionHandler(config) {}
     virtual Decision handleTransaction(Request request) override
     {
         return "";

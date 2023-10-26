@@ -1,11 +1,15 @@
 /TRANSACTION
 body: json {
-    participants: [{host: string, port: int}],
-    operation: string
+    coordinator: [string],
+    participants: [string]
 }
 Purpose: external client makes a request to perform an atomic transaction
 
 /VOTEREQ/:txID
+body: json {
+    coordinator: [string],
+    participants: [string]
+}
 Purpose: internal coordinator sends to all participants to get their vote
 
 /VOTEYES/:txID

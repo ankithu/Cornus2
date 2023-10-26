@@ -4,15 +4,17 @@
 #include "types.hpp"
 #include <vector>
 
-struct HostID {
-    std::string host;
-    int port;
-};
+// hostname:port
+using HostID = std::string;
 
-struct TransactionConfig {
+struct TransactionConfig
+{
+    TransactionConfig(HostID coord, std::vector<HostID> parts) : coordinator(coord), participants(parts)
+    {
+    }
     HostID coordinator;
     std::vector<HostID> participants;
     std::chrono::duration<double> timeout;
 };
 
-#endif //CORNUS_TRANSACTIONCONFIG_H
+#endif // CORNUS_TRANSACTIONCONFIG_H

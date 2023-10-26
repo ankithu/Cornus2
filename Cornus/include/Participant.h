@@ -6,6 +6,7 @@
 class Participant : public TransactionHandler
 {
 public:
+    explicit Participant(TransactionConfig &config) : TransactionHandler(config) {}
     virtual Decision handleTransaction(Request request) override
     {
         return "";
