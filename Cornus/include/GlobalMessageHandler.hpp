@@ -51,7 +51,6 @@ public:
     void onClientRequest(const httplib::Request &req, httplib::Response &res)
     {
         TransactionId txid = getUniqueTransactionId();
-        std::cout << txid << std::endl;
         Request request = Request(RequestType::transaction, txid, req);
         Coordinator *n = createNode<Coordinator>(txid, req);
         Decision d = n->handleTransaction(request);
@@ -99,7 +98,7 @@ private:
         if (transactions.find(txid) != transactions.end())
         {
             TransactionHandler *n = transactions[txid];
-            // delete n;
+            delete n;
             transactions.erase(txid);
         }
     }
