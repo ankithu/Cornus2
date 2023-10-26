@@ -6,7 +6,9 @@
 class Coordinator : public TransactionHandler
 {
 public:
-    explicit Coordinator(TransactionConfig &config) : TransactionHandler(config) {}
+    explicit Coordinator(TransactionConfig &config) : TransactionHandler(config)
+    {
+    }
     virtual Decision handleTransaction(Request request) override
     {
         return "";
