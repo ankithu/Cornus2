@@ -3,8 +3,8 @@
 
 int main(int argc, char **argv)
 {
-    // TODO: add error checking or automatic node ID assignment
     uint16_t nodeId = atoi(argv[1]);
-
-    GlobalMessageHandler handler(nodeId);
+    std::string host = std::string(argv[2]);
+    int port = atoi(argv[3]);
+    GlobalMessageHandler handler(nodeId, host, port);
 }

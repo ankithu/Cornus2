@@ -1,11 +1,13 @@
 /TRANSACTION
-body: json {
-    participants: [{host: string, port: int}],
-    operation: string
-}
+body: plain string of each node starting with coordinator separated by spaces
+coordinator participant1 participant2 participant3 ...
+
 Purpose: external client makes a request to perform an atomic transaction
 
 /VOTEREQ/:txID
+body: plain string of each node starting with coordinator separated by spaces
+coordinator participant1 participant2 participant3 ...
+
 Purpose: internal coordinator sends to all participants to get their vote
 
 /VOTEYES/:txID

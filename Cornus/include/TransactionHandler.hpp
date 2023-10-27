@@ -9,51 +9,56 @@
 #include "TransactionConfig.h"
 #include "loglib.hpp"
 
-
 using Decision = std::string;
 using TransactionId = uint64_t;
 
 class TransactionHandler
 {
 public:
-    explicit TransactionHandler(TransactionConfig& config) : config(config){}
+    explicit TransactionHandler(TransactionConfig &config) : config(config) {}
 
-    Decision terminationProtocol(TransactionId txid){
-        //wait for failure detection timeout and alternative node to complete log
-        //TODO
+    Decision terminationProtocol(TransactionId txid)
+    {
+        // wait for failure detection timeout and alternative node to complete log
+        // TODO
         size_t requestCount = 0;
-        for (auto otherParticipantId : config.participants){
+        for (auto otherParticipantId : config.participants)
+        {
+            //TODO fix
             DBMSInterface::LOG_ONCE(otherParticipantId);
             ++requestCount;
         }
-        //wait for responses
+        // wait for responses
         size_t responseCount = 0;
-        while (true){
+        while (true)
+        {
             std::optional<Request> responseOpt = messages.waitForNextMessage(config.timeout);
-            if (!responseOpt){
-                //hopefully optimized with tail recursive call
+            if (!responseOpt)
+            {
+                // hopefully optimized with tail recursive call
                 return terminationProtocol(txid);
             }
-            auto& response = *responseOpt;
+            auto &response = *responseOpt;
             LogResponse logResponse = incomingRequestToLogResponse(response);
-            switch (logResponse.resp){
-                case TransactionLogResponse::ABORT:
-                    return "ABORT";
-                case TransactionLogResponse::COMMIT:
+            switch (logResponse.resp)
+            {
+            case TransactionLogResponse::ABORT:
+                return "ABORT";
+            case TransactionLogResponse::COMMIT:
+                return "COMMIT";
+            case TransactionLogResponse::VOTE_YES:
+                ++responseCount;
+                if (responseCount == requestCount)
+                {
                     return "COMMIT";
-                case TransactionLogResponse::VOTE_YES:
-                    ++responseCount;
-                    if (responseCount == requestCount){
-                        return "COMMIT";
-                    }
-                    break;
+                }
+                break;
             }
         }
-
-
     }
 
-    void handle(Request request){
+    void handle(Request request)
+    {
         messages.push(request);
     }
 
