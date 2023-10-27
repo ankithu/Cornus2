@@ -9,7 +9,7 @@ using HostID = std::string;
 
 struct TransactionConfig
 {
-    TransactionConfig(std::string in)
+    TransactionConfig(std::string in,TransactionId id):txid(id)
     {
         std::stringstream ss(in);
         ss >> coordinator;
@@ -32,6 +32,7 @@ struct TransactionConfig
     HostID coordinator;
     std::vector<HostID> participants;
     std::chrono::duration<double> timeout;
+    TransactionId txid;
 };
 
 #endif // CORNUS_TRANSACTIONCONFIG_H

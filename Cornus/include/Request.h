@@ -10,7 +10,8 @@ enum RequestType
     voteYes,
     voteAbort,
     willVoteYes,
-    voteYesCompleted
+    voteYesCompleted,
+    Commit
 };
 
 struct Request

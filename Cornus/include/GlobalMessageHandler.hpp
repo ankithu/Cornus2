@@ -24,6 +24,8 @@ public:
                  { std::thread process(&GlobalMessageHandler::onOldRequest, this, req, RequestType::voteYes); process.detach(); });
         svr.Post("/ABORT/:txid", [&](const httplib::Request &req, httplib::Response &res)
                  { std::thread process(&GlobalMessageHandler::onOldRequest, this, req, RequestType::voteAbort); process.detach(); });
+        svr.Post("/COMMIT/:txid", [&](const httplib::Request &req, httplib::Response &res)
+                 { std::thread process(&GlobalMessageHandler::onOldRequest, this, req, RequestType::Commit); process.detach(); });
         /*
         only relevant to new protocol, will uncomment later
         svr.Post("/WILLVOTEYES/:txid", [&](const httplib::Request &req, httplib::Response &res)
@@ -86,7 +88,7 @@ private:
     Node *createNode(TransactionId txid, const httplib::Request &req)
     {
         std::unique_lock lockMutex(mapMutex);
-        TransactionConfig conf(req.body);
+        TransactionConfig conf(req.body,txid);
         Node *p = new Node(conf);
         transactions[txid] = p;
         return p;
