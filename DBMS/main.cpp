@@ -9,7 +9,7 @@ LogAddress getLogAddress(const httplib::Request& req){
     auto dataOrTransaction = req.path_params.at("dOrt");
     LogAddress address;
     address.txId = std::stoul(transactionId);
-    address.clientId = std::stoul(clientId);
+    address.clientId = clientId;
     if (dataOrTransaction == "DATA"){
         address.type = LogType::DataLog;
     }

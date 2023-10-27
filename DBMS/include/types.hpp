@@ -6,7 +6,7 @@
 #include "log.hpp"
 
 using TransactionID_t = uint64_t;
-using ClientID_t = uint64_t;
+using ClientID_t = std::string;
 
 enum class LogType {
     DataLog = 0,
