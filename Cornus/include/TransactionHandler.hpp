@@ -23,8 +23,7 @@ public:
         //TODO
         size_t requestCount = 0;
         for (auto otherParticipantId : config.participants){
-            Request logReq = createLogReq(otherParticipantId);
-            DBMSInterface::LOG_ONCE(logReq);
+            DBMSInterface::LOG_ONCE(otherParticipantId);
             ++requestCount;
         }
         //wait for responses
@@ -63,7 +62,6 @@ public:
 private:
     MessageQueue<Request> messages;
     TransactionConfig config;
-    Request createLogReq(HostID otherNode);
 };
 
 #endif // CORNUS_TRANSACTIONHANDLER_HPP

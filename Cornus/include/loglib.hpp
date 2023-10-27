@@ -2,7 +2,6 @@
 #define CORNUS_LOGLIB_HPP
 
 #include "Response.hpp"
-#include "Request.h"
 #include "mutex"
 
 enum class TransactionLogResponse {
@@ -22,7 +21,7 @@ LogResponse incomingRequestToLogResponse(Request& r){
 }
 //LogImpl now describes any type that has a LOG_ONCE, LOG_WRITE, and LOG_READ function
 template <class T>
-concept LogImpl = requires(T candidateImpl, Request& r, Response res){
+concept LogImpl = requires(T candidateImpl, httplib::Request& r, Response res){
     //concept requires that a function defined like this would compile
     //so if the candidate implemenation does not have LOG_ONCE, LOG_WRITE, LOG_READ
     //functions that take in a request whose return time is Response, the concept
@@ -36,17 +35,17 @@ concept LogImpl = requires(T candidateImpl, Request& r, Response res){
 template <LogImpl Impl>
 class LogInterface {
 public:
-    static Response LOG_ONCE(Request& request){
+    static Response LOG_ONCE(httplib::Request& request){
         auto l = std::unique_lock(implMut);
         return impl.LOG_ONCE(request);
     }
 
-    static Request LOG_WRITE(Request& request){
+    static Request LOG_WRITE(httplib::Request& request){
         auto l = std::unique_lock(implMut);
         return impl.LOG_WRITE(request);
     }
 
-    static Request LOG_READ(Request& request){
+    static Request LOG_READ(httplib::Request& request){
         auto l = std::unique_lock(implMut);
         return impl.LOG_READ(request);
     }
@@ -59,9 +58,9 @@ private:
 //TODO implement interacting with the simulated dbms her
 class SimulatedDBMSImpl{
 public:
-    Response LOG_ONCE(Request& request);
-    Response LOG_WRITE(Request& request);
-    Response LOG_READ(Request& request);
+    Response LOG_ONCE(httplib::Request& request);
+    Response LOG_WRITE(httplib::Request& request);
+    Response LOG_READ(httplib::Request& request);
 };
 
 //potentially add additional implementations for other DBMS interfaces
