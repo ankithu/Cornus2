@@ -1,5 +1,5 @@
-#ifndef CORNUS_PARTICIPANT_H
-#define CORNUS_PARTICIPANT_H
+#ifndef CORNUS_PARTICIPANT_HPP
+#define CORNUS_PARTICIPANT_HPP
 
 #include "TransactionHandler.hpp"
 
@@ -10,6 +10,10 @@ public:
     virtual Decision handleTransaction(Request request) override
     {
         return "";
+        ///TRANSACTION
+        //Vote req
+        //commit
+        //abort
     }
 };
 
