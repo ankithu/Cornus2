@@ -45,7 +45,7 @@ public:
     {
         TransactionId txid = getTxId(req);
         Request request = Request(type, txid, req);
-        Node *n = createNode<Node>(txid, req);
+        Node *n = createNode<Participant>(txid, req);
         n->handleTransaction(request);
         removeFromMap(txid);
     }

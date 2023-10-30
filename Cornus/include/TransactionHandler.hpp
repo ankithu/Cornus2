@@ -11,11 +11,19 @@
 
 using Decision = std::string;
 using TransactionId = uint64_t;
-
+enum TxState
+{
+    Starting,
+    Voting,
+    Aborted,
+    Commited
+};
 class TransactionHandler
 {
 public:
-    explicit TransactionHandler(TransactionConfig &config) : config(config) {}
+    explicit TransactionHandler(TransactionConfig &config) : config(config) {
+        txstate=TxState::Starting;
+    }
 
     Decision terminationProtocol(TransactionId txid)
     {
@@ -64,9 +72,10 @@ public:
 
     virtual Decision handleTransaction(Request request) = 0;
 
-private:
+protected:
     MessageQueue<Request> messages;
     TransactionConfig config;
+    TxState txstate;
 };
 
 #endif // CORNUS_TRANSACTIONHANDLER_HPP
