@@ -24,6 +24,7 @@ public:
         if(txstate==TxState::Starting){
             httplib::Params params;
             params.emplace("request", request.req.body());
+            params.emplace("command", "");
             params.emplace("sender", this->hostname);// need to actually get the hostname
             broadcast(params,"/VOTEREQ/");
             txstate==TxState::Voting;
@@ -49,6 +50,7 @@ public:
         txstate==TxState::Aborted;
         httplib::Params params;
         params.emplace("request", "");
+        params.emplace("command", "");
         params.emplace("sender", this->hostname);// need to actually get the hostname
         broadcast(params,"/ABORT/");
     }
@@ -57,6 +59,7 @@ public:
         txstate==TxState::Commited;
         httplib::Params params;
         params.emplace("request", "");
+        params.emplace("command", "");
         params.emplace("sender", this->hostname);// need to actually get the hostname
         broadcast(params,"/COMMIT/");
     }
@@ -65,7 +68,7 @@ public:
     }
     void broadcast(httplib::Params params,std::string endpoint){
         for(auto participant:participants){
-            auto res = participant->Post(endpoint, params);
+            auto res = participant.second->Post(endpoint, params);
         }
     }
 private:

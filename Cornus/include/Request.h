@@ -8,7 +8,7 @@ enum RequestType
     transaction,
     voteReq,
     voteYes,
-    voteAbort,
+    Abort,
     willVoteYes,
     voteYesCompleted,
     Commit

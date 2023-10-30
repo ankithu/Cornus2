@@ -15,6 +15,7 @@ enum TxState
 {
     Starting,
     Voting,
+    Voted,
     Aborted,
     Commited
 };
