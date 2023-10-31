@@ -16,11 +16,11 @@ public:
             participants[participant]=cli;
             pstatus[participant]=0;
         }
-        start_transaction();
+        
     }
     virtual Decision handleTransaction(Request request) override
     {
-        messages.push(request);
+        start_transaction();
     }
     void start_transaction(){
         //log starting transaction
