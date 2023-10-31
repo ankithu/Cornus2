@@ -7,7 +7,7 @@
 #include <condition_variable>
 #include "types.hpp"
 #include "TransactionConfig.h"
-#include "loglib.hpp"
+#include "requestHandler.hpp"
 
 using Decision = std::string;
 using TransactionId = uint64_t;
