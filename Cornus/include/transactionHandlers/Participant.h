@@ -13,11 +13,11 @@ public:
         httplib::Client * cli = new httplib::Client(this->config.coordinator);
         cli->set_keep_alive(true);   //not sure about this
         coord=cli;
-        start_transaction();
+        
     }
     virtual Decision handleTransaction(Request request) override
     {
-        messages.push(request);
+        start_transaction();
     }
     void start_transaction(){
         auto request= messages.waitForNextMessage(config.timeout);
