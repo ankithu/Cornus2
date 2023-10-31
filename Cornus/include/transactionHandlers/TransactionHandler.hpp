@@ -38,6 +38,7 @@ public:
         }
         // wait for responses
         size_t responseCount = 0;
+        messages.setTimeoutStart();
         while (true)
         {
             std::optional<Request> responseOpt = messages.waitForNextMessage(config.timeout);
