@@ -31,7 +31,10 @@ public:
         }
 
     }
-
+    std::optional<T> waitForNextMessageWithTimeout(std::chrono::duration<double> timeout){
+        setTimeoutStart();
+        waitForNextMessage(timeout);
+    }
     void setTimeoutStart(){
         auto lock = std::unique_lock(mutex);
         //set timeoutStart
