@@ -25,7 +25,7 @@ public:
         for (auto otherParticipantId : config.participants)
         {
             //TODO fix
-            DBMSInterface::LOG_ONCE(otherParticipantId);
+            RequestInterface::LOG_ONCE(otherParticipantId);
             ++requestCount;
         }
         // wait for responses

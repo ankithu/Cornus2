@@ -56,9 +56,9 @@ public:
     }
 
 private:
-    void checkUndefinedInput(std::string& data){
-        if (data != "ABORT" && data != "COMMIT"){
-            throw std::runtime_error("Got decision that wasn't COMMIT, or ABORT!");
+    static void checkUndefinedInput(std::string& data){
+        if (data != "ABORT" && data != "COMMIT" && data != "VOTE-YES"){
+            throw std::runtime_error("Got decision that wasn't COMMIT, ABORT, or VOTE-YES!");
         }
     }
     std::string decision = "WORKING";

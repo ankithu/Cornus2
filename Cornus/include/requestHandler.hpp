@@ -41,7 +41,7 @@ concept RPCImpl = requires(T candidateImpl, HostID& host, std::string& r){
 //Interface provides static ability to perform log updates and RPCs given a certain request
 //makes sure only one outgoing request occurs at once (network limitation)
 template <LogImpl LogImplT, RPCImpl RPCImplT>
-class RequestInterface {
+class TemplatedRequestInterface {
 public:
     static void LOG_ONCE(httplib::Request& request){
         auto l = std::unique_lock(httpMut);
@@ -64,6 +64,7 @@ public:
     }
 
 private:
+    //TODO properly initialize these
     static LogImplT logImpl;
     static std::mutex httpMut;
     static RPCImplT rpcImpl;
@@ -127,13 +128,13 @@ private:
 
 //potentially add additional implementations for other DBMS interfaces
 //create the implementation, and then add a branch to the compiler directives
-//and a compiler variable to indicate which one is "DBMSInterface"
-using SimulatedDBMS = RequestInterface<SimulatedDBMSImpl, SimulatedRPCImpl>;
+//and a compiler variable to indicate which one is "RequestInterface"
+using SimulatedDBMS = TemplatedRequestInterface<SimulatedDBMSImpl, SimulatedRPCImpl>;
 
 #define SIMULATED_DBMS
 
 #ifdef SIMULATED_DBMS
-using DBMSInterface = SimulatedDBMS;
+using RequestInterface = SimulatedDBMS;
 #endif
 
 

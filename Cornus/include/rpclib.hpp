@@ -24,7 +24,7 @@ concept RPCImpl = requires(T candidateImpl, std::string& r){
 
 //Interface provides static ability to perform log updates given a certain request
 template <RPCImpl Impl>
-class RequestInterface {
+class TemplatedRequestInterface {
 public:
     static Response LOG_ONCE(httplib::Request& request){
         auto l = std::unique_lock(httpMut);
@@ -79,13 +79,13 @@ private:
 
 //potentially add additional implementations for other DBMS interfaces
 //create the implementation, and then add a branch to the compiler directives
-//and a compiler variable to indicate which one is "DBMSInterface"
-using SimulatedDBMS = RequestInterface<SimulatedDBMSImpl>;
+//and a compiler variable to indicate which one is "RequestInterface"
+using SimulatedDBMS = TemplatedRequestInterface<SimulatedDBMSImpl>;
 
 #define SIMULATED_DBMS
 
 #ifdef SIMULATED_DBMS
-using DBMSInterface = SimulatedDBMS;
+using RequestInterface = SimulatedDBMS;
 #endif
 
 #endif //CORNUS_RPCLIB_HPP
