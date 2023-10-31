@@ -18,9 +18,6 @@ public:
         httplib::Server::Handler handler;
         svr.Post("/TRANSACTION", [&](const httplib::Request &req, httplib::Response &res)
                  { onClientRequest(req, res); });
-        svr.Post("/:txid", [&](const httplib::Request &req, httplib::Response &res)
-                 { std::thread process(&GlobalMessageHandler::onInternalRequest<Participant>, this, req); process.detach(); });
-        /*
         svr.Post("/VOTEREQ/:txid", [&](const httplib::Request &req, httplib::Response &res)
                  { std::thread process(&GlobalMessageHandler::onNewRequest<Participant>, this, req, RequestType::voteReq); process.detach(); });
         svr.Post("/VOTEYES/:txid", [&](const httplib::Request &req, httplib::Response &res)
@@ -29,7 +26,7 @@ public:
                  { std::thread process(&GlobalMessageHandler::onOldRequest, this, req, RequestType::Abort); process.detach(); });
         svr.Post("/COMMIT/:txid", [&](const httplib::Request &req, httplib::Response &res)
                  { std::thread process(&GlobalMessageHandler::onOldRequest, this, req, RequestType::Commit); process.detach(); });
-        
+        /*
         only relevant to new protocol, will uncomment later
         svr.Post("/WILLVOTEYES/:txid", [&](const httplib::Request &req, httplib::Response &res)
                  { std::thread process(&GlobalMessageHandler::onNewRequest<Replicator>, this, req, RequestType::willVoteYes); process.detach(); });
@@ -42,19 +39,15 @@ public:
             std::cout << "SERVER FAILED TO START" << std::endl;
         }
     }
+
     template <class Node>
-    void onInternalRequest(const httplib::Request req){
+    void onNewRequest(const httplib::Request req, RequestType type)
+    {
         TransactionId txid = getTxId(req);
-        Request request = Request(txid, req);
-        std::unique_lock lockMutex(mapMutex);
-        if (transactions.find(txid) == transactions.end())
-        {
-            TransactionConfig conf(req.params.find("config").second,txid);
-            Node *p = new Node(conf);
-            transactions[txid] = p;
-        }
-        transactions[txid]->handle(request);
-        
+        Request request = Request(type, txid, req);
+        Node *n = createNode<Node>(txid, req);
+        n->handleTransaction(request);
+        removeFromMap(txid);
     }
 
     void onClientRequest(const httplib::Request &req, httplib::Response &res)
@@ -64,8 +57,15 @@ public:
         Coordinator *n = createNode<Coordinator>(txid, req);
         Decision d = n->handleTransaction(request);
         res.set_content(d, "text/plain");
-        sendMessage(txid, request);
         removeFromMap(txid);
+    }
+
+    void onOldRequest(const httplib::Request req, RequestType type)
+    {
+
+        TransactionId txid = getTxId(req);
+        Request request = Request(type, txid, req);
+        sendMessage(txid, request);
     }
 
 private:
@@ -117,7 +117,7 @@ private:
     httplib::Server svr;
     // transactionID format:
     // bits 63-48: 0, bits 47-16: per node counter, bits 15-0: unique node id
-    // This should never be broken down, it just ensures uniqueness across transactionHandlers
+    // This should never be broken down, it just ensures uniqueness across nodes
     u_int16_t nodeId;
     u_int32_t transactionCounter = 0;
     std::mutex mapMutex;
