@@ -24,7 +24,7 @@ public:
         if(request.has_value()){
             if(request->type==RequestType::voteReq){
                 //log voteyes
-                send("VOTEYES");
+                send("VOTE-YES");
             }else{
                 abort();
             }
