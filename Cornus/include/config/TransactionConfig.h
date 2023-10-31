@@ -1,7 +1,7 @@
 #ifndef CORNUS_TRANSACTIONCONFIG_H
 #define CORNUS_TRANSACTIONCONFIG_H
 
-#include "types.hpp"
+#include "../types.hpp"
 #include <vector>
 #include "HostConfig.hpp"
 

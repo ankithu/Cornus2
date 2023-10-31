@@ -1,9 +1,9 @@
 #ifndef CORNUS_MESSAGEHANDLER_HPP
 #define CORNUS_MESSAGEHANDLER_HPP
 
-#include "Coordinator.h"
-#include "Participant.h"
-#include "Replicator.h"
+#include "nodes/Coordinator.h"
+#include "nodes/Participant.h"
+#include "../transactionHandlers/Replicator.h"
 #include <thread>
 #include <mutex>
 #include <functional>
@@ -117,7 +117,7 @@ private:
     httplib::Server svr;
     // transactionID format:
     // bits 63-48: 0, bits 47-16: per node counter, bits 15-0: unique node id
-    // This should never be broken down, it just ensures uniqueness across nodes
+    // This should never be broken down, it just ensures uniqueness across transactionHandlers
     u_int16_t nodeId;
     u_int32_t transactionCounter = 0;
     std::mutex mapMutex;

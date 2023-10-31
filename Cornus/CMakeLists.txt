@@ -5,5 +5,5 @@ set(CMAKE_CXX_STANDARD 23)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
 
-add_executable(Cornus main.cpp include/TransactionHandler.hpp include/Coordinator.h include/Participant.h include/messageQueue.hpp include/GlobalMessageHandler.hpp include/httplib.hpp include/TransactionConfig.h include/types.hpp include/requestHandler.hpp include/Response.hpp include/rpclib.hpp include/HostConfig.hpp)
+add_executable(Cornus main.cpp include/transactionHandlers/TransactionHandler.hpp include/transactionHandlers/Coordinator.h include/transactionHandlers/Participant.h include/messaging/messageQueue.hpp include/messaging/GlobalMessageHandler.hpp include/lib/httplib.hpp include/config/TransactionConfig.h include/types.hpp include/messaging/requestHandler.hpp include/messaging/Response.hpp include/config/HostConfig.hpp)
 

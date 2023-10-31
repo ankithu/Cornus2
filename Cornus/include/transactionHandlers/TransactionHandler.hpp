@@ -1,13 +1,13 @@
 #ifndef CORNUS_TRANSACTIONHANDLER_HPP
 #define CORNUS_TRANSACTIONHANDLER_HPP
 
-#include "Request.h"
-#include "messageQueue.hpp"
+#include "../messaging/Request.h"
+#include "../messaging/messageQueue.hpp"
 #include <queue>
 #include <condition_variable>
-#include "types.hpp"
-#include "TransactionConfig.h"
-#include "requestHandler.hpp"
+#include "../types.hpp"
+#include "../config/TransactionConfig.h"
+#include "../messaging/requestHandler.hpp"
 
 using Decision = std::string;
 using TransactionId = uint64_t;
@@ -45,7 +45,7 @@ public:
             if (!responseOpt)
             {
                 // hopefully optimized with tail recursive call
-                return terminationProtocol(this->config.txid);
+                return terminationProtocol();
             }
             auto &response = *responseOpt;
             LogResponse logResponse = incomingRequestToLogResponse(response);

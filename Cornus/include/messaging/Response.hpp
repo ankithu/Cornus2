@@ -1,7 +1,7 @@
 #ifndef CORNUS_RESPONSE_HPP
 #define CORNUS_RESPONSE_HPP
 
-#include "httplib.hpp"
+#include "../lib/httplib.hpp"
 
 enum class ResponseType {
     ACK = 0,

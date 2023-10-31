@@ -1,7 +1,7 @@
 #ifndef CORNUS_REQUEST_H
 #define CORNUS_REQUEST_H
 
-#include "httplib.hpp"
+#include "../lib/httplib.hpp"
 
 enum RequestType
 {

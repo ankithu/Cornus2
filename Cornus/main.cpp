@@ -1,5 +1,5 @@
 #include <iostream>
-#include "include/GlobalMessageHandler.hpp"
+#include "include/messaging/GlobalMessageHandler.hpp"
 
 int main(int argc, char **argv)
 {
