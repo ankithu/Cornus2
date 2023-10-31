@@ -4,3 +4,5 @@ Cornus/build/*
 DBMS/build/*
 *.idea*
 build/*
+.DS_Store
+.vscode/*
