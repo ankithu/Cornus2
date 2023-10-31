@@ -3,9 +3,8 @@
 
 #include "types.hpp"
 #include <vector>
+#include "HostConfig.hpp"
 
-// hostname:port
-using HostID = std::string;
 
 struct TransactionConfig
 {
