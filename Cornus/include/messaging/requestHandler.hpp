@@ -23,14 +23,14 @@ LogResponse incomingRequestToLogResponse(Request& r){
 
 //LogImpl now describes any type that has a LOG_ONCE, LOG_WRITE, and LOG_READ function
 template <class T>
-concept LogImpl = requires(T candidateImpl, std::string& r){
+concept LogImpl = requires(T candidateImpl, std::string& r, std::string& str){
     //concept requires that a function defined like this would compile
     //so if the candidate implemenation does not have LOG_ONCE, LOG_WRITE, LOG_READ
     //functions that take in a request whose return time is Response, the concept
     //will not be met and the code won't compile
-    candidateImpl.LOG_ONCE(r);
-    candidateImpl.LOG_WRITE(r);
-    candidateImpl.LOG_READ(r);
+    candidateImpl.LOG_ONCE(r) == str;
+    candidateImpl.LOG_WRITE(r) == str;
+    candidateImpl.LOG_READ(r) == str;
 };
 
 //RPCImpl describes any type that has a SEND_RPC function
@@ -44,17 +44,17 @@ concept RPCImpl = requires(T candidateImpl, HostID& host, std::string& r){
 template <LogImpl LogImplT, RPCImpl RPCImplT>
 class TemplatedRequestInterface {
 public:
-    static void LOG_ONCE(std::string& request){
+    static std::string LOG_ONCE(std::string& request){
         auto l = std::unique_lock(httpMut);
         logImpl.LOG_ONCE(request);
     }
 
-    static void LOG_WRITE(std::string& request){
+    static std::string LOG_WRITE(std::string& request){
         auto l = std::unique_lock(httpMut);
         logImpl.LOG_WRITE(request);
     }
 
-    static void LOG_READ(std::string& request){
+    static std::string LOG_READ(std::string& request){
         auto l = std::unique_lock(httpMut);
         logImpl.LOG_READ(request);
     }
@@ -76,25 +76,27 @@ class SimulatedDBMSImpl{
 public:
     explicit SimulatedDBMSImpl(std::string& address) : dbmsAddress(address), cli(dbmsAddress) {}
 
-    void LOG_ONCE(std::string& request){
+    std::string LOG_ONCE(std::string& request){
          auto res = cli.Post("LOG_ONCE_PATH TODO", request, "text/plain");
          if (res.error() != httplib::Error::Success) {
              //ERROR handle TODO
          }
     }
 
-    void LOG_WRITE(std::string& request){
+    std::string LOG_WRITE(std::string& request){
         auto res = cli.Post("LOG_WRITE_PATH TODO", request, "text/plain");
         if (res.error() != httplib::Error::Success) {
             //ERROR handle TODO
         }
+        return res->body;
     }
 
-    void LOG_READ(std::string& request){
+    std::string LOG_READ(std::string& request){
         auto res = cli.Post("LOG_READ_PATH TODO", request, "text/plain");
         if (res.error() != httplib::Error::Success) {
             //ERROR handle TODO
         }
+        return res->body;
     }
 private:
     //TODO set this

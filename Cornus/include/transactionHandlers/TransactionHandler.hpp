@@ -28,42 +28,25 @@ public:
 
     Decision terminationProtocol()
     {
-        // wait for failure detection timeout and alternative node to complete log
-        // TODO
-        size_t requestCount = 0;
+        //TODO:  wait for failure detection timeout and alternative node to complete log
         for (auto otherParticipantId : config.participants)
         {
-            RequestInterface::LOG_ONCE(otherParticipantId);
-            ++requestCount;
-        }
-        // wait for responses
-        size_t responseCount = 0;
-        messages.setTimeoutStart();
-        while (true)
-        {
-            std::optional<Request> responseOpt = messages.waitForNextMessage(config.timeout);
-            if (!responseOpt)
-            {
-                // hopefully optimized with tail recursive call
-                return terminationProtocol();
-            }
-            auto &response = *responseOpt;
-            LogResponse logResponse = incomingRequestToLogResponse(response);
-            switch (logResponse.resp)
-            {
-            case TransactionLogResponse::ABORT:
+            std::string resp = RequestInterface::LOG_ONCE(otherParticipantId);
+            if (resp == "ABORT"){
                 return "ABORT";
-            case TransactionLogResponse::COMMIT:
+            }
+            else if (resp == "COMMIT"){
                 return "COMMIT";
-            case TransactionLogResponse::VOTE_YES:
-                ++responseCount;
-                if (responseCount == requestCount)
-                {
-                    return "COMMIT";
-                }
-                break;
+            }
+            else if (resp == "VOTE-YES"){ //VOTE-YES
+                continue;
+            }
+            else {
+                throw std::runtime_error("Unknown response from transaction log: " + resp);
             }
         }
+        //this could only happen if we receive all vote yes responses
+        return "COMMIT";
     }
 
     void handle(Request request)
