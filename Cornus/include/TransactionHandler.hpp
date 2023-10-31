@@ -11,13 +11,22 @@
 
 using Decision = std::string;
 using TransactionId = uint64_t;
-
+enum TxState
+{
+    Starting,
+    Voting,
+    Voted,
+    Aborted,
+    Commited
+};
 class TransactionHandler
 {
 public:
-    explicit TransactionHandler(TransactionConfig &config) : config(config) {}
+    explicit TransactionHandler(TransactionConfig &config) : config(config) {
+        txstate=TxState::Starting;
+    }
 
-    Decision terminationProtocol(TransactionId txid)
+    Decision terminationProtocol()
     {
         // wait for failure detection timeout and alternative node to complete log
         // TODO
@@ -36,7 +45,7 @@ public:
             if (!responseOpt)
             {
                 // hopefully optimized with tail recursive call
-                return terminationProtocol(txid);
+                return terminationProtocol(this->config.txid);
             }
             auto &response = *responseOpt;
             LogResponse logResponse = incomingRequestToLogResponse(response);
@@ -64,9 +73,10 @@ public:
 
     virtual Decision handleTransaction(Request request) = 0;
 
-private:
+protected:
     MessageQueue<Request> messages;
     TransactionConfig config;
+    TxState txstate;
 };
 
 #endif // CORNUS_TRANSACTIONHANDLER_HPP
