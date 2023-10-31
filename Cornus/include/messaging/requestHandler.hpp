@@ -3,6 +3,7 @@
 
 #include "Response.hpp"
 #include "mutex"
+#include "../config/HostConfig.hpp"
 
 enum class TransactionLogResponse {
     ABORT = 0,
@@ -43,17 +44,17 @@ concept RPCImpl = requires(T candidateImpl, HostID& host, std::string& r){
 template <LogImpl LogImplT, RPCImpl RPCImplT>
 class TemplatedRequestInterface {
 public:
-    static void LOG_ONCE(httplib::Request& request){
+    static void LOG_ONCE(std::string& request){
         auto l = std::unique_lock(httpMut);
         logImpl.LOG_ONCE(request);
     }
 
-    static void LOG_WRITE(httplib::Request& request){
+    static void LOG_WRITE(std::string& request){
         auto l = std::unique_lock(httpMut);
         logImpl.LOG_WRITE(request);
     }
 
-    static void LOG_READ(httplib::Request& request){
+    static void LOG_READ(std::string& request){
         auto l = std::unique_lock(httpMut);
         logImpl.LOG_READ(request);
     }

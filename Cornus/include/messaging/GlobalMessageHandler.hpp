@@ -1,8 +1,8 @@
 #ifndef CORNUS_MESSAGEHANDLER_HPP
 #define CORNUS_MESSAGEHANDLER_HPP
 
-#include "nodes/Coordinator.h"
-#include "nodes/Participant.h"
+#include "../transactionHandlers/Coordinator.h"
+#include "../transactionHandlers/Participant.h"
 #include "../transactionHandlers/Replicator.h"
 #include <thread>
 #include <mutex>
