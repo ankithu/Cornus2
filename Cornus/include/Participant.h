@@ -2,7 +2,10 @@
 #define CORNUS_PARTICIPANT_HPP
 
 #include "TransactionHandler.hpp"
-
+/*
+TODO: 
+- Add logging
+*/
 class Participant : public TransactionHandler
 {
 public:
@@ -14,17 +17,15 @@ public:
     }
     virtual Decision handleTransaction(Request request) override
     {
-        
+        messages.push(request);
     }
     void start_transaction(){
         auto request= messages.waitForNextMessage(config.timeout);
         if(request.has_value()){
             if(request->type==RequestType::voteReq){
                 //log voteyes
-                httplib::Params params;
-                params.emplace("sender", this->hostname);
-                coord->Post("/VOTEYES/",params);
-            }else if(request->type==RequestType::Abort){
+                send("VOTEYES");
+            }else{
                 abort();
             }
         }else{
@@ -36,6 +37,8 @@ public:
                 commit();
             }else if(commit_request->type==RequestType::Abort){
                 abort();
+            }else{
+                terminationProtocol();
             }
         } else{
             terminationProtocol();
@@ -47,19 +50,22 @@ public:
         //log abort
         txstate==TxState::Aborted;
         httplib::Params params;
-        params.emplace("request", "");
-        params.emplace("sender", this->hostname);// need to actually get the hostname
-        coord.Post("/ABORT/",params);
+        send("ABORT");
     }
     void commit(){
         //log commit
         txstate==TxState::Commited;
+        send("COMMIT");
+        //Do operation
+    }
+    void send(std::string type){
+        std::string path="/"+this->config.txid;
         httplib::Params params;
         params.emplace("request", "");
-        params.emplace("sender", this->hostname);// need to actually get the hostname
-        coord.Post("/COMMIT/",params);
+        params.emplace("type", type);
+        params.emplace("sender", this->hostname);
+        coord->Post(path,params);
     }
-
 private:
     httplib::Client * coord;
 };

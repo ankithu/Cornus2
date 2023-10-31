@@ -26,7 +26,7 @@ public:
         txstate=TxState::Starting;
     }
 
-    Decision terminationProtocol(TransactionId txid)
+    Decision terminationProtocol()
     {
         // wait for failure detection timeout and alternative node to complete log
         // TODO
@@ -45,7 +45,7 @@ public:
             if (!responseOpt)
             {
                 // hopefully optimized with tail recursive call
-                return terminationProtocol(txid);
+                return terminationProtocol(this->config.txid);
             }
             auto &response = *responseOpt;
             LogResponse logResponse = incomingRequestToLogResponse(response);

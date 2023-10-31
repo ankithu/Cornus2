@@ -2,7 +2,10 @@
 #define CORNUS_COORDINATOR_HPP
 
 #include "TransactionHandler.hpp"
-
+/*
+TODO: 
+- Add callback for timeout in voting phase
+*/
 class Coordinator : public TransactionHandler
 {
 public:
@@ -13,34 +16,47 @@ public:
             participants[participant]=cli;
             pstatus[participant]=0;
         }
+        start_transaction();
     }
     virtual Decision handleTransaction(Request request) override
     {
+        messages.push(request);
     }
-    void start_transaction(Request request){
+    void start_transaction(){
         //log starting transaction
         //log participants
         //broadcast vote req and participant list to participants
+        auto request=messages.waitForNextMessage(config.timeout);
         if(txstate==TxState::Starting){
             httplib::Params params;
-            params.emplace("request", request.req.body());
+            params.emplace("config", request->req.body());
             params.emplace("command", "");
+            params.emplace("type", "VOTEREQ");
             params.emplace("sender", this->hostname);// need to actually get the hostname
             broadcast(params,"/VOTEREQ/");
             txstate==TxState::Voting;
         }
-        //start timeout callback
+        collectVotes();
     }
-    void collectVote(Request request){
+    void collectVotes(){
         //add to vote
         //if all votes are collected, send commit message
         //if abort is collected, decide abort
-        if(txstate==TxState::Voting){
-            std::string sender=request.req.params.find("sender")->second;
-            pstatus[sender]=1;
-            votes++;//might need to lock
-            if(votes==participants.size()){
-                commit();
+        while(txstate==TxState::Voting){
+            auto request= messages.waitForNextMessage(config.timeout);//this timeout needs to be fixed
+            if(request.has_value()){
+                if(request->type==RequestType::voteYes){
+                    std::string sender=request->req.params.find("sender")->second;
+                    pstatus[sender]=1;
+                    votes++;//might need to lock
+                    if(votes==participants.size()){
+                        commit();
+                    }
+                }else if(request->type==RequestType::Abort){
+                    abort();
+                }
+            }else{
+                terminationProtocol();
             }
         }
 
@@ -51,6 +67,7 @@ public:
         httplib::Params params;
         params.emplace("request", "");
         params.emplace("command", "");
+        params.emplace("type", "ABORT");
         params.emplace("sender", this->hostname);// need to actually get the hostname
         broadcast(params,"/ABORT/");
     }
@@ -60,11 +77,12 @@ public:
         httplib::Params params;
         params.emplace("request", "");
         params.emplace("command", "");
+        params.emplace("type", "COMMIT");
         params.emplace("sender", this->hostname);// need to actually get the hostname
         broadcast(params,"/COMMIT/");
     }
     void timeout_callback(){
-        terminationProtocol(this->config.txid);
+        terminationProtocol();
     }
     void broadcast(httplib::Params params,std::string endpoint){
         for(auto participant:participants){
