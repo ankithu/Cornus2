@@ -31,7 +31,7 @@ public:
         //TODO:  wait for failure detection timeout and alternative node to complete log
         for (auto otherParticipantId : config.participants)
         {
-            std::string resp = RequestInterface::LOG_ONCE(otherParticipantId);
+            std::string resp = RequestInterface::LOG_ONCE("ABORT", config.txid, otherParticipantId, LogType::TRANSACTION);
             if (resp == "ABORT"){
                 return "ABORT";
             }
