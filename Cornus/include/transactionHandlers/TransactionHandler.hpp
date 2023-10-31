@@ -33,7 +33,6 @@ public:
         size_t requestCount = 0;
         for (auto otherParticipantId : config.participants)
         {
-            //TODO fix
             RequestInterface::LOG_ONCE(otherParticipantId);
             ++requestCount;
         }
