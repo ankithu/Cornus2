@@ -8,7 +8,7 @@
 
 struct TransactionConfig
 {
-    TransactionConfig(std::string in,TransactionId id):txid(id)
+    TransactionConfig(const std::string& in,TransactionId id):txid(id)
     {
         std::stringstream ss(in);
         ss >> coordinator;

@@ -5,25 +5,10 @@
 #include "mutex"
 #include "../config/HostConfig.hpp"
 
-enum class TransactionLogResponse {
-    ABORT = 0,
-    VOTE_YES = 1,
-    COMMIT = 2
-};
-
 enum class LogType {
     DATA = 0,
     TRANSACTION = 1
 };
-
-struct LogResponse {
-    HostID host;
-    TransactionLogResponse resp;
-};
-
-LogResponse incomingRequestToLogResponse(Request& r){
-
-}
 
 //LogImpl now describes any type that has a LOG_ONCE, LOG_WRITE, and LOG_READ function
 template <class T>
@@ -50,35 +35,41 @@ class TemplatedRequestInterface {
 public:
     static std::string LOG_ONCE(const std::string& request, const TransactionId txId, const HostID& hostId, const LogType logType){
         auto l = std::unique_lock(httpMut);
-        return logImpl.LOG_ONCE(request, txId, hostId, logType);
+        return logImpl->LOG_ONCE(request, txId, hostId, logType);
     }
 
     static std::string LOG_WRITE(const std::string& request, const TransactionId txId, const HostID& hostId, const LogType logType){
         auto l = std::unique_lock(httpMut);
-        return logImpl.LOG_WRITE(request, txId, hostId, logType);
+        return logImpl->LOG_WRITE(request, txId, hostId, logType);
     }
 
     static std::string LOG_READ(const std::string& request, const TransactionId txId, const HostID& hostId, const LogType logType){
         auto l = std::unique_lock(httpMut);
-        return logImpl.LOG_READ(request, txId, hostId, logType);
+        return logImpl->LOG_READ(request, txId, hostId, logType);
     }
 
     static void SEND_RPC(HostID& host, std::string& request){
         auto l = std::unique_lock(httpMut);
-        rpcImpl.SEND_RPC(host, request);
+        rpcImpl->SEND_RPC(host, request);
+    }
+
+    static void init(const HostConfig& hostConfig){
+        auto l = std::unique_lock(httpMut);
+        logImpl = std::make_unique<LogImplT>(LogImplT(hostConfig.dbmsAddress));
+        rpcImpl = std::make_unique<RPCImplT>(RPCImplT(hostConfig));
     }
 
 private:
     //TODO properly initialize these
-    static LogImplT logImpl;
-    static std::mutex httpMut;
-    static RPCImplT rpcImpl;
+    static std::unique_ptr<LogImplT> logImpl;
+    static inline std::mutex httpMut{};
+    static std::unique_ptr<RPCImplT> rpcImpl;
 };
 
 //TODO implement interacting with the simulated dbms her
 class SimulatedDBMSImpl{
 public:
-    explicit SimulatedDBMSImpl(std::string& address) : dbmsAddress(address), cli(dbmsAddress) {}
+    explicit SimulatedDBMSImpl(const std::string& address) : dbmsAddress(address), cli(dbmsAddress) {}
 
     std::string LOG_ONCE(const std::string& request, const TransactionId txId, const HostID& hostId, const LogType logType){
          auto res = cli.Post(getPath("LOG_ONCE", txId, hostId, logType), request, "text/plain");
@@ -115,7 +106,7 @@ private:
 
 class SimulatedRPCImpl {
 public:
-    explicit SimulatedRPCImpl(HostConfig hostConfig){
+    explicit SimulatedRPCImpl(const HostConfig& hostConfig){
         for (auto id : hostConfig.allOthers){
             clients.insert({id, httplib::Client(id)});
         }

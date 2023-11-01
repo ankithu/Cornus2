@@ -28,7 +28,7 @@ public:
 
     Decision terminationProtocol()
     {
-        //TODO:  wait for failure detection timeout and alternative node to complete log
+        //TODO: wait for failure detection timeout and alternative node to complete log
         for (auto otherParticipantId : config.participants)
         {
             std::string resp = RequestInterface::LOG_ONCE("ABORT", config.txid, otherParticipantId, LogType::TRANSACTION);
@@ -55,6 +55,8 @@ public:
     }
 
     virtual Decision handleTransaction(Request request) = 0;
+
+    virtual ~TransactionHandler(){}
 
 protected:
     MessageQueue<Request> messages;
