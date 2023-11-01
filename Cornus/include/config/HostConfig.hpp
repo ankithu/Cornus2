@@ -21,6 +21,7 @@ struct HostConfig {
         hostNum = data["host_num"].get<size_t>();
         port = data["port"].get<int>();
         id = host + ":" + std::to_string(port);
+        timeout = std::chrono::milliseconds (data["timeout_millis"].get<uint64_t>());
     }
     HostID id;
     std::vector<HostID> allOthers;
@@ -28,6 +29,7 @@ struct HostConfig {
     size_t hostNum;
     int port;
     std::string host;
+    std::chrono::duration<double> timeout;
 };
 
 

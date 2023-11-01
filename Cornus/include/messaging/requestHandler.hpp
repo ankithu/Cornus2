@@ -71,14 +71,18 @@ public:
     explicit SimulatedDBMSImpl(const std::string& address) : dbmsAddress(address), cli(dbmsAddress) {}
 
     std::string LOG_ONCE(const std::string& request, const TransactionId txId, const HostID& hostId, const LogType logType){
+         std::cout << "attempting log once: " << request << " request to " << dbmsAddress << " on path: " << getPath("LOG_ONCE", txId, hostId, logType) <<  std::endl;
          auto res = cli.Post(getPath("LOG_ONCE", txId, hostId, logType), request, "text/plain");
+         std::cout << res << std::endl;
          if (res.error() != httplib::Error::Success) {
              //ERROR handle TODO
+
          }
          return res->body;
     }
 
     std::string LOG_WRITE(const std::string& request, const TransactionId txId, const HostID& hostId, const LogType logType){
+        std::cout << "attempting log write request " << std::endl;
         auto res = cli.Post(getPath("LOG_WRITE", txId, hostId, logType), request, "text/plain");
         if (res.error() != httplib::Error::Success) {
             //ERROR handle TODO
@@ -87,6 +91,7 @@ public:
     }
 
     std::string LOG_READ(const std::string& request, const TransactionId txId, const HostID& hostId, const LogType logType){
+        std::cout << "attempting log read request " << std::endl;
         auto res = cli.Post(getPath("LOG_READ", txId, hostId, logType), request, "text/plain");
         if (res.error() != httplib::Error::Success) {
             //ERROR handle TODO
@@ -96,7 +101,7 @@ public:
 private:
 
     inline static std::string getPath(const std::string& endpoint, const TransactionId txId, const HostID& hostId, const LogType logType){
-        return "/" + endpoint + "/" + std::to_string(txId) + "/" + hostId + (logType == LogType::DATA ? "DATA" : "TRANSACTION");
+        return "/" + endpoint + "/" + std::to_string(txId) + "/" + hostId + "/" + (logType == LogType::DATA ? "DATA" : "TRANSACTION");
     }
     //TODO set this
     std::string dbmsAddress;

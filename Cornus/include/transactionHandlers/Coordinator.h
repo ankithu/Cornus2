@@ -9,7 +9,7 @@ TODO:
 class Coordinator : public TransactionHandler
 {
 public:
-    Coordinator(TransactionConfig &config, HostID hostname) : TransactionHandler(config,hostname) {
+    Coordinator(TransactionConfig &config, HostID hostname, HostConfig& hostConfig) : TransactionHandler(config,hostname, hostConfig) {
     }
     virtual Decision handleTransaction(Request client_request) override
     {
@@ -22,7 +22,7 @@ public:
         messages.setTimeoutStart();
         Decision decision="";
         while(decision==""){
-            auto p_request= messages.waitForNextMessage(config.timeout);
+            auto p_request= messages.waitForNextMessage(hostConfig.timeout);
             if(p_request.has_value()){
                 if(p_request->type==RequestType::voteYes){
                     votes++;

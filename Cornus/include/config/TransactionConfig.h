@@ -30,7 +30,6 @@ struct TransactionConfig
     }
     HostID coordinator;
     std::vector<HostID> participants;
-    std::chrono::duration<double> timeout;
     TransactionId txid;
 };
 

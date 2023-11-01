@@ -45,19 +45,23 @@ public:
 
     std::string& LOG_ONCE(std::string& data){
         //requires unique writer (no readers allowed)
+        std::cout << "waiting for transaction log lock" << std::endl;
         auto lock = std::unique_lock(decisionMutex);
+        std::cout << "transaction log lock acquired" << std::endl;
         if (decision != "WORKING"){
             //somebody has already logged...
+            std::cout << "decision : " << decision << " already exists" << std::endl;
             return decision;
         }
         checkUndefinedInput(data);
+        std::cout << "setting decision to " << data << std::endl;
         decision = data;
         return decision;
     }
 
 private:
     static void checkUndefinedInput(std::string& data){
-        if (data != "ABORT" && data != "COMMIT" && data != "VOTE-YES"){
+        if (data != "ABORT" && data != "COMMIT" && data != "VOTEYES"){
             throw std::runtime_error("Got decision that wasn't COMMIT, ABORT, or VOTE-YES!");
         }
     }

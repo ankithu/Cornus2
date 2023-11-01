@@ -16,10 +16,14 @@ public:
         std::cout << "writing '" << data << "' once on " << address << std::endl;
         auto log_once_timeout = std::chrono::milliseconds (100);
         if (address.type == LogType::DataLog){
-            return logPair.dataLog.LOG_ONCE(data);
+            auto res  = logPair.dataLog.LOG_ONCE(data);
+            std::cout << "data log returns : " << res << std::endl;
+            return res;
         }
         else{
-            return logPair.transactionLog.LOG_ONCE(data);
+            auto res = logPair.transactionLog.LOG_ONCE(data);
+            std::cout << "trans log returns: " << res << std::endl;
+            return res;
         }
     }
 

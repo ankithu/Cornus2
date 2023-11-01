@@ -13,7 +13,7 @@
 class GlobalMessageHandler
 {
 public:
-    GlobalMessageHandler(u_int16_t nodeId, std::string host, int port) : nodeId(nodeId)
+    GlobalMessageHandler(HostConfig& hostConfig) : hostConfig(hostConfig), nodeId(hostConfig.hostNum)
     {
         httplib::Server::Handler handler;
         svr.Post("/TRANSACTION", [&](const httplib::Request &req, httplib::Response &res)
@@ -34,9 +34,9 @@ public:
         svr.Post("/VOTEYESCOMPLETED/:txid", [&](const httplib::Request &req, httplib::Response &res)
                  { std::thread process(&GlobalMessageHandler::onOldRequest, this, req, RequestType::voteYesCompleted);process.detach(); });
         */
-       this->hostname=host+":"+std::to_string(port);
-        std::cout << "Starting server..." << host << " " << port << std::endl;
-        if (!svr.listen(host, port))
+        this->hostname = hostConfig.id;
+        std::cout << "Starting server..." << hostConfig.host << " " << hostConfig.port << std::endl;
+        if (!svr.listen(hostConfig.host, hostConfig.port))
         {
             std::cout << "SERVER FAILED TO START" << std::endl;
         }
@@ -45,7 +45,9 @@ public:
     template <class Node>
     void onNewRequest(const httplib::Request req, RequestType type)
     {
+        std::cout << "Got new requet as a participant" << std::endl;
         TransactionId txid = getTxId(req);
+        std::cout << "txid: " << txid << std::endl;
         Request request = Request(type, txid, req);
         Node *n = createNode<Node>(request,txid);
         n->handleTransaction(request);
@@ -54,7 +56,9 @@ public:
 
     void onClientRequest(const httplib::Request &req, httplib::Response &res)
     {
+        std::cout << "new client request" << std::endl;
         TransactionId txid = getUniqueTransactionId();
+        std::cout << "Created transaction id: " << txid << std::endl;
         Request request = Request(RequestType::transaction, txid, req);
         Coordinator *n = createNode<Coordinator>(request,txid);
         Decision d = n->handleTransaction(request);
@@ -91,7 +95,7 @@ private:
     {
         std::unique_lock lockMutex(mapMutex);
         TransactionConfig conf(request.getParam("config"),txid);
-        Node *p = new Node(conf,hostname);
+        Node *p = new Node(conf,hostname, hostConfig);
         transactions[txid] = p;
         return p;
     }
@@ -116,6 +120,7 @@ private:
         }
     }
 
+    HostConfig& hostConfig;
     httplib::Server svr;
     // transactionID format:
     // bits 63-48: 0, bits 47-16: per node counter, bits 15-0: unique node id

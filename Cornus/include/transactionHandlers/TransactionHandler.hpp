@@ -22,7 +22,7 @@ enum TxState
 class TransactionHandler
 {
 public:
-    TransactionHandler(TransactionConfig &config,HostID hostname) : config(config),hostname(hostname) {
+    TransactionHandler(TransactionConfig &config,HostID hostname, HostConfig& hostConfig) : config(config),hostname(hostname), hostConfig(hostConfig) {
         txstate=TxState::Starting;
     }
 
@@ -63,6 +63,7 @@ protected:
     TransactionConfig config;
     TxState txstate;
     HostID hostname;
+    HostConfig& hostConfig;
 };
 
 #endif // CORNUS_TRANSACTIONHANDLER_HPP
