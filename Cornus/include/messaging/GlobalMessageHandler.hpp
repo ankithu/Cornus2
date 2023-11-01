@@ -18,6 +18,7 @@ public:
         httplib::Server::Handler handler;
         svr.Post("/TRANSACTION", [&](const httplib::Request &req, httplib::Response &res)
                  { onClientRequest(req, res); });
+        //handler for below endpoints launches another thread that is independent so ACK response should happen immediately after thread launch
         svr.Post("/VOTEREQ/:txid", [&](const httplib::Request &req, httplib::Response &res)
                  { std::thread process(&GlobalMessageHandler::onNewRequest<Participant>, this, req, RequestType::voteReq); process.detach(); });
         svr.Post("/VOTEYES/:txid", [&](const httplib::Request &req, httplib::Response &res)
@@ -34,7 +35,7 @@ public:
                  { std::thread process(&GlobalMessageHandler::onOldRequest, this, req, RequestType::voteYesCompleted);process.detach(); });
         */
        this->hostname=host+":"+std::to_string(port);
-        std::cout << "Starting server..." << std::endl;
+        std::cout << "Starting server..." << host << " " << port << std::endl;
         if (!svr.listen(host, port))
         {
             std::cout << "SERVER FAILED TO START" << std::endl;

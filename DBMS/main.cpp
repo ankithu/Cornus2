@@ -24,11 +24,10 @@ LogAddress getLogAddress(const httplib::Request& req){
 
 
 int main(int argc, char** argv){
-    std::string confFile = "~/Documents/umich/EECS591/Cornus2/DBMS/config/dbms.config";
-    if (argc > 1){
-        confFile = std::string(argv[1]);
-    }
 
+    if (argc != 2){
+        throw std::runtime_error("Usage: ./dbms port");
+    }
 
     httplib::Server svr;
     LogManager manager;
@@ -64,5 +63,5 @@ int main(int argc, char** argv){
              });
 
     std::cout << "starting server..." << std::endl;
-    svr.listen("localhost", 1234);
+    svr.listen("localhost", std::stoi(argv[1]));
 }

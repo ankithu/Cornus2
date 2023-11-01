@@ -48,7 +48,7 @@ public:
         return logImpl->LOG_READ(request, txId, hostId, logType);
     }
 
-    static void SEND_RPC(HostID& host, std::string endpoint,httplib::Params request){
+    static void SEND_RPC(HostID& host, std::string endpoint, httplib::Params request){
         auto l = std::unique_lock(httpMut);
         rpcImpl->SEND_RPC(host, endpoint,request);
     }
@@ -60,7 +60,6 @@ public:
     }
 
 private:
-    //TODO properly initialize these
     static inline std::unique_ptr<LogImplT> logImpl{};
     static inline std::mutex httpMut{};
     static inline std::unique_ptr<RPCImplT> rpcImpl{};
