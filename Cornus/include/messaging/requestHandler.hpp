@@ -61,9 +61,9 @@ public:
 
 private:
     //TODO properly initialize these
-    static std::unique_ptr<LogImplT> logImpl;
+    static inline std::unique_ptr<LogImplT> logImpl{};
     static inline std::mutex httpMut{};
-    static std::unique_ptr<RPCImplT> rpcImpl;
+    static inline std::unique_ptr<RPCImplT> rpcImpl{};
 };
 
 //TODO implement interacting with the simulated dbms her
