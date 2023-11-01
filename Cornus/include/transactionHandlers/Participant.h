@@ -14,32 +14,27 @@ public:
     virtual Decision handleTransaction(Request start_request) override
     {
         //Prepare
-        if(start_request.type==RequestType::voteReq){
-            Decision local_decision=work(start_request);
-            if(local_decision=="VOTEYES"){
-                std::string resp = RequestInterface::LOG_ONCE("VOTEYES", config.txid, this->hostname, LogType::TRANSACTION);
-                if(resp=="VOTEYES"){
-                    send("VOTEYES");
-                    Decision decision;
-                    //Execution phase
-                    auto commit_request= messages.waitForNextMessageWithTimeout(config.timeout);
-                    if(commit_request.has_value()){
-                        if(commit_request->type==RequestType::Commit){
-                            decision="COMMIT";
-                        }else if(commit_request->type==RequestType::Abort){
-                            decision="ABORT";
-                        }else{
-                            //TODO: message at wrong time
-                        }
-                    } else{
-                        decision=terminationProtocol();
+        Decision local_decision=work(start_request);
+        if(local_decision=="VOTEYES"){
+            std::string resp = RequestInterface::LOG_ONCE("VOTEYES", config.txid, this->hostname, LogType::TRANSACTION);
+            if(resp=="VOTEYES"){
+                send("VOTEYES");
+                Decision decision;
+                //Execution phase
+                auto commit_request= messages.waitForNextMessageWithTimeout(config.timeout);
+                if(commit_request.has_value()){
+                    if(commit_request->type==RequestType::Commit){
+                        decision="COMMIT";
+                    }else if(commit_request->type==RequestType::Abort){
+                        decision="ABORT";
+                    }else{
+                        //TODO: message at wrong time
                     }
-                    RequestInterface::LOG_WRITE(decision, config.txid, this->hostname, LogType::TRANSACTION);
-                    return decision;                
-                }else{
-                    send("ABORT");
-                    return "ABORT";
+                } else{
+                    decision=terminationProtocol();
                 }
+                RequestInterface::LOG_WRITE(decision, config.txid, this->hostname, LogType::TRANSACTION);
+                return decision;                
             }else{
                 send("ABORT");
                 return "ABORT";

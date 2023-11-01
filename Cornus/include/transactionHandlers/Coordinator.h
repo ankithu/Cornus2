@@ -16,24 +16,30 @@ public:
         //Prepare Phase
         send("VOTEREQ",client_request.getParam("config"));
         int votes=0;
+
         //Voting Phase
         txstate=TxState::Voting;
         messages.setTimeoutStart();
-        auto p_request= messages.waitForNextMessage(config.timeout);
-        if(p_request.has_value()){
-            if(p_request->type==RequestType::voteYes){
-                std::string sender=p_request->getParam("sender");
-                votes++;
-                if(votes==config.participants.size()){
-                    commit();
+        Decision decision="";
+        while(decision==""){
+            auto p_request= messages.waitForNextMessage(config.timeout);
+            if(p_request.has_value()){
+                if(p_request->type==RequestType::voteYes){
+                    votes++;
+                    if(votes!=config.participants.size()){
+                        decision="COMMIT";
+                    }
+                }else if(p_request->type==RequestType::Abort){
+                    decision="ABORT";
                 }
-            }else if(p_request->type==RequestType::Abort){
-                abort();
+            }else{  //Timeout in voting phase
+                decision=terminationProtocol();
+                
             }
-
-        }else{  //Timeout in voting phase
-            send(terminationProtocol(),"");
         }
+        send(decision,"");
+        return decision;
+        
     }
     void abort(){
         //log abort
