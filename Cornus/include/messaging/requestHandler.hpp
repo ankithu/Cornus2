@@ -48,7 +48,7 @@ public:
         return logImpl->LOG_READ(request, txId, hostId, logType);
     }
 
-    static void SEND_RPC(HostID& host, std::string& request){
+    static void SEND_RPC(HostID& host, std::string endpoint,httplib::Params message){
         auto l = std::unique_lock(httpMut);
         rpcImpl->SEND_RPC(host, request);
     }
@@ -112,12 +112,12 @@ public:
         }
     }
 
-    void SEND_RPC(HostID& host, std::string& message){
+    void SEND_RPC(HostID& host, std::string endpoint,httplib::Params message){
         auto clientItr = clients.find(host);
         if (clientItr == clients.end()){
            //TODO handle (happens on bad SEND_RPC calls)
         }
-        auto res = clientItr->second.Post("/RPC", message, "text/plain");
+        auto res = clientItr->second.Post(endpoint, message);
         if (res.error() != httplib::Error::Success){
             //TODO handle
         }
