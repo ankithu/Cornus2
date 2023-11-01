@@ -51,7 +51,13 @@ def generate_transactions(test_file, nodes_file):
     return transactions
 
 def make_request(url, body):
-    response = requests.post(url, data=body)
+    headers = {
+    'content-type': 'application/x-www-form-urlencoded',
+    }
+    params = {
+    'config': body,
+    }
+    response = requests.post(url, data=params, headers=headers)
     return response
 
 def send_requests_sequential(transactions):

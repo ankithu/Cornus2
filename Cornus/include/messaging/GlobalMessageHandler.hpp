@@ -33,6 +33,7 @@ public:
         svr.Post("/VOTEYESCOMPLETED/:txid", [&](const httplib::Request &req, httplib::Response &res)
                  { std::thread process(&GlobalMessageHandler::onOldRequest, this, req, RequestType::voteYesCompleted);process.detach(); });
         */
+       this->hostname=host+":"+std::to_string(port);
         std::cout << "Starting server..." << std::endl;
         if (!svr.listen(host, port))
         {
@@ -45,7 +46,7 @@ public:
     {
         TransactionId txid = getTxId(req);
         Request request = Request(type, txid, req);
-        Node *n = createNode<Node>(txid, req);
+        Node *n = createNode<Node>(request);
         n->handleTransaction(request);
         removeFromMap(txid);
     }
@@ -54,7 +55,7 @@ public:
     {
         TransactionId txid = getUniqueTransactionId();
         Request request = Request(RequestType::transaction, txid, req);
-        Coordinator *n = createNode<Coordinator>(txid, req);
+        Coordinator *n = createNode<Coordinator>(request);
         Decision d = n->handleTransaction(request);
         res.set_content(d, "text/plain");
         removeFromMap(txid);
@@ -85,11 +86,11 @@ private:
     }
 
     template <class Node>
-    Node *createNode(TransactionId txid, const httplib::Request &req)
+    Node *createNode(Request request)
     {
         std::unique_lock lockMutex(mapMutex);
-        TransactionConfig conf(req.body,txid);
-        Node *p = new Node(conf);
+        TransactionConfig conf(request.getParam("config"),txid);
+        Node *p = new Node(conf,hostname);
         transactions[txid] = p;
         return p;
     }
@@ -122,6 +123,7 @@ private:
     u_int32_t transactionCounter = 0;
     std::mutex mapMutex;
     std::map<TransactionId, TransactionHandler *> transactions;
+    HostID hostname;
 };
 
 #endif // CORNUS_MESSAGEHANDLER_HPP

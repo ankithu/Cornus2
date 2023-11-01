@@ -10,64 +10,45 @@ class Participant : public TransactionHandler
 {
 public:
     explicit Participant(TransactionConfig &config) : TransactionHandler(config) {
-        httplib::Client * cli = new httplib::Client(this->config.coordinator);
-        cli->set_keep_alive(true);   //not sure about this
-        coord=cli;
-        
     }
-    virtual Decision handleTransaction(Request request) override
+    virtual Decision handleTransaction(Request start_request) override
     {
-        start_transaction();
-    }
-    void start_transaction(){
-        auto request= messages.waitForNextMessage(config.timeout);
-        if(request.has_value()){
-            if(request->type==RequestType::voteReq){
-                //log voteyes
-                send("VOTE-YES");
-            }else{
-                abort();
+        //Prepare
+        if(start_request.type==RequestType::voteReq){
+            std::string resp = RequestInterface::LOG_ONCE("VOTEYES", config.txid, this->hostname, LogType::TRANSACTION);
+            send(resp);
+            if(resp=="ABORT"){
+                return;
             }
         }else{
             abort();
+            return;
         }
-        auto commit_request= messages.waitForNextMessage(config.timeout);
+        std::string decision="";
+        //Execution phase
+        auto commit_request= messages.waitForNextMessageWithTimeout(config.timeout);
         if(commit_request.has_value()){
             if(commit_request->type==RequestType::Commit){
-                commit();
+                decision="COMMIT";
             }else if(commit_request->type==RequestType::Abort){
-                abort();
+                decision="ABORT";
             }else{
-                terminationProtocol();
+                //TODO: message at wrong time
             }
         } else{
-            terminationProtocol();
+            decision=terminationProtocol();
         }
-
-        //start timeout callback
+        RequestInterface::LOG_WRITE(decision, config.txid, this->hostname, LogType::TRANSACTION);
     }
-    void abort(){
-        //log abort
-        txstate==TxState::Aborted;
-        httplib::Params params;
-        send("ABORT");
-    }
-    void commit(){
-        //log commit
-        txstate==TxState::Commited;
-        send("COMMIT");
-        //Do operation
-    }
+   
     void send(std::string type){
-        std::string path="/"+this->config.txid;
+        std::string path="/"+type+"/"+std::to_string(this->config.txid);
         httplib::Params params;
         params.emplace("request", "");
         params.emplace("type", type);
         params.emplace("sender", this->hostname);
-        coord->Post(path,params);
+        RequestInterface::SEND_RPC(config.coordinator,path,params);
     }
-private:
-    httplib::Client * coord;
 };
 
 #endif // CORNUS_PARTICIPANT_H
