@@ -24,8 +24,8 @@ concept LogImpl = requires(T candidateImpl, std::string& r, HostID& h, Transacti
 
 //RPCImpl describes any type that has a SEND_RPC function
 template <class T>
-concept RPCImpl = requires(T candidateImpl, HostID& host, std::string& r){
-    candidateImpl.SEND_RPC(host, r);
+concept RPCImpl = requires(T candidateImpl, HostID& host, std::string endpoint,httplib::Params request){
+    candidateImpl.SEND_RPC(host, endpoint,request);
 };
 
 //Interface provides static ability to perform log updates and RPCs given a certain request
@@ -48,9 +48,9 @@ public:
         return logImpl->LOG_READ(request, txId, hostId, logType);
     }
 
-    static void SEND_RPC(HostID& host, std::string endpoint,httplib::Params message){
+    static void SEND_RPC(HostID& host, std::string endpoint,httplib::Params request){
         auto l = std::unique_lock(httpMut);
-        rpcImpl->SEND_RPC(host, request);
+        rpcImpl->SEND_RPC(host, endpoint,request);
     }
 
     static void init(const HostConfig& hostConfig){

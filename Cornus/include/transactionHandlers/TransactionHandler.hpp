@@ -22,7 +22,7 @@ enum TxState
 class TransactionHandler
 {
 public:
-    explicit TransactionHandler(TransactionConfig &config) : config(config),hostname(hostname) {
+    TransactionHandler(TransactionConfig &config,HostID hostname) : config(config),hostname(hostname) {
         txstate=TxState::Starting;
     }
 
@@ -38,7 +38,7 @@ public:
             else if (resp == "COMMIT"){
                 return "COMMIT";
             }
-            else if (resp == "VOTE-YES"){ //VOTE-YES
+            else if (resp == "VOTEYES"){ //VOTE-YES
                 continue;
             }
             else {

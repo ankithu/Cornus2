@@ -9,15 +9,15 @@ TODO:
 class Coordinator : public TransactionHandler
 {
 public:
-    explicit Coordinator(TransactionConfig &config) : TransactionHandler(config),votes(0) {
+    Coordinator(TransactionConfig &config, HostID hostname) : TransactionHandler(config,hostname) {
     }
     virtual Decision handleTransaction(Request client_request) override
     {
         //Prepare Phase
         send("VOTEREQ",client_request.getParam("config"));
-
+        int votes=0;
         //Voting Phase
-        txstate==TxState::Voting;
+        txstate=TxState::Voting;
         messages.setTimeoutStart();
         auto p_request= messages.waitForNextMessage(config.timeout);
         if(p_request.has_value()){
@@ -37,12 +37,12 @@ public:
     }
     void abort(){
         //log abort
-        txstate==TxState::Aborted;
+        txstate=TxState::Aborted;
         send("ABORT","");
     }
     void commit(){
         //log commit
-        txstate==TxState::Commited;
+        txstate=TxState::Commited;
         send("COMMIT","");
         
     }
@@ -58,8 +58,6 @@ public:
             RequestInterface::SEND_RPC(participant,path,params);
         }
     }
-private:
-    int votes;
     
 };
 

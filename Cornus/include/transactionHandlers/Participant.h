@@ -9,36 +9,44 @@ TODO:
 class Participant : public TransactionHandler
 {
 public:
-    explicit Participant(TransactionConfig &config) : TransactionHandler(config) {
+    Participant(TransactionConfig &config, HostID hostname) : TransactionHandler(config,hostname) {
     }
     virtual Decision handleTransaction(Request start_request) override
     {
         //Prepare
         if(start_request.type==RequestType::voteReq){
-            std::string resp = RequestInterface::LOG_ONCE("VOTEYES", config.txid, this->hostname, LogType::TRANSACTION);
-            send(resp);
-            if(resp=="ABORT"){
-                return;
-            }
-        }else{
-            abort();
-            return;
-        }
-        std::string decision="";
-        //Execution phase
-        auto commit_request= messages.waitForNextMessageWithTimeout(config.timeout);
-        if(commit_request.has_value()){
-            if(commit_request->type==RequestType::Commit){
-                decision="COMMIT";
-            }else if(commit_request->type==RequestType::Abort){
-                decision="ABORT";
+            Decision local_decision=work(start_request);
+            if(local_decision=="VOTEYES"){
+                std::string resp = RequestInterface::LOG_ONCE("VOTEYES", config.txid, this->hostname, LogType::TRANSACTION);
+                if(resp=="VOTEYES"){
+                    send("VOTEYES");
+                    Decision decision;
+                    //Execution phase
+                    auto commit_request= messages.waitForNextMessageWithTimeout(config.timeout);
+                    if(commit_request.has_value()){
+                        if(commit_request->type==RequestType::Commit){
+                            decision="COMMIT";
+                        }else if(commit_request->type==RequestType::Abort){
+                            decision="ABORT";
+                        }else{
+                            //TODO: message at wrong time
+                        }
+                    } else{
+                        decision=terminationProtocol();
+                    }
+                    RequestInterface::LOG_WRITE(decision, config.txid, this->hostname, LogType::TRANSACTION);
+                    return decision;                
+                }else{
+                    send("ABORT");
+                    return "ABORT";
+                }
             }else{
-                //TODO: message at wrong time
+                send("ABORT");
+                return "ABORT";
             }
-        } else{
-            decision=terminationProtocol();
         }
-        RequestInterface::LOG_WRITE(decision, config.txid, this->hostname, LogType::TRANSACTION);
+        abort();
+        return "ABORT";
     }
    
     void send(std::string type){
@@ -48,6 +56,10 @@ public:
         params.emplace("type", type);
         params.emplace("sender", this->hostname);
         RequestInterface::SEND_RPC(config.coordinator,path,params);
+    }
+
+    Decision work(Request request){
+        return "VOTEYES";
     }
 };
 

@@ -46,7 +46,7 @@ public:
     {
         TransactionId txid = getTxId(req);
         Request request = Request(type, txid, req);
-        Node *n = createNode<Node>(request);
+        Node *n = createNode<Node>(request,txid);
         n->handleTransaction(request);
         removeFromMap(txid);
     }
@@ -55,7 +55,7 @@ public:
     {
         TransactionId txid = getUniqueTransactionId();
         Request request = Request(RequestType::transaction, txid, req);
-        Coordinator *n = createNode<Coordinator>(request);
+        Coordinator *n = createNode<Coordinator>(request,txid);
         Decision d = n->handleTransaction(request);
         res.set_content(d, "text/plain");
         removeFromMap(txid);
@@ -86,7 +86,7 @@ private:
     }
 
     template <class Node>
-    Node *createNode(Request request)
+    Node *createNode(Request request, TransactionId txid)
     {
         std::unique_lock lockMutex(mapMutex);
         TransactionConfig conf(request.getParam("config"),txid);
