@@ -40,6 +40,9 @@ public:
             } else{
                 decision = this->terminationProtocol();
             }
+            if (decision == "COMMIT"){
+                worker.COMMIT(start_request.req.body);
+            }
             RequestInterface::LOG_WRITE(decision, this->config.txid, this->hostname, LogType::TRANSACTION);
             return decision;
         }else{
