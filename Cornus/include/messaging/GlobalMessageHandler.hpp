@@ -7,6 +7,7 @@
 #include <thread>
 #include <mutex>
 #include <functional>
+#include <istream>
 
 // onRequest function, in class or in global namespace, takes HTTP request object
 
@@ -20,7 +21,7 @@ public:
                  { onClientRequest(req, res); });
         //handler for below endpoints launches another thread that is independent so ACK response should happen immediately after thread launch
         svr.Post("/VOTEREQ/:txid", [&](const httplib::Request &req, httplib::Response &res)
-                 { std::thread process(&GlobalMessageHandler::onNewRequest<Participant>, this, req, RequestType::voteReq); process.detach(); });
+                 { std::thread process(&GlobalMessageHandler::onNewRequest<Participant<WorkerT>>, this, req, RequestType::voteReq); process.detach(); });
         svr.Post("/VOTEYES/:txid", [&](const httplib::Request &req, httplib::Response &res)
                  { std::thread process(&GlobalMessageHandler::onOldRequest, this, req, RequestType::voteYes); process.detach(); });
         svr.Post("/ABORT/:txid", [&](const httplib::Request &req, httplib::Response &res)

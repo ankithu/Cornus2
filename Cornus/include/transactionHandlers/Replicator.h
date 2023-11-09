@@ -4,11 +4,12 @@
 #include "TransactionHandler.hpp"
 #include <condition_variable>
 
+
 class Replicator : public TransactionHandler
 {
 public:
     Replicator(TransactionConfig &config, HostID hostname, HostConfig& hostConfig) : TransactionHandler(config,hostname, hostConfig) {}
-    virtual Decision handleTransaction(Request request) override
+    virtual Decision handleTransaction(const Request& request) override
     {
         return "";
     }

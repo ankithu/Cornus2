@@ -12,14 +12,14 @@ enum class LogType {
 
 //LogImpl now describes any type that has a LOG_ONCE, LOG_WRITE, and LOG_READ function
 template <class T>
-concept LogImpl = requires(T candidateImpl, std::string& r, HostID& h, TransactionId id, LogType t, std::string& str){
+concept LogImpl = requires(T candidateImpl, std::string& r, HostID& h, TransactionId id, LogType t){
     //concept requires that a function defined like this would compile
     //so if the candidate implemenation does not have LOG_ONCE, LOG_WRITE, LOG_READ
     //functions that take in a request whose return time is Response, the concept
     //will not be met and the code won't compile
-    candidateImpl.LOG_ONCE(r, id, h, t) == str;
-    candidateImpl.LOG_WRITE(r, id, h, t) == str;
-    candidateImpl.LOG_READ(r, id, h, t) == str;
+    { candidateImpl.LOG_ONCE(r, id, h, t) } -> std::same_as<std::string>;
+    { candidateImpl.LOG_WRITE(r, id, h, t) } -> std::same_as<std::string>;
+    { candidateImpl.LOG_READ(r, id, h, t) } -> std::same_as<std::string>;
 };
 
 //RPCImpl describes any type that has a SEND_RPC function

@@ -8,6 +8,7 @@
 #include "../types.hpp"
 #include "../config/TransactionConfig.h"
 #include "../messaging/requestHandler.hpp"
+#include "../worker/workerConcept.hpp"
 
 using Decision = std::string;
 using TransactionId = uint64_t;
@@ -19,6 +20,7 @@ enum TxState
     Aborted,
     Commited
 };
+
 class TransactionHandler
 {
 public:
@@ -54,9 +56,9 @@ public:
         messages.push(request);
     }
 
-    virtual Decision handleTransaction(Request request) = 0;
+    virtual Decision handleTransaction(const Request& request) = 0;
 
-    virtual ~TransactionHandler(){}
+    virtual ~TransactionHandler() = default;
 
 protected:
     MessageQueue<Request> messages;

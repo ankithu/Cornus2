@@ -20,12 +20,14 @@ struct Request
         : type(type_in), txid(txid), req(req)
     {
     }
-    std::string getParam(std::string param){
+
+    [[nodiscard]] std::string getParam(const std::string&& param) const{
         if(req.params.find(param)!=req.params.end()){
             return req.params.find(param)->second;
         }
         return "";
     }
+
     RequestType type;
     uint64_t txid;
     const httplib::Request req;
