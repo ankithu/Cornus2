@@ -18,6 +18,7 @@ public:
 
         if (!votedYes(start_request))
         {
+            send("ABORT");
             return "ABORT";
         }
 
