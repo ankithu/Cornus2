@@ -3,7 +3,7 @@ Purpose: Starts up Cornus nodes at the host:port specified in the input file
 
 Running the script: python3 nodes.py nodes.json
 
-The nodes file is an array where each element is a string of the form "hostname:port"
+The nodes file is an array where each element is a string of the host config path
 """
 
 import argparse
@@ -22,10 +22,9 @@ def start_nodes(nodes_file):
     with open(nodes_file, 'r') as file:
         nodes = json.load(file)
     
-    commands = []
-    for i in range(len(nodes)):
-        host, port = nodes[i].split(":")
-        commands.append("./../Cornus/build/Cornus " + str(i) + " " + host + " " + port)
+    commands = ["./../DBMS/build/DBMS 9000"]
+    for node in nodes:
+        commands.append("./../Cornus/build/Cornus " + node)
     pool = multiprocessing.Pool(processes=len(commands))
     pool.map(run_executable, commands)
     pool.close()

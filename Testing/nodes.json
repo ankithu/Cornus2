@@ -1,6 +1,6 @@
 [
-  "localhost:8000",
-  "localhost:8001",
-  "localhost:8002",
-  "localhost:8003"
+  "./../Cornus/host0.config",
+  "./../Cornus/host1.config",
+  "./../Cornus/host2.config",
+  "./../Cornus/host3.config"
 ]

@@ -7,4 +7,4 @@
 using TransactionId = uint64_t;
 using WorkerT = AcceptAllWorker;
 
-#endif //CORNUS_TYPES_HPP
+#endif // CORNUS_TYPES_HPP

@@ -7,7 +7,7 @@ The test file is an array where each element is a transaction request of the fol
 { "coordinator": index int, "participants": [index int, ...], "operation": string }
 The index int refers to the corresponding element in the nodes file. 
 
-The nodes file is an array where each element is a string of the form "hostname:port"
+The nodes file is an array where each element is a string of the host config path
 
 The boolean should be True for concurrent requests and False for sequential requests.
 
@@ -18,7 +18,10 @@ import json
 import requests
 import concurrent.futures
 
-
+def getHostPort(confFile):
+    with open(confFile, 'r') as file:
+        conf = json.load(file)
+    return conf["host"] + ":" + str(conf["port"])
 
 def generate_transactions(test_file, nodes_file):
     transactions = []
@@ -42,12 +45,12 @@ def generate_transactions(test_file, nodes_file):
                 print("INVALID TEST CASE: participant index out of range")
                 exit(1)
         
-        body = nodes[coordinator] + " "
+        body = getHostPort(nodes[coordinator]) + " "
         for i in range(len(participants)):
-            body = body + nodes[participants[i]] + " "
+            body = body + getHostPort(nodes[participants[i]]) + " "
 
 
-        transactions.append(("http://"+nodes[coordinator] +"/TRANSACTION", body))
+        transactions.append(("http://"+getHostPort(nodes[coordinator]) +"/TRANSACTION", body))
     return transactions
 
 def make_request(url, body):
@@ -57,6 +60,7 @@ def make_request(url, body):
     params = {
     'config': body,
     }
+    print(url, params, headers)
     response = requests.post(url, data=params, headers=headers)
     return response
 
