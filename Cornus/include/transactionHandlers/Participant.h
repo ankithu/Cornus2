@@ -7,10 +7,10 @@ TODO:
 - Add logging
 */
 template <WorkerImpl WorkerT>
-class Participant : public TransactionHandler
+class PaperParticipant : public PaperTransactionHandler
 {
 public:
-    Participant(TransactionConfig &config, HostID hostname, HostConfig &hostConfig) : TransactionHandler(config, hostname, hostConfig), worker()
+    PaperParticipant(TransactionConfig &config, HostID hostname, HostConfig &hostConfig) : PaperTransactionHandler(config, hostname, hostConfig), worker()
     {
     }
     virtual Decision handleTransaction(const Request &start_request) override

@@ -6,10 +6,10 @@
 TODO:
 */
 template <WorkerImpl WorkerT>
-class Participant2 : public TransactionHandler2
+class NewParticipant : public NewTransactionHandler
 {
 public:
-    Participant2(TransactionConfig &config, HostID hostname, HostConfig &hostConfig) : TransactionHandler2(config, hostname, hostConfig), worker()
+    NewParticipant(TransactionConfig &config, HostID hostname, HostConfig &hostConfig) : NewTransactionHandler(config, hostname, hostConfig), worker()
     {
     }
     virtual Decision handleTransaction(const Request &start_request) override
@@ -73,13 +73,14 @@ public:
         std::string resp = RequestInterface::LOG_ONCE("ABORT", config.txid, this->hostname, LogType::TRANSACTION);
         return resp;
     }
-} private : WorkerT worker;
 
-inline bool votedYes(const Request &request)
-{
-    return worker.VOTE_REQ(request.req.body);
-}
-}
-;
+private:
+    WorkerT worker;
+
+    inline bool votedYes(const Request &request)
+    {
+        return worker.VOTE_REQ(request.req.body);
+    }
+};
 
 #endif // CORNUS_PARTICIPANT_H

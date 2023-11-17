@@ -1,13 +1,17 @@
 #ifndef CORNUS_MESSAGEHANDLER_HPP
 #define CORNUS_MESSAGEHANDLER_HPP
 
-#include "../transactionHandlers/Coordinator.h"
-#include "../transactionHandlers/Participant.h"
-#include "../transactionHandlers/Replicator.h"
 #include <thread>
 #include <mutex>
 #include <functional>
 #include <istream>
+#include "../transactionHandlers/TransactionHandler.hpp"
+#include "../transactionHandlers/TransactionHandler2.hpp"
+#include "../transactionHandlers/Coordinator.h"
+#include "../transactionHandlers/Participant.h"
+#include "../transactionHandlers/Coordinator2.h"
+#include "../transactionHandlers/Participant2.h"
+#include "../transactionHandlers/Replicator.h"
 
 // onRequest function, in class or in global namespace, takes HTTP request object
 
@@ -21,7 +25,7 @@ public:
                  { onClientRequest(req, res); });
         // handler for below endpoints launches another thread that is independent so ACK response should happen immediately after thread launch
         svr.Post("/VOTEREQ/:txid", [&](const httplib::Request &req, httplib::Response &res)
-                 { std::thread process(&GlobalMessageHandler::onNewRequest<Participant<WorkerT>>, this, req, RequestType::voteReq); process.detach(); });
+                 { std::thread process(&GlobalMessageHandler::onNewRequest<NewParticipant<WorkerT>>, this, req, RequestType::voteReq); process.detach(); });
         svr.Post("/VOTEYES/:txid", [&](const httplib::Request &req, httplib::Response &res)
                  { std::thread process(&GlobalMessageHandler::onOldRequest, this, req, RequestType::voteYes); process.detach(); });
         svr.Post("/ABORT/:txid", [&](const httplib::Request &req, httplib::Response &res)
@@ -62,7 +66,7 @@ public:
         TransactionId txid = getUniqueTransactionId();
         std::cout << "Created transaction id: " << txid << std::endl;
         Request request = Request(RequestType::transaction, txid, req);
-        Coordinator *n = createNode<Coordinator>(request, txid);
+        NewCoordinator *n = createNode<NewCoordinator>(request, txid);
         Decision d = n->handleTransaction(request);
         res.set_content(d, "text/plain");
         removeFromMap(txid);
@@ -107,7 +111,7 @@ private:
         std::unique_lock lockMutex(mapMutex);
         if (transactions.find(txid) != transactions.end())
         {
-            TransactionHandler *n = transactions[txid];
+            NewTransactionHandler *n = transactions[txid];
             delete n;
             transactions.erase(txid);
         }
@@ -130,8 +134,8 @@ private:
     u_int16_t nodeId;
     u_int32_t transactionCounter = 0;
     std::mutex mapMutex;
-    std::map<TransactionId, TransactionHandler *> transactions;
-    std::map<TransactionId, Replicator *> replicators;
+    std::map<TransactionId, NewTransactionHandler *> transactions;
+    std::map<TransactionId, NewTransactionHandler *> replicators;
     HostID hostname;
 };
 

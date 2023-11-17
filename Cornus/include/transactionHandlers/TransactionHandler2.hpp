@@ -13,10 +13,10 @@
 using Decision = std::string;
 using TransactionId = uint64_t;
 
-class TransactionHandler2
+class NewTransactionHandler
 {
 public:
-    TransactionHandler2(TransactionConfig &config, HostID hostname, HostConfig &hostConfig) : config(config), hostname(hostname), hostConfig(hostConfig)
+    NewTransactionHandler(TransactionConfig &config, HostID hostname, HostConfig &hostConfig) : config(config), hostname(hostname), hostConfig(hostConfig)
     {
     }
 
@@ -54,7 +54,12 @@ public:
 
     virtual Decision handleTransaction(const Request &request) = 0;
 
-    virtual ~TransactionHandler2() = default;
+    virtual ~NewTransactionHandler() = default;
+
+    void logFinal(Decision decision, TransactionId txid, HostID host)
+    {
+        // TODO IMPLEMENT IT
+    }
 
 protected:
     MessageQueue<Request> messages;

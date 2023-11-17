@@ -7,10 +7,10 @@ TODO:
 - Fix logging post responding to client, needs to be a new thread
 */
 
-class Coordinator2 : public TransactionHandler2
+class NewCoordinator : public NewTransactionHandler
 {
 public:
-    Coordinator2(TransactionConfig &config, HostID hostname, HostConfig &hostConfig) : TransactionHandler2(config, hostname, hostConfig)
+    NewCoordinator(TransactionConfig &config, HostID hostname, HostConfig &hostConfig) : NewTransactionHandler(config, hostname, hostConfig)
     {
     }
 
@@ -52,7 +52,7 @@ public:
     }
     void finishTransaction(Decision decision)
     {
-        RequestInterface::LOG(decision, this->config.txid, this->hostname, LogType::TRANSACTION);
+        logFinal(decision, this->config.txid, this->hostname);
         sendToReplicators("COMPLETE", "");
         sendToParticipants(decision, "");
     }
@@ -74,10 +74,13 @@ public:
         params.emplace("command", "");
         params.emplace("type", type);
         params.emplace("sender", this->hostname);
+        /*
+        commenting out for now to allow compilation
         for (auto replicator : this->config.replicators)
         {
             RequestInterface::SEND_RPC(replicator, path, params);
         }
+        */
     }
     void sendToParticipants(std::string type, std::string req_config)
     {

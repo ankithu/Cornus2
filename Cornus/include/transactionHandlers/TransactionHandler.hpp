@@ -13,10 +13,10 @@
 using Decision = std::string;
 using TransactionId = uint64_t;
 
-class TransactionHandler
+class PaperTransactionHandler
 {
 public:
-    TransactionHandler(TransactionConfig &config, HostID hostname, HostConfig &hostConfig) : config(config), hostname(hostname), hostConfig(hostConfig)
+    PaperTransactionHandler(TransactionConfig &config, HostID hostname, HostConfig &hostConfig) : config(config), hostname(hostname), hostConfig(hostConfig)
     {
     }
 
@@ -54,7 +54,7 @@ public:
 
     virtual Decision handleTransaction(const Request &request) = 0;
 
-    virtual ~TransactionHandler() = default;
+    virtual ~PaperTransactionHandler() = default;
 
 protected:
     MessageQueue<Request> messages;

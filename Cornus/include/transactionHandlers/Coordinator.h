@@ -7,10 +7,10 @@ TODO:
 - Add callback for timeout in voting phase
 */
 
-class Coordinator : public TransactionHandler
+class PaperCoordinator : public PaperTransactionHandler
 {
 public:
-    Coordinator(TransactionConfig &config, HostID hostname, HostConfig &hostConfig) : TransactionHandler(config, hostname, hostConfig)
+    PaperCoordinator(TransactionConfig &config, HostID hostname, HostConfig &hostConfig) : PaperTransactionHandler(config, hostname, hostConfig)
     {
     }
 
