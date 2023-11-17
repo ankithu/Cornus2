@@ -9,8 +9,9 @@ enum RequestType
     voteReq,
     voteYes,
     Abort,
-    willVoteYes,
-    voteYesCompleted,
+    willCommit,
+    willAbort,
+    decisionCompleted,
     Commit
 };
 
@@ -21,8 +22,10 @@ struct Request
     {
     }
 
-    [[nodiscard]] std::string getParam(const std::string&& param) const{
-        if(req.params.find(param)!=req.params.end()){
+    [[nodiscard]] std::string getParam(const std::string &&param) const
+    {
+        if (req.params.find(param) != req.params.end())
+        {
             return req.params.find(param)->second;
         }
         return "";

@@ -1,15 +1,15 @@
-#ifndef CORNUS_PARTICIPANT_HPP
-#define CORNUS_PARTICIPANT_HPP
+#ifndef CORNUS_PARTICIPANT2_HPP
+#define CORNUS_PARTICIPANT2_HPP
 
-#include "TransactionHandler.hpp"
+#include "TransactionHandler2.hpp"
 /*
 TODO:
 */
 template <WorkerImpl WorkerT>
-class Participant : public TransactionHandler
+class Participant2 : public TransactionHandler2
 {
 public:
-    Participant(TransactionConfig &config, HostID hostname, HostConfig &hostConfig) : TransactionHandler(config, hostname, hostConfig), worker()
+    Participant2(TransactionConfig &config, HostID hostname, HostConfig &hostConfig) : TransactionHandler2(config, hostname, hostConfig), worker()
     {
     }
     virtual Decision handleTransaction(const Request &start_request) override
@@ -68,18 +68,18 @@ public:
         RequestInterface::SEND_RPC(this->config.coordinator, path, params);
     }
 
-    Decision optTerminationProtocol(){
+    Decision optTerminationProtocol()
+    {
         std::string resp = RequestInterface::LOG_ONCE("ABORT", config.txid, this->hostname, LogType::TRANSACTION);
         return resp;
-        }
     }
-private:
-    WorkerT worker;
+} private : WorkerT worker;
 
-    inline bool votedYes(const Request &request)
-    {
-        return worker.VOTE_REQ(request.req.body);
-    }
-};
+inline bool votedYes(const Request &request)
+{
+    return worker.VOTE_REQ(request.req.body);
+}
+}
+;
 
 #endif // CORNUS_PARTICIPANT_H

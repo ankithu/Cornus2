@@ -14,12 +14,12 @@
 class GlobalMessageHandler
 {
 public:
-    GlobalMessageHandler(HostConfig& hostConfig) : hostConfig(hostConfig), nodeId(hostConfig.hostNum)
+    GlobalMessageHandler(HostConfig &hostConfig) : hostConfig(hostConfig), nodeId(hostConfig.hostNum)
     {
         httplib::Server::Handler handler;
         svr.Post("/TRANSACTION", [&](const httplib::Request &req, httplib::Response &res)
                  { onClientRequest(req, res); });
-        //handler for below endpoints launches another thread that is independent so ACK response should happen immediately after thread launch
+        // handler for below endpoints launches another thread that is independent so ACK response should happen immediately after thread launch
         svr.Post("/VOTEREQ/:txid", [&](const httplib::Request &req, httplib::Response &res)
                  { std::thread process(&GlobalMessageHandler::onNewRequest<Participant<WorkerT>>, this, req, RequestType::voteReq); process.detach(); });
         svr.Post("/VOTEYES/:txid", [&](const httplib::Request &req, httplib::Response &res)
@@ -29,11 +29,12 @@ public:
         svr.Post("/COMMIT/:txid", [&](const httplib::Request &req, httplib::Response &res)
                  { std::thread process(&GlobalMessageHandler::onOldRequest, this, req, RequestType::Commit); process.detach(); });
         /*
-        only relevant to new protocol, will uncomment later
-        svr.Post("/WILLVOTEYES/:txid", [&](const httplib::Request &req, httplib::Response &res)
-                 { std::thread process(&GlobalMessageHandler::onNewRequest<Replicator>, this, req, RequestType::willVoteYes); process.detach(); });
-        svr.Post("/VOTEYESCOMPLETED/:txid", [&](const httplib::Request &req, httplib::Response &res)
-                 { std::thread process(&GlobalMessageHandler::onOldRequest, this, req, RequestType::voteYesCompleted);process.detach(); });
+        svr.Post("/WILLCOMMIT/:txid", [&](const httplib::Request &req, httplib::Response &res)
+                 { std::thread process(&GlobalMessageHandler::onNewRequest<Replicator>, this, req, RequestType::willCommit); process.detach(); });
+        svr.Post("/WILLABORT/:txid", [&](const httplib::Request &req, httplib::Response &res)
+                 { std::thread process(&GlobalMessageHandler::onNewRequest<Replicator>, this, req, RequestType::willAbort); process.detach(); });
+        svr.Post("/DECISIONCOMPLETED/:txid", [&](const httplib::Request &req, httplib::Response &res)
+                 { std::thread process(&GlobalMessageHandler::onOldRequest, this, req, RequestType::decisionCompleted);process.detach(); });
         */
         this->hostname = hostConfig.id;
         std::cout << "Starting server..." << hostConfig.host << " " << hostConfig.port << std::endl;
@@ -50,7 +51,7 @@ public:
         TransactionId txid = getTxId(req);
         std::cout << "txid: " << txid << std::endl;
         Request request = Request(type, txid, req);
-        Node *n = createNode<Node>(request,txid);
+        Node *n = createNode<Node>(request, txid);
         n->handleTransaction(request);
         removeFromMap(txid);
     }
@@ -61,7 +62,7 @@ public:
         TransactionId txid = getUniqueTransactionId();
         std::cout << "Created transaction id: " << txid << std::endl;
         Request request = Request(RequestType::transaction, txid, req);
-        Coordinator *n = createNode<Coordinator>(request,txid);
+        Coordinator *n = createNode<Coordinator>(request, txid);
         Decision d = n->handleTransaction(request);
         res.set_content(d, "text/plain");
         removeFromMap(txid);
@@ -95,8 +96,8 @@ private:
     Node *createNode(Request request, TransactionId txid)
     {
         std::unique_lock lockMutex(mapMutex);
-        TransactionConfig conf(request.getParam("config"),txid);
-        Node *p = new Node(conf,hostname, hostConfig);
+        TransactionConfig conf(request.getParam("config"), txid);
+        Node *p = new Node(conf, hostname, hostConfig);
         transactions[txid] = p;
         return p;
     }
@@ -121,7 +122,7 @@ private:
         }
     }
 
-    HostConfig& hostConfig;
+    HostConfig &hostConfig;
     httplib::Server svr;
     // transactionID format:
     // bits 63-48: 0, bits 47-16: per node counter, bits 15-0: unique node id
@@ -130,6 +131,7 @@ private:
     u_int32_t transactionCounter = 0;
     std::mutex mapMutex;
     std::map<TransactionId, TransactionHandler *> transactions;
+    std::map<TransactionId, Replicator *> replicators;
     HostID hostname;
 };
 

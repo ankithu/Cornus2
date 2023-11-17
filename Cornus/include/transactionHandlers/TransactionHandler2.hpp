@@ -1,5 +1,5 @@
-#ifndef CORNUS_TRANSACTIONHANDLER_HPP
-#define CORNUS_TRANSACTIONHANDLER_HPP
+#ifndef CORNUS_TRANSACTIONHANDLER2_HPP
+#define CORNUS_TRANSACTIONHANDLER2_HPP
 
 #include "../messaging/Request.h"
 #include "../messaging/messageQueue.hpp"
@@ -13,10 +13,10 @@
 using Decision = std::string;
 using TransactionId = uint64_t;
 
-class TransactionHandler
+class TransactionHandler2
 {
 public:
-    TransactionHandler(TransactionConfig &config, HostID hostname, HostConfig &hostConfig) : config(config), hostname(hostname), hostConfig(hostConfig)
+    TransactionHandler2(TransactionConfig &config, HostID hostname, HostConfig &hostConfig) : config(config), hostname(hostname), hostConfig(hostConfig)
     {
     }
 
@@ -54,7 +54,7 @@ public:
 
     virtual Decision handleTransaction(const Request &request) = 0;
 
-    virtual ~TransactionHandler() = default;
+    virtual ~TransactionHandler2() = default;
 
 protected:
     MessageQueue<Request> messages;
