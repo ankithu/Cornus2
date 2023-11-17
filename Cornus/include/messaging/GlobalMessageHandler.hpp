@@ -12,6 +12,7 @@
 #include "../transactionHandlers/Coordinator2.h"
 #include "../transactionHandlers/Participant2.h"
 #include "../transactionHandlers/Replicator.h"
+#include "../transactionHandlers/Committer.h"
 
 using TransactionHandler = NewTransactionHandler;
 using Coordinator = NewCoordinator;
@@ -42,6 +43,8 @@ public:
                  { std::thread process(&GlobalMessageHandler::onNewRequest<Replicator>, this, req, RequestType::willAbort, &replicators); process.detach(); });
         svr.Post("/DECISIONCOMPLETED/:txid", [&](const httplib::Request &req, httplib::Response &res)
                  { std::thread process(&GlobalMessageHandler::onOldRequest, this, req, RequestType::decisionCompleted, &replicators);process.detach(); });
+        svr.Post("/OVERRIDECOMMIT/:txid", [&](const httplib::Request &req, httplib::Response &res)
+                 { std::thread process(&GlobalMessageHandler::onNewRequest<Committer<WorkerT>>, this, req, RequestType::Commit, &committers); process.detach(); });
         this->hostname = hostConfig.id;
         std::cout << "Starting server..." << hostConfig.host << " " << hostConfig.port << std::endl;
         if (!svr.listen(hostConfig.host, hostConfig.port))
@@ -138,6 +141,7 @@ private:
     std::mutex mapMutex;
     std::map<TransactionId, TransactionHandler *> handlers;
     std::map<TransactionId, TransactionHandler *> replicators;
+    std::map<TransactionId, TransactionHandler *> committers;
     HostID hostname;
 };
 

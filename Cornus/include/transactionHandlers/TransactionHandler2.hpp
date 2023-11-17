@@ -58,11 +58,31 @@ public:
 
     void logFinal(Decision decision, TransactionId txid, HostID host)
     {
-        // TODO IMPLEMENT IT
+        Decision prev = RequestInterface::LOG_READ(decision, this->config.txid, this->hostname, LogType::TRANSACTION);
+        if (prev != decision)
+        {
+            RequestInterface::LOG_WRITE(decision, this->config.txid, this->hostname, LogType::TRANSACTION);
+
+            if (prev == "ABORT")
+            {
+                std::string path = "/OVERRIDECOMMIT/" + std::to_string(this->config.txid);
+                httplib::Params params;
+                params.emplace("type", "COMMIT");
+                params.emplace("sender", this->hostname);
+
+                for (auto participant : this->config.participants)
+                {
+                    RequestInterface::SEND_RPC(participant, path, params);
+                }
+            }
+        }
     }
 
+    // TODO IMPLEMENT IT
+
 protected:
-    MessageQueue<Request> messages;
+    MessageQueue<Request>
+        messages;
     TransactionConfig config;
     HostID hostname;
     HostConfig &hostConfig;
