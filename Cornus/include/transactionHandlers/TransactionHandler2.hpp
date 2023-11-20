@@ -7,7 +7,7 @@
 #include <condition_variable>
 #include "../types.hpp"
 #include "../config/TransactionConfig.h"
-#include "../messaging/requestHandler.hpp"
+#include "../messaging/dbms.hpp"
 #include "../worker/workerConcept.hpp"
 
 using Decision = std::string;
@@ -25,7 +25,7 @@ public:
         // TODO: wait for failure detection timeout and alternative node to complete log
         for (auto otherParticipantId : config.participants)
         {
-            std::string resp = RequestInterface::LOG_ONCE("ABORT", config.txid, otherParticipantId, LogType::TRANSACTION);
+            std::string resp = DBMSInterface::LOG_ONCE("ABORT", config.txid, otherParticipantId, LogType::TRANSACTION);
             if (resp == "ABORT")
             {
                 return "ABORT";
@@ -58,21 +58,22 @@ public:
 
     void logFinal(Decision decision, TransactionId txid, HostID host)
     {
-        Decision prev = RequestInterface::LOG_READ(decision, this->config.txid, this->hostname, LogType::TRANSACTION);
+        Decision prev = DBMSInterface::LOG_READ(decision, this->config.txid, this->hostname, LogType::TRANSACTION);
         if (prev != decision)
         {
-            RequestInterface::LOG_WRITE(decision, this->config.txid, this->hostname, LogType::TRANSACTION);
+            DBMSInterface::LOG_WRITE(decision, this->config.txid, this->hostname, LogType::TRANSACTION);
 
             if (prev == "ABORT")
             {
-                std::string path = "/OVERRIDECOMMIT/" + std::to_string(this->config.txid);
-                httplib::Params params;
+                std::string endpoint = "OVERRIDECOMMIT";
+                ParamsT params;
+                params.emplace("txid", std::to_string(this->config.txid));
                 params.emplace("type", "COMMIT");
                 params.emplace("sender", this->hostname);
 
                 for (auto participant : this->config.participants)
                 {
-                    RequestInterface::SEND_RPC(participant, path, params);
+                    sendToHost(participant, TCPRequest(endpoint, params));
                 }
             }
         }
@@ -81,11 +82,22 @@ public:
     // TODO IMPLEMENT IT
 
 protected:
+
+    std::future<std::optional<TCPResponse>> sendToHost(HostID& client, TCPRequest req){
+        auto itr = clients.find(client);
+        if (itr == clients.end()){
+            itr = clients.emplace(client, std::make_unique<TCPClient>(client)).first;
+        }
+        return itr->second->sendRequestAsync(req);
+    }
+
     MessageQueue<Request>
         messages;
     TransactionConfig config;
     HostID hostname;
     HostConfig &hostConfig;
+    std::unordered_map<HostID, std::unique_ptr<TCPClient>> clients;
+
 };
 
 #endif // CORNUS_TRANSACTIONHANDLER_HPP

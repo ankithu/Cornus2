@@ -8,6 +8,6 @@ int main(int argc, char **argv)
         throw std::runtime_error("Usage: ./cornus hostConfigJsonFile");
     }
     HostConfig configuration = HostConfig(argv[1]);
-    RequestInterface::init(configuration);
+    DBMSInterface::init(configuration);
     GlobalMessageHandler handler(configuration);
 }

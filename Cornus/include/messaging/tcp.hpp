@@ -7,7 +7,7 @@
  *
  * Provides "endpoint" abstraction to allow different message types to be handled by different callbacks
  *
- * A callback funciton should take in a TCPRequest& and return a TCPResponse.
+ * A callback function should take in a TCPRequest& and return a TCPResponse.
  *
  * Write a callback like this:
  * TCPResponse handler(const TCPRequest& req){
@@ -78,19 +78,83 @@
 
 #include <iostream>
 #include <future>
+#include <sstream>
 
-static const size_t MAX_MESSAGE_SIZE = 256;
+static const size_t MAX_MESSAGE_SIZE = 512;
 static const char HEADER_DELIM = '\t';
 static const char MESSAGE_END = '\n';
 
-struct TCPRequest {
+using ParamsT = std::unordered_map<std::string, std::string>;
+
+class TCPRequest {
+public:
     std::string endpoint;
     std::string request;
+private:
+    std::unordered_map<std::string, std::string> params;
+public:
+
+    TCPRequest(std::string&& endpoint, std::string&& request) : endpoint(endpoint), request(request) {
+        std::stringstream ss(request);
+        std::string pair;
+        while (std::getline(ss, pair, ';')){
+            if (pair.find(':') == std::string::npos){
+                break;
+            }
+            std::stringstream pss(pair);
+            std::string key, val;
+            std::getline(pss, key, ':');
+            std::getline(pss, val, ':');
+            params[key] = val;
+        }
+    }
+
+    TCPRequest(const std::string& endpoint, const std::string& request) : endpoint(endpoint), request(request){
+        std::stringstream ss(request);
+        std::string pair;
+        while (std::getline(ss, pair, ';')){
+            if (pair.find(':') == std::string::npos){
+                break;
+            }
+            std::stringstream pss(pair);
+            std::string key, val;
+            std::getline(pss, key, ':');
+            std::getline(pss, val, ':');
+            params[key] = val;
+        }
+    }
+
+    TCPRequest(std::string& endpoint, ParamsT& params) : endpoint(endpoint), params(params){
+        writeParams();
+    }
+
+    void setParam(const std::string& param, const std::string& value){
+        params[param] = value;
+        writeParams();
+    }
+
+    std::optional<std::string> getParam(const std::string& param) const{
+        auto itr = params.find(param);
+        if (itr != params.end()){
+            return {itr->second};
+        }
+        return std::nullopt;
+    }
+
+private:
+    void writeParams(){
+        request = "";
+        for (auto& [param, val] : params){
+            request += param + ":" + val + ";";
+        }
+    }
 };
 
 struct TCPResponse {
     std::string response;
 };
+
+static const TCPResponse TCP_OK = TCPResponse{"OK"};
 
 std::ostream& operator<<(std::ostream& os, const TCPRequest& req) {
     os << "TCP Request = { endpoint = \"" << req.endpoint << "\", request = \"" << req.request << "\"}";
@@ -153,8 +217,8 @@ private:
         //std::cout << std::endl;
         if (header_delim && message_end){
             std::optional<TCPRequest> o(
-                    {std::string(msg, *header_delim),
-                     std::string (msg + *header_delim + 1, *message_end - *header_delim - 1)});
+                    {TCPRequest(std::string(msg, *header_delim),
+                     std::string (msg + *header_delim + 1, *message_end - *header_delim - 1))});
             return o;
         }
         else {
@@ -442,6 +506,13 @@ public:
             perror("Error connecting stream socket");
             valid = false;
         }
+    }
+
+    TCPClient(const std::string& hostnamecolonport){
+        size_t delim = hostnamecolonport.find(":");
+        std::string host = hostnamecolonport.substr(0, delim);
+        int port = std::stoi(hostnamecolonport.substr(delim + 1));
+        TCPClient(host, port);
     }
 
     ~TCPClient(){

@@ -2,6 +2,7 @@
 #define CORNUS_COORDINATOR_HPP
 
 #include "TransactionHandler.hpp"
+#include "../utils.hpp"
 /*
 TODO:
 - Add callback for timeout in voting phase
@@ -62,17 +63,27 @@ public:
 
     void send(std::string type, std::string req_config)
     {
-        std::string path = "/" + type + "/" + std::to_string(this->config.txid);
-        httplib::Params params;
+        ParamsT params;
         params.emplace("config", req_config);
         params.emplace("command", "");
+        params.emplace("txid", std::to_string(this->config.txid));
         params.emplace("type", type);
         params.emplace("sender", this->hostname);
+        TCPRequest req(type, params);
+        std::vector<std::future<std::optional<TCPResponse>>> responses;
+
         for (auto participant : this->config.participants)
         {
-            RequestInterface::SEND_RPC(participant, path, params);
+            auto itr = clients.find(participant);
+            if (itr == clients.end()) {
+                itr = clients.emplace(participant, std::make_unique<TCPClient>(participant)).first;
+            }
+            responses.push_back(itr->second->sendRequestAsync(req));
         }
+        resolveFutures(responses);
     }
+private:
+    std::unordered_map<HostID, std::unique_ptr<TCPClient>> clients;
 };
 
 #endif // CORNUS_COORDINATOR_H

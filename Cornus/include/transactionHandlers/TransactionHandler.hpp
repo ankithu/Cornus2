@@ -7,7 +7,7 @@
 #include <condition_variable>
 #include "../types.hpp"
 #include "../config/TransactionConfig.h"
-#include "../messaging/requestHandler.hpp"
+#include "../messaging/dbms.hpp"
 #include "../worker/workerConcept.hpp"
 
 using Decision = std::string;
@@ -25,7 +25,7 @@ public:
         // TODO: wait for failure detection timeout and alternative node to complete log
         for (auto otherParticipantId : config.participants)
         {
-            std::string resp = RequestInterface::LOG_ONCE("ABORT", config.txid, otherParticipantId, LogType::TRANSACTION);
+            std::string resp = DBMSInterface::LOG_ONCE("ABORT", config.txid, otherParticipantId, LogType::TRANSACTION);
             if (resp == "ABORT")
             {
                 return "ABORT";

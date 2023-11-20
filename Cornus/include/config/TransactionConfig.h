@@ -30,6 +30,8 @@ struct TransactionConfig
     }
     HostID coordinator;
     std::vector<HostID> participants;
+    //TODO: populate
+    std::vector<HostID> replicators;
     TransactionId txid;
 };
 

@@ -1,9 +1,10 @@
-#ifndef CORNUS_REQUESTHANDLER_HPP
-#define CORNUS_REQUESTHANDLER_HPP
+#ifndef CORNUS_DBMS_HPP
+#define CORNUS_DBMS_HPP
 
 #include "Response.hpp"
 #include "mutex"
 #include "../config/HostConfig.hpp"
+#include "../lib/httplib.hpp"
 
 enum class LogType {
     DATA = 0,
@@ -22,15 +23,10 @@ concept LogImpl = requires(T candidateImpl, std::string& r, HostID& h, Transacti
     { candidateImpl.LOG_READ(r, id, h, t) } -> std::same_as<std::string>;
 };
 
-//RPCImpl describes any type that has a SEND_RPC function
-template <class T>
-concept RPCImpl = requires(T candidateImpl, HostID& host, std::string endpoint,httplib::Params request){
-    candidateImpl.SEND_RPC(host, endpoint,request);
-};
 
 //Interface provides static ability to perform log updates and RPCs given a certain request
 //makes sure only one outgoing request occurs at once (network limitation)
-template <LogImpl LogImplT, RPCImpl RPCImplT>
+template <LogImpl LogImplT>
 class TemplatedRequestInterface {
 public:
     static std::string LOG_ONCE(const std::string& request, const TransactionId txId, const HostID& hostId, const LogType logType){
@@ -48,21 +44,14 @@ public:
         return logImpl->LOG_READ(request, txId, hostId, logType);
     }
 
-    static void SEND_RPC(HostID& host, std::string endpoint, httplib::Params request){
-        auto l = std::unique_lock(httpMut);
-        rpcImpl->SEND_RPC(host, endpoint,request);
-    }
-
     static void init(const HostConfig& hostConfig){
         auto l = std::unique_lock(httpMut);
         logImpl = std::make_unique<LogImplT>(LogImplT(hostConfig.dbmsAddress));
-        rpcImpl = std::make_unique<RPCImplT>(RPCImplT(hostConfig));
     }
 
 private:
     static inline std::unique_ptr<LogImplT> logImpl{};
     static inline std::mutex httpMut{};
-    static inline std::unique_ptr<RPCImplT> rpcImpl{};
 };
 
 //TODO implement interacting with the simulated dbms her
@@ -108,41 +97,18 @@ private:
     httplib::Client cli;
 };
 
-class SimulatedRPCImpl {
-public:
-    explicit SimulatedRPCImpl(const HostConfig& hostConfig){
-        for (auto id : hostConfig.allOthers){
-            clients.insert({id, httplib::Client(id)});
-        }
-    }
-
-    void SEND_RPC(HostID& host, std::string endpoint,httplib::Params message){
-        auto clientItr = clients.find(host);
-        if (clientItr == clients.end()){
-           //TODO handle (happens on bad SEND_RPC calls)
-        }
-        auto res = clientItr->second.Post(endpoint, message);
-        if (res.error() != httplib::Error::Success){
-            //TODO handle
-        }
-    }
-
-
-private:
-    std::unordered_map<HostID, httplib::Client> clients;
-};
 
 
 //potentially add additional implementations for other DBMS interfaces
 //create the implementation, and then add a branch to the compiler directives
-//and a compiler variable to indicate which one is "RequestInterface"
-using SimulatedDBMS = TemplatedRequestInterface<SimulatedDBMSImpl, SimulatedRPCImpl>;
+//and a compiler variable to indicate which one is "DBMSInterface"
+using SimulatedDBMS = TemplatedRequestInterface<SimulatedDBMSImpl>;
 
 #define SIMULATED_DBMS
 
 #ifdef SIMULATED_DBMS
-using RequestInterface = SimulatedDBMS;
+using DBMSInterface = SimulatedDBMS;
 #endif
 
 
-#endif //CORNUS_REQUESTHANDLER_HPP
+#endif //CORNUS_DBMS_HPP

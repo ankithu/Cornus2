@@ -13,7 +13,7 @@ public:
     virtual Decision handleTransaction(const Request &start_request) override
     {
 
-        worker.COMMIT(start_request.req.body);
+        worker.COMMIT(start_request.req.request);
         return "COMMIT";
     }
 

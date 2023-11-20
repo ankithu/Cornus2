@@ -2,6 +2,7 @@
 #define CORNUS_COORDINATOR2_HPP
 
 #include "TransactionHandler2.hpp"
+#include "../utils.hpp"
 /*
 TODO:
 - Fix logging post responding to client, needs to be a new thread
@@ -68,32 +69,36 @@ public:
     }
     void sendToReplicators(std::string type, std::string req_config)
     {
-        std::string path = "/" + type + "/" + std::to_string(this->config.txid);
-        httplib::Params params;
+        ParamsT params;
         params.emplace("config", req_config);
         params.emplace("command", "");
         params.emplace("type", type);
+        params.emplace("txid", std::to_string(this->config.txid));
         params.emplace("sender", this->hostname);
-        /*
-        commenting out for now to allow compilation
+        std::vector<std::future<std::optional<TCPResponse>>> futures;
         for (auto replicator : this->config.replicators)
         {
-            RequestInterface::SEND_RPC(replicator, path, params);
+            TCPRequest req(type, params);
+            futures.push_back(sendToHost(replicator, req));
         }
-        */
+        resolveFutures(futures);
     }
+
     void sendToParticipants(std::string type, std::string req_config)
     {
-        std::string path = "/" + type + "/" + std::to_string(this->config.txid);
-        httplib::Params params;
+        ParamsT params;
+        params.emplace("txid", std::to_string(this->config.txid));
         params.emplace("config", req_config);
         params.emplace("command", "");
         params.emplace("type", type);
         params.emplace("sender", this->hostname);
+        std::vector<std::future<std::optional<TCPResponse>>> futures;
         for (auto participant : this->config.participants)
         {
-            RequestInterface::SEND_RPC(participant, path, params);
+            TCPRequest req(type, params);
+            futures.push_back(sendToHost(participant, req));
         }
+        resolveFutures(futures);
     }
 };
 

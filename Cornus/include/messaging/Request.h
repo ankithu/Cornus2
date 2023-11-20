@@ -1,7 +1,7 @@
 #ifndef CORNUS_REQUEST_H
 #define CORNUS_REQUEST_H
 
-#include "../lib/httplib.hpp"
+#include "tcp.hpp"
 
 enum RequestType
 {
@@ -17,23 +17,18 @@ enum RequestType
 
 struct Request
 {
-    Request(RequestType type_in, uint64_t txid, const httplib::Request &req)
-        : type(type_in), txid(txid), req(req)
-    {
-    }
+    Request(RequestType type_in, uint64_t txid, const TCPRequest&& req)
+        : type(type_in), txid(txid), req(req){}
 
-    [[nodiscard]] std::string getParam(const std::string &&param) const
+    [[nodiscard]] std::string getParam(const std::string&& param) const
     {
-        if (req.params.find(param) != req.params.end())
-        {
-            return req.params.find(param)->second;
-        }
-        return "";
+        auto search = req.getParam(param);
+        return search ? *search : "";
     }
 
     RequestType type;
     uint64_t txid;
-    const httplib::Request req;
+    const TCPRequest req;
 };
 
 #endif // CORNUS_REQUEST_H

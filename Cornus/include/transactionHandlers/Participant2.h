@@ -9,8 +9,10 @@ template <WorkerImpl WorkerT>
 class NewParticipant : public NewTransactionHandler
 {
 public:
-    NewParticipant(TransactionConfig &config, HostID hostname, HostConfig &hostConfig) : NewTransactionHandler(config, hostname, hostConfig), worker()
+    NewParticipant(TransactionConfig &config, HostID hostname, HostConfig &hostConfig) : NewTransactionHandler(config, hostname, hostConfig),
+    worker()
     {
+        clients.emplace(config.coordinator, std::make_unique<TCPClient>(config.coordinator));
     }
     virtual Decision handleTransaction(const Request &start_request) override
     {
@@ -52,7 +54,7 @@ public:
         if (decision == "COMMIT")
         {
             std::cout << "COMMITTING as participant. " << std::endl;
-            worker.COMMIT(start_request.req.body);
+            worker.COMMIT(start_request.req.request);
         }
 
         return decision;
@@ -60,17 +62,18 @@ public:
 
     void send(std::string type)
     {
-        std::string path = "/" + type + "/" + std::to_string(this->config.txid);
-        httplib::Params params;
+        ParamsT params;
         params.emplace("request", "");
+        params.emplace("txid", std::to_string(this->config.txid));
         params.emplace("type", type);
         params.emplace("sender", this->hostname);
-        RequestInterface::SEND_RPC(this->config.coordinator, path, params);
+        TCPRequest req(type, params);
+        clients[config.coordinator]->sendRequest(req);
     }
 
     Decision optTerminationProtocol()
     {
-        std::string resp = RequestInterface::LOG_ONCE("ABORT", config.txid, this->hostname, LogType::TRANSACTION);
+        std::string resp = DBMSInterface::LOG_ONCE("ABORT", config.txid, this->hostname, LogType::TRANSACTION);
         return resp;
     }
 
@@ -79,7 +82,7 @@ private:
 
     inline bool votedYes(const Request &request)
     {
-        return worker.VOTE_REQ(request.req.body);
+        return worker.VOTE_REQ(request.req.request);
     }
 };
 

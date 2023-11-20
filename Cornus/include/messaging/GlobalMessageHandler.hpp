@@ -13,6 +13,7 @@
 #include "../transactionHandlers/Participant2.h"
 #include "../transactionHandlers/Replicator.h"
 #include "../transactionHandlers/Committer.h"
+#include "../messaging/tcp.hpp"
 
 using TransactionHandler = NewTransactionHandler;
 using Coordinator = NewCoordinator;
@@ -23,43 +24,56 @@ using Participant = NewParticipant<WorkerT>;
 class GlobalMessageHandler
 {
 public:
-    GlobalMessageHandler(HostConfig &hostConfig) : hostConfig(hostConfig), nodeId(hostConfig.hostNum)
+    GlobalMessageHandler(HostConfig &hostConfig) : hostConfig(hostConfig), nodeId(hostConfig.hostNum), server(hostConfig.port, 100)
     {
-        httplib::Server::Handler handler;
+
         svr.Post("/TRANSACTION", [&](const httplib::Request &req, httplib::Response &res)
-                 { onClientRequest(req, res, &handlers); });
+        { onClientRequest(req, res, &handlers); });
+
+
+        server.registerCallback("TRANSACTION", [&](const TCPRequest& req)
+            { return onClientRequest(req);});
+
         // handler for below endpoints launches another thread that is independent so ACK response should happen immediately after thread launch
-        svr.Post("/VOTEREQ/:txid", [&](const httplib::Request &req, httplib::Response &res)
-                 { std::thread process(&GlobalMessageHandler::onNewRequest<Participant>, this, req, RequestType::voteReq, &handlers); process.detach(); });
-        svr.Post("/VOTEYES/:txid", [&](const httplib::Request &req, httplib::Response &res)
-                 { std::thread process(&GlobalMessageHandler::onOldRequest, this, req, RequestType::voteYes, &handlers); process.detach(); });
-        svr.Post("/ABORT/:txid", [&](const httplib::Request &req, httplib::Response &res)
-                 { std::thread process(&GlobalMessageHandler::onOldRequest, this, req, RequestType::Abort, &handlers); process.detach(); });
-        svr.Post("/COMMIT/:txid", [&](const httplib::Request &req, httplib::Response &res)
-                 { std::thread process(&GlobalMessageHandler::onOldRequest, this, req, RequestType::Commit, &handlers); process.detach(); });
-        svr.Post("/WILLCOMMIT/:txid", [&](const httplib::Request &req, httplib::Response &res)
-                 { std::thread process(&GlobalMessageHandler::onNewRequest<Replicator>, this, req, RequestType::willCommit, &replicators); process.detach(); });
-        svr.Post("/WILLABORT/:txid", [&](const httplib::Request &req, httplib::Response &res)
-                 { std::thread process(&GlobalMessageHandler::onNewRequest<Replicator>, this, req, RequestType::willAbort, &replicators); process.detach(); });
-        svr.Post("/DECISIONCOMPLETED/:txid", [&](const httplib::Request &req, httplib::Response &res)
-                 { std::thread process(&GlobalMessageHandler::onOldRequest, this, req, RequestType::decisionCompleted, &replicators);process.detach(); });
-        svr.Post("/OVERRIDECOMMIT/:txid", [&](const httplib::Request &req, httplib::Response &res)
-                 { std::thread process(&GlobalMessageHandler::onNewRequest<Committer<WorkerT>>, this, req, RequestType::Commit, &committers); process.detach(); });
+        server.registerCallback("VOTEREQ", [&](const TCPRequest& req)
+            { std::thread process(&GlobalMessageHandler::onNewRequest<Participant>, this, req, RequestType::voteReq, &handlers); process.detach(); return TCP_OK;});
+
+        server.registerCallback("VOTEREQ", [&](const TCPRequest& req)
+                 { std::thread process(&GlobalMessageHandler::onNewRequest<Participant>, this, req, RequestType::voteReq, &handlers); process.detach(); return TCP_OK;});
+
+        server.registerCallback("VOTEYES", [&](const TCPRequest& req)
+                 { std::thread process(&GlobalMessageHandler::onOldRequest, this, req, RequestType::voteYes, &handlers); process.detach(); return TCP_OK;});
+
+        server.registerCallback("ABORT", [&](const TCPRequest& req)
+                 { std::thread process(&GlobalMessageHandler::onOldRequest, this, req, RequestType::Abort, &handlers); process.detach(); return TCP_OK;});
+
+        server.registerCallback("COMMIT", [&](const TCPRequest &req)
+                 { std::thread process(&GlobalMessageHandler::onOldRequest, this, req, RequestType::Commit, &handlers); process.detach(); return TCP_OK;});
+
+        server.registerCallback("WILLCOMMIT", [&](const TCPRequest& req)
+                 { std::thread process(&GlobalMessageHandler::onNewRequest<Replicator>, this, req, RequestType::willCommit, &replicators); process.detach(); return TCP_OK;});
+
+        server.registerCallback("WILLABORT", [&](const TCPRequest &req)
+                 { std::thread process(&GlobalMessageHandler::onNewRequest<Replicator>, this, req, RequestType::willAbort, &replicators); process.detach(); return TCP_OK;});
+
+        server.registerCallback("DECISIONCOMPLETED", [&](const TCPRequest& req)
+                 { std::thread process(&GlobalMessageHandler::onOldRequest, this, req, RequestType::decisionCompleted, &replicators);process.detach(); return TCP_OK;});
+
+        server.registerCallback("OVERRIDECOMMIT", [&](const TCPRequest& req)
+                 { std::thread process(&GlobalMessageHandler::onNewRequest<Committer<WorkerT>>, this, req, RequestType::Commit, &committers); process.detach(); return TCP_OK;});
+
         this->hostname = hostConfig.id;
         std::cout << "Starting server..." << hostConfig.host << " " << hostConfig.port << std::endl;
-        if (!svr.listen(hostConfig.host, hostConfig.port))
-        {
-            std::cout << "SERVER FAILED TO START" << std::endl;
-        }
+        server.runServer();
     }
 
     template <class Node>
-    void onNewRequest(const httplib::Request req, RequestType type, std::map<TransactionId, TransactionHandler *> *transactions)
+    void onNewRequest(const TCPRequest& req, RequestType type, std::map<TransactionId, TransactionHandler *> *transactions)
     {
         std::cout << "Got new requet as a participant" << std::endl;
         TransactionId txid = getTxId(req);
         std::cout << "txid: " << txid << std::endl;
-        Request request = Request(type, txid, req);
+        Request request = Request(type, txid, std::move(req));
         Node *n = createNode<Node>(request, txid, transactions);
         n->handleTransaction(request);
         removeFromMap(txid, transactions);
@@ -70,18 +84,32 @@ public:
         std::cout << "new client request" << std::endl;
         TransactionId txid = getUniqueTransactionId();
         std::cout << "Created transaction id: " << txid << std::endl;
-        Request request = Request(RequestType::transaction, txid, req);
+        Request request = Request(RequestType::transaction, txid, TCPRequest("TRANSACTION", req.body));
         Coordinator *n = createNode<Coordinator>(request, txid, transactions);
         Decision d = n->handleTransaction(request);
         res.set_content(d, "text/plain");
         removeFromMap(txid, transactions);
     }
 
-    void onOldRequest(const httplib::Request req, RequestType type, std::map<TransactionId, TransactionHandler *> *transactions)
-    {
 
+    TCPResponse onClientRequest(const TCPRequest& req){
+        std::cout << "new client request" << std::endl;
+        TransactionId txid = getUniqueTransactionId();
+        std::cout << "Created transaction id: " << txid << std::endl;
+        Request request = Request(RequestType::transaction, txid, std::move(req));
+        Coordinator *n = createNode<Coordinator>(request, txid, &handlers);
+        Decision d = n->handleTransaction(request);
+        TCPResponse res;
+        res.response = d;
+        removeFromMap(txid, &handlers);
+        return res;
+    }
+
+
+    void onOldRequest(const TCPRequest& req, RequestType type, std::map<TransactionId, TransactionHandler *> *transactions)
+    {
         TransactionId txid = getTxId(req);
-        Request request = Request(type, txid, req);
+        Request request = Request(type, txid, std::move(req));
         sendMessage(txid, request, transactions);
     }
 
@@ -94,10 +122,14 @@ private:
         return newID;
     }
 
-    TransactionId getTxId(const httplib::Request &req)
+    TransactionId getTxId(const TCPRequest &req)
     {
-        auto txid_in = req.path_params.at("txid");
-        TransactionId txid = std::stoul(txid_in);
+        auto txid_in = req.getParam("txid");
+        if (!txid_in){
+            perror("Can't find txid! \n");
+            throw std::runtime_error("can't find txid");
+        }
+        TransactionId txid = std::stoul(*txid_in);
         return txid;
     }
 
@@ -133,6 +165,7 @@ private:
 
     HostConfig &hostConfig;
     httplib::Server svr;
+    TCPServer server;
     // transactionID format:
     // bits 63-48: 0, bits 47-16: per node counter, bits 15-0: unique node id
     // This should never be broken down, it just ensures uniqueness across nodes

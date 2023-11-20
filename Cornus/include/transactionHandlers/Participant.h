@@ -10,7 +10,8 @@ template <WorkerImpl WorkerT>
 class PaperParticipant : public PaperTransactionHandler
 {
 public:
-    PaperParticipant(TransactionConfig &config, HostID hostname, HostConfig &hostConfig) : PaperTransactionHandler(config, hostname, hostConfig), worker()
+    PaperParticipant(TransactionConfig &config, HostID hostname, HostConfig &hostConfig) : PaperTransactionHandler(config, hostname, hostConfig),
+        worker(), clientToCoordinator(config.coordinator)
     {
     }
     virtual Decision handleTransaction(const Request &start_request) override
@@ -24,7 +25,7 @@ public:
 
         // voted yes
         std::cout << "voting yes as participant. " << std::endl;
-        std::string resp = RequestInterface::LOG_ONCE("VOTEYES", this->config.txid, this->hostname, LogType::TRANSACTION);
+        std::string resp = DBMSInterface::LOG_ONCE("VOTEYES", this->config.txid, this->hostname, LogType::TRANSACTION);
         std::cout << "DBMS RESPONSE OF " << resp << std::endl;
         if (resp == "VOTEYES")
         {
@@ -52,10 +53,10 @@ public:
             {
                 decision = this->terminationProtocol();
             }
-            RequestInterface::LOG_WRITE(decision, this->config.txid, this->hostname, LogType::TRANSACTION);
+            DBMSInterface::LOG_WRITE(decision, this->config.txid, this->hostname, LogType::TRANSACTION);
             if (decision == "COMMIT")
             {
-                worker.COMMIT(start_request.req.body);
+                worker.COMMIT(start_request.req.request);
             }
             return decision;
         }
@@ -69,20 +70,22 @@ public:
 
     void send(std::string type)
     {
-        std::string path = "/" + type + "/" + std::to_string(this->config.txid);
-        httplib::Params params;
+        ParamsT params;
         params.emplace("request", "");
+        params.emplace("txid", std::to_string(this->config.txid));
         params.emplace("type", type);
         params.emplace("sender", this->hostname);
-        RequestInterface::SEND_RPC(this->config.coordinator, path, params);
+        TCPRequest req(type, params);
+        clientToCoordinator.sendRequest(req);
     }
 
 private:
     WorkerT worker;
+    TCPClient clientToCoordinator;
 
     inline bool votedYes(const Request &request)
     {
-        return worker.VOTE_REQ(request.req.body);
+        return worker.VOTE_REQ(request.req.request);
     }
 };
 
