@@ -15,24 +15,21 @@
 #include "../transactionHandlers/Committer.h"
 #include "../messaging/tcp.hpp"
 
-using TransactionHandler = NewTransactionHandler;
-using Coordinator = NewCoordinator;
-using Participant = NewParticipant<WorkerT>;
+using TransactionHandler = PaperTransactionHandler;
+using Coordinator = PaperCoordinator;
+using Participant = PaperParticipant<WorkerT>;
 
 // onRequest function, in class or in global namespace, takes HTTP request object
 
 class GlobalMessageHandler
 {
 public:
-    GlobalMessageHandler(HostConfig &hostConfig) : hostConfig(hostConfig), nodeId(hostConfig.hostNum), server(hostConfig.port, 100)
+    GlobalMessageHandler(HostConfig &hostConfig) : hostConfig(hostConfig), nodeId(hostConfig.hostNum), server(hostConfig.port , 100)
     {
 
         svr.Post("/TRANSACTION", [&](const httplib::Request &req, httplib::Response &res)
         { onClientRequest(req, res, &handlers); });
 
-
-        server.registerCallback("TRANSACTION", [&](const TCPRequest& req)
-            { return onClientRequest(req);});
 
         // handler for below endpoints launches another thread that is independent so ACK response should happen immediately after thread launch
         server.registerCallback("VOTEREQ", [&](const TCPRequest& req)
@@ -63,16 +60,21 @@ public:
                  { std::thread process(&GlobalMessageHandler::onNewRequest<Committer<WorkerT>>, this, req, RequestType::Commit, &committers); process.detach(); return TCP_OK;});
 
         this->hostname = hostConfig.id;
-        std::cout << "Starting server..." << hostConfig.host << " " << hostConfig.port << std::endl;
+        std::cout << "Starting client http server..." << hostConfig.host << " " << (hostConfig.port + 1) << std::endl;
+        auto httpserverthread = std::thread([this, &hostConfig]() {
+            if (!svr.listen(hostConfig.host, hostConfig.port + 1))
+            {
+                std::cout << "SERVER FAILED TO START" << std::endl;
+            }
+        });
         server.runServer();
+        httpserverthread.join();
     }
 
     template <class Node>
     void onNewRequest(const TCPRequest& req, RequestType type, std::map<TransactionId, TransactionHandler *> *transactions)
     {
-        std::cout << "Got new requet as a participant" << std::endl;
         TransactionId txid = getTxId(req);
-        std::cout << "txid: " << txid << std::endl;
         Request request = Request(type, txid, std::move(req));
         Node *n = createNode<Node>(request, txid, transactions);
         n->handleTransaction(request);
@@ -87,22 +89,9 @@ public:
         Request request = Request(RequestType::transaction, txid, TCPRequest("TRANSACTION", req.body));
         Coordinator *n = createNode<Coordinator>(request, txid, transactions);
         Decision d = n->handleTransaction(request);
+        std::cout << "txid: " << txid << " res = " << d << std::endl;
         res.set_content(d, "text/plain");
         removeFromMap(txid, transactions);
-    }
-
-
-    TCPResponse onClientRequest(const TCPRequest& req){
-        std::cout << "new client request" << std::endl;
-        TransactionId txid = getUniqueTransactionId();
-        std::cout << "Created transaction id: " << txid << std::endl;
-        Request request = Request(RequestType::transaction, txid, std::move(req));
-        Coordinator *n = createNode<Coordinator>(request, txid, &handlers);
-        Decision d = n->handleTransaction(request);
-        TCPResponse res;
-        res.response = d;
-        removeFromMap(txid, &handlers);
-        return res;
     }
 
 
@@ -139,7 +128,14 @@ private:
         std::unique_lock lockMutex(mapMutex);
         TransactionConfig conf(request.getParam("config"), txid);
         Node *p = new Node(conf, hostname, hostConfig);
-        (*transactions)[txid] = p;
+        if constexpr(std::is_base_of_v<TransactionHandler, Node>){
+            (*transactions)[txid] = p;
+        }
+        else{
+            std::cout << "bad call: cannot assign " << type_name<Node*>() << " to " << type_name<TransactionHandler*>() << std::endl;
+            throw std::runtime_error("bad call to create node!");
+        }
+
         return p;
     }
 

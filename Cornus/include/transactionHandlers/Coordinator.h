@@ -18,6 +18,7 @@ public:
     virtual Decision handleTransaction(const Request &client_request) override
     {
         // Prepare Phase
+        std::cout << "sending vote req" << std::endl;
         send("VOTEREQ", client_request.getParam("config"));
         int votes = 0;
 
@@ -70,6 +71,7 @@ public:
         params.emplace("type", type);
         params.emplace("sender", this->hostname);
         TCPRequest req(type, params);
+        std::cout << "sending request: " << req.request << std::endl;
         std::vector<std::future<std::optional<TCPResponse>>> responses;
 
         for (auto participant : this->config.participants)
@@ -80,6 +82,7 @@ public:
             }
             responses.push_back(itr->second->sendRequestAsync(req));
         }
+        std::cout << "sent requests" << std::endl;
         resolveFutures(responses);
     }
 private:

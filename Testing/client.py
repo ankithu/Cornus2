@@ -21,7 +21,9 @@ import concurrent.futures
 def getHostPort(confFile):
     with open(confFile, 'r') as file:
         conf = json.load(file)
-    return conf["host"] + ":" + str(conf["port"])
+    #adding 1 to port since the client interface is one port above the internal interface
+    #this is confusing and potentially should be changed by just having two variables in the config
+    return conf["host"] + ":" + str(conf["port"] + 1)
 
 def generate_transactions(test_file, nodes_file):
     transactions = []

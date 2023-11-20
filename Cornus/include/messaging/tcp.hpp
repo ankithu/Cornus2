@@ -124,7 +124,11 @@ public:
         }
     }
 
-    TCPRequest(std::string& endpoint, ParamsT& params) : endpoint(endpoint), params(params){
+    TCPRequest(const std::string& endpoint, const ParamsT& params) : endpoint(endpoint), params(params){
+        writeParams();
+    }
+
+    TCPRequest(std::string&& endpoint, ParamsT&& params) : endpoint(std::move(endpoint)), params(std::move(params)){
         writeParams();
     }
 
@@ -139,6 +143,15 @@ public:
             return {itr->second};
         }
         return std::nullopt;
+    }
+
+    friend std::ostream& operator<<(std::ostream& os, const TCPRequest& req) {
+        os << "TCP Request = { endpoint = \"" << req.endpoint << "\", request = \"" << req.request << "\", params: {";
+        for (auto& [param, val] : req.params){
+            os << "{ param: " << param << ", val: \"" << val << "\" }, ";
+        }
+        os << "}}";
+        return os;
     }
 
 private:
@@ -156,10 +169,7 @@ struct TCPResponse {
 
 static const TCPResponse TCP_OK = TCPResponse{"OK"};
 
-std::ostream& operator<<(std::ostream& os, const TCPRequest& req) {
-    os << "TCP Request = { endpoint = \"" << req.endpoint << "\", request = \"" << req.request << "\"}";
-    return os;
-}
+
 
 std::ostream& operator<<(std::ostream& os, const TCPResponse& res){
     os << "TCP Response = { response = \"" << res.response << "\"}";

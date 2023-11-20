@@ -16,7 +16,7 @@ TCPResponse handleWhatsMyName(const TCPRequest& req){
 }
 
 int main(){
-    TCPServer server(8000, 10);
+    TCPServer server(9500, 10);
     server.registerCallback("hello", handleHello);
     server.registerCallback("name", handleWhatsMyName);
     int res = server.runServer();
