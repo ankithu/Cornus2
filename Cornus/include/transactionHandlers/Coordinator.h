@@ -33,7 +33,7 @@ public:
                 if (p_request->type == RequestType::voteYes)
                 {
                     votes++;
-                    if (votes != this->config.participants.size())
+                    if (votes == this->config.participants.size())
                     {
                         decision = "COMMIT";
                     }

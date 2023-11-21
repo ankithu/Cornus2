@@ -3,6 +3,7 @@
 
 #include "TransactionHandler2.hpp"
 #include "../utils.hpp"
+
 /*
 TODO:
 - Fix logging post responding to client, needs to be a new thread
@@ -32,7 +33,7 @@ public:
                 if (p_request->type == RequestType::voteYes)
                 {
                     votes++;
-                    if (votes != this->config.participants.size())
+                    if (votes == this->config.participants.size())
                     {
                         decision = "COMMIT";
                     }
@@ -47,14 +48,16 @@ public:
                 decision = "ABORT";
             }
         }
-        sendToReplicators(decision, client_request.getParam("config"));
+        sendToReplicators("WILL"+ decision, client_request.getParam("config"));
+        //std::thread postDecision(&NewCoordinator::finishTransaction,decision);
+        std::thread postDecision = std::thread([this, decision]() { this->finishTransaction(decision); });
+        postDecision.detach();
         return decision;
-        finishTransaction(decision);
     }
     void finishTransaction(Decision decision)
     {
         logFinal(decision, this->config.txid, this->hostname);
-        sendToReplicators("COMPLETE", "");
+        sendToReplicators("DECISIONCOMPLETED", "");
         sendToParticipants(decision, "");
     }
     void abort()
