@@ -70,10 +70,14 @@ public:
                 params.emplace("txid", std::to_string(this->config.txid));
                 params.emplace("type", "COMMIT");
                 params.emplace("sender", this->hostname);
-
+                TCPRequest r(endpoint, params);
+                std::vector<std::future<std::optional<TCPResponse>>> responses;
                 for (auto participant : this->config.participants)
                 {
-                    sendToHost(participant, TCPRequest(endpoint, params));
+                    responses.emplace_back(sendToHost(participant, TCPRequest(endpoint, params)));
+                }
+                for (auto& resp : responses){
+                    resp.get();
                 }
             }
         }
