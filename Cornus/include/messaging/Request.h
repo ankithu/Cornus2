@@ -17,7 +17,7 @@ enum RequestType
 
 struct Request
 {
-    Request(RequestType type_in, uint64_t txid, const TCPRequest&& req)
+    Request(const RequestType& type_in, const uint64_t& txid, const TCPRequest& req)
         : type(type_in), txid(txid), req(req){}
 
     [[nodiscard]] std::string getParam(const std::string&& param) const

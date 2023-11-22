@@ -16,7 +16,7 @@ public:
     {
     }
 
-    virtual Decision handleTransaction(const Request &client_request) override
+    Decision handleTransaction(const Request &client_request) override
     {
         // Prepare Phase
         sendToParticipants("VOTEREQ", client_request.getParam("config"));
@@ -49,11 +49,9 @@ public:
             }
         }
         sendToReplicators("WILL"+ decision, client_request.getParam("config"));
-        //std::thread postDecision(&NewCoordinator::finishTransaction,decision);
-        std::thread postDecision = std::thread([this, decision]() { this->finishTransaction(decision); });
-        postDecision.detach();
         return decision;
     }
+
     void finishTransaction(Decision decision)
     {
         logFinal(decision, this->config.txid, this->hostname);

@@ -15,7 +15,7 @@ public:
     {
     }
 
-    virtual Decision handleTransaction(const Request &client_request) override
+    Decision handleTransaction(const Request &client_request) override
     {
         // Prepare Phase
         std::cout << "sending vote req" << std::endl;
@@ -85,6 +85,7 @@ public:
         std::cout << "sent requests" << std::endl;
         resolveFutures(responses);
     }
+
 private:
     std::unordered_map<HostID, std::unique_ptr<TCPClient>> clients;
 };

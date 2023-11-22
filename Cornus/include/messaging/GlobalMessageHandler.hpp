@@ -15,9 +15,11 @@
 #include "../transactionHandlers/Committer.h"
 #include "../messaging/tcp.hpp"
 
-using TransactionHandler = PaperTransactionHandler;
-using Coordinator = PaperCoordinator;
-using Participant = PaperParticipant<WorkerT>;
+using TransactionHandler = NewTransactionHandler;
+using Coordinator = NewCoordinator;
+using Participant = NewParticipant<WorkerT>;
+
+using TransactionHandlerMapT = std::map<TransactionId, std::shared_ptr<TransactionHandler>>;
 
 // onRequest function, in class or in global namespace, takes HTTP request object
 
@@ -72,33 +74,40 @@ public:
     }
 
     template <class Node>
-    void onNewRequest(const TCPRequest& req, RequestType type, std::map<TransactionId, TransactionHandler *> *transactions)
+    void onNewRequest(const TCPRequest& req, RequestType type, TransactionHandlerMapT* transactions)
     {
         TransactionId txid = getTxId(req);
         Request request = Request(type, txid, std::move(req));
-        Node *n = createNode<Node>(request, txid, transactions);
+        auto n = createNode<Node>(request, txid, transactions);
         n->handleTransaction(request);
         removeFromMap(txid, transactions);
     }
 
-    void onClientRequest(const httplib::Request &req, httplib::Response &res, std::map<TransactionId, TransactionHandler *> *transactions)
+    void onClientRequest(const httplib::Request &req, httplib::Response &res, TransactionHandlerMapT* transactions)
     {
         std::cout << "new client request" << std::endl;
         TransactionId txid = getUniqueTransactionId();
         std::cout << "Created transaction id: " << txid << std::endl;
         Request request = Request(RequestType::transaction, txid, TCPRequest("TRANSACTION", req.body));
-        Coordinator *n = createNode<Coordinator>(request, txid, transactions);
-        Decision d = n->handleTransaction(request);
+        auto n = createNode<Coordinator>(request, txid, transactions);
+        auto d = n->handleTransaction(request);
+        if constexpr (requires {n->finishTransaction(d);}){
+            std::thread backgroundwork([d, n](){
+                n->finishTransaction(d);
+            });
+            backgroundwork.detach();
+        }
+
         std::cout << "txid: " << txid << " res = " << d << std::endl;
         res.set_content(d, "text/plain");
         removeFromMap(txid, transactions);
     }
 
 
-    void onOldRequest(const TCPRequest& req, RequestType type, std::map<TransactionId, TransactionHandler *> *transactions)
+    void onOldRequest(const TCPRequest& req, RequestType type, TransactionHandlerMapT* transactions)
     {
         TransactionId txid = getTxId(req);
-        Request request = Request(type, txid, std::move(req));
+        Request request = Request(type, txid, req);
         sendMessage(txid, request, transactions);
     }
 
@@ -123,11 +132,11 @@ private:
     }
 
     template <class Node>
-    Node *createNode(Request request, TransactionId txid, std::map<TransactionId, TransactionHandler *> *transactions)
+    std::shared_ptr<Node> createNode(Request request, TransactionId txid, TransactionHandlerMapT* transactions)
     {
         std::unique_lock lockMutex(mapMutex);
         TransactionConfig conf(request.getParam("config"), txid);
-        Node *p = new Node(conf, hostname, hostConfig);
+        auto p = std::make_shared<Node>(conf, hostname, hostConfig);
         if constexpr(std::is_base_of_v<TransactionHandler, Node>){
             (*transactions)[txid] = p;
         }
@@ -139,18 +148,16 @@ private:
         return p;
     }
 
-    void removeFromMap(TransactionId txid, std::map<TransactionId, TransactionHandler *> *transactions)
+    void removeFromMap(TransactionId txid, TransactionHandlerMapT* transactions)
     {
         std::unique_lock lockMutex(mapMutex);
         if (transactions->find(txid) != transactions->end())
         {
-            TransactionHandler *n = (*transactions)[txid];
-            delete n;
             transactions->erase(txid);
         }
     }
 
-    void sendMessage(TransactionId txid, Request request, std::map<TransactionId, TransactionHandler *> *transactions)
+    void sendMessage(TransactionId txid, Request request, TransactionHandlerMapT* transactions)
     {
         std::unique_lock lockMutex(mapMutex);
         if (transactions->find(txid) != transactions->end())
@@ -168,9 +175,9 @@ private:
     u_int16_t nodeId;
     u_int32_t transactionCounter = 0;
     std::mutex mapMutex;
-    std::map<TransactionId, TransactionHandler *> handlers;
-    std::map<TransactionId, TransactionHandler *> replicators;
-    std::map<TransactionId, TransactionHandler *> committers;
+    TransactionHandlerMapT handlers;
+    TransactionHandlerMapT replicators;
+    TransactionHandlerMapT committers;
     HostID hostname;
 };
 

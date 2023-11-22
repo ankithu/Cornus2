@@ -10,8 +10,6 @@
 #include "../messaging/dbms.hpp"
 #include "../worker/workerConcept.hpp"
 
-using Decision = std::string;
-using TransactionId = uint64_t;
 
 class NewTransactionHandler
 {
