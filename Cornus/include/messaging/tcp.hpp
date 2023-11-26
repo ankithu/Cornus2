@@ -83,6 +83,8 @@
 static const size_t MAX_MESSAGE_SIZE = 512;
 static const char HEADER_DELIM = '\t';
 static const char MESSAGE_END = '\n';
+static const char KEY_VALUE_DELIM = 0x1e;
+static const char PAIR_DELIM = 0x1f;
 
 using ParamsT = std::unordered_map<std::string, std::string>;
 
@@ -100,16 +102,16 @@ public:
     {
         std::stringstream ss(request);
         std::string pair;
-        while (std::getline(ss, pair, ';'))
+        while (std::getline(ss, pair, PAIR_DELIM))
         {
-            if (pair.find(':') == std::string::npos)
+            if (pair.find(KEY_VALUE_DELIM) == std::string::npos)
             {
                 break;
             }
             std::stringstream pss(pair);
             std::string key, val;
-            std::getline(pss, key, ':');
-            std::getline(pss, val, ':');
+            std::getline(pss, key, KEY_VALUE_DELIM);
+            std::getline(pss, val, KEY_VALUE_DELIM);
             params[key] = val;
         }
     }
@@ -118,16 +120,16 @@ public:
     {
         std::stringstream ss(request);
         std::string pair;
-        while (std::getline(ss, pair, ';'))
+        while (std::getline(ss, pair, PAIR_DELIM))
         {
-            if (pair.find(':') == std::string::npos)
+            if (pair.find(KEY_VALUE_DELIM) == std::string::npos)
             {
                 break;
             }
             std::stringstream pss(pair);
             std::string key, val;
-            std::getline(pss, key, ':');
-            std::getline(pss, val, ':');
+            std::getline(pss, key, KEY_VALUE_DELIM);
+            std::getline(pss, val, KEY_VALUE_DELIM);
             params[key] = val;
         }
     }
@@ -177,7 +179,7 @@ private:
         request = "";
         for (auto &[param, val] : params)
         {
-            request += param + ":" + val + ";";
+            request += param + KEY_VALUE_DELIM + val + PAIR_DELIM;
         }
     }
 };
@@ -551,9 +553,7 @@ private:
         return out;
     }
 
-public:
-    TCPClient(const std::string &hostname, const int port)
-    {
+    void init(const std::string& hostname, const int port){
         sockfd = socket(AF_INET, SOCK_STREAM, IPPROTO_IP);
 
         // (2) Create a sockaddr_in to specify remote host and port
@@ -572,12 +572,18 @@ public:
         }
     }
 
+public:
+    TCPClient(const std::string& hostname, const int port)
+    {
+        init(hostname, port);
+    }
+
     TCPClient(const std::string &hostnamecolonport)
     {
         size_t delim = hostnamecolonport.find(":");
         std::string host = hostnamecolonport.substr(0, delim);
         int port = std::stoi(hostnamecolonport.substr(delim + 1));
-        TCPClient(host, port);
+        init(host, port);
     }
 
     ~TCPClient()

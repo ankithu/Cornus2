@@ -29,7 +29,7 @@ def getHostPort(confFile):
 def getHostPortPlus1(confFile):
     with open(confFile, 'r') as file:
         conf = json.load(file)
-    return conf["host"] + ":" + str(conf["port"] + 1)
+    return conf["host"] + ":" + str(conf["port"] + 100)
 
 def generate_transactions(test_file, nodes_file):
     transactions = []

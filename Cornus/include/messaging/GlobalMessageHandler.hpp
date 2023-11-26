@@ -16,8 +16,8 @@
 #include "../messaging/tcp.hpp"
 
 // uncomment whichever one you would like to compile
-#define PAPER_VERSION
-// #define NEW_VERSION
+//#define PAPER_VERSION
+#define NEW_VERSION
 
 #ifdef PAPER_VERSION
 using TransactionHandler = PaperTransactionHandler;
@@ -70,10 +70,10 @@ public:
                                 { std::thread process(&GlobalMessageHandler::onNewRequest<Committer<WorkerT>>, this, req, RequestType::Commit, &committers); process.detach(); return TCP_OK; });
 
         this->hostname = hostConfig.id;
-        std::cout << "Starting client http server..." << hostConfig.host << " " << (hostConfig.port + 1) << std::endl;
+        std::cout << "Starting client http server..." << hostConfig.host << " " << (hostConfig.port + 100) << std::endl;
         auto httpserverthread = std::thread([this, &hostConfig]()
                                             {
-            if (!svr.listen(hostConfig.host, hostConfig.port + 1))
+            if (!svr.listen(hostConfig.host, hostConfig.port + 100))
             {
                 std::cout << "SERVER FAILED TO START" << std::endl;
             } });

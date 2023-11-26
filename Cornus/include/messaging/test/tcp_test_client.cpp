@@ -17,7 +17,7 @@ void printRes(std::optional<TCPResponse> res){
 }
 
 void sendRequest(TCPRequest req, bool async = false, int aysnc_timeout = 10){
-    TCPClient cli("localhost", 9500);
+    TCPClient cli("localhost:9500");
     {
         std::lock_guard<std::mutex> lock(cout_mutex);
         std::cout << "attempting send of " << req << " on endpoint " << req.endpoint << std::endl;
