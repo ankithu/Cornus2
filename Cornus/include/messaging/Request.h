@@ -10,7 +10,6 @@ enum RequestType
     voteYes,
     Abort,
     willCommit,
-    willAbort,
     decisionCompleted,
     Commit
 };

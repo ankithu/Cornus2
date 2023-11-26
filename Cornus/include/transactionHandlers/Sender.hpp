@@ -27,7 +27,7 @@ public:
 
     void sendToReplicators(std::string type, std::string req_config)
     {
-        send(type, req_config, this->config.replicators);
+        send(type, req_config, this->hostConfig.replicators);
     }
 
     void sendToCoordinator(std::string type)

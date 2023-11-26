@@ -16,8 +16,8 @@
 #include "../messaging/tcp.hpp"
 
 // uncomment whichever one you would like to compile
-//#define PAPER_VERSION
-#define NEW_VERSION
+#define PAPER_VERSION
+// #define NEW_VERSION
 
 #ifdef PAPER_VERSION
 using TransactionHandler = PaperTransactionHandler;
@@ -42,14 +42,14 @@ public:
     {
 
         svr.Post("/TRANSACTION", [&](const httplib::Request &req, httplib::Response &res)
-                 {std::cout << "A" << std::endl; onClientRequest(req, res, &handlers); });
+                 { onClientRequest(req, res, &handlers); });
 
         // handler for below endpoints launches another thread that is independent so ACK response should happen immediately after thread launch
         server.registerCallback("VOTEREQ", [&](const TCPRequest &req)
-                                { std::cout << "B" << std::endl;std::thread process(&GlobalMessageHandler::onNewRequest<Participant>, this, req, RequestType::voteReq, &handlers); process.detach(); return TCP_OK; });
+                                { std::thread process(&GlobalMessageHandler::onNewRequest<Participant>, this, req, RequestType::voteReq, &handlers); process.detach(); return TCP_OK; });
 
         server.registerCallback("VOTEYES", [&](const TCPRequest &req)
-                                { std::cout << "C" << std::endl;std::thread process(&GlobalMessageHandler::onOldRequest, this, req, RequestType::voteYes, &handlers); process.detach(); return TCP_OK; });
+                                { std::thread process(&GlobalMessageHandler::onOldRequest, this, req, RequestType::voteYes, &handlers); process.detach(); return TCP_OK; });
 
         server.registerCallback("ABORT", [&](const TCPRequest &req)
                                 { std::thread process(&GlobalMessageHandler::onOldRequest, this, req, RequestType::Abort, &handlers); process.detach(); return TCP_OK; });
@@ -59,9 +59,6 @@ public:
 
         server.registerCallback("WILLCOMMIT", [&](const TCPRequest &req)
                                 { std::thread process(&GlobalMessageHandler::onNewRequest<Replicator>, this, req, RequestType::willCommit, &replicators); process.detach(); return TCP_OK; });
-
-        server.registerCallback("WILLABORT", [&](const TCPRequest &req)
-                                { std::thread process(&GlobalMessageHandler::onNewRequest<Replicator>, this, req, RequestType::willAbort, &replicators); process.detach(); return TCP_OK; });
 
         server.registerCallback("DECISIONCOMPLETED", [&](const TCPRequest &req)
                                 { std::thread process(&GlobalMessageHandler::onOldRequest, this, req, RequestType::decisionCompleted, &replicators);process.detach(); return TCP_OK; });
@@ -84,7 +81,6 @@ public:
     template <class Node>
     void onNewRequest(const TCPRequest &req, RequestType type, TransactionHandlerMapT *transactions)
     {
-        std::cout << "new" << std::endl;
         TransactionId txid = getTxId(req);
         Request request = Request(type, txid);
         auto n = createNode<Node>(req.getParam("config"), txid, transactions);
@@ -94,7 +90,6 @@ public:
 
     void onClientRequest(const httplib::Request &req, httplib::Response &res, TransactionHandlerMapT *transactions)
     {
-        std::cout << "client" << std::endl;
         TransactionId txid = getUniqueTransactionId();
         std::cout << "before " << req.body << req.get_param_value("config") << std::endl;
         Request request = Request(RequestType::transaction, txid);
@@ -137,7 +132,6 @@ private:
     std::shared_ptr<Node> createNode(std::string config, TransactionId txid, TransactionHandlerMapT *transactions)
     {
         std::unique_lock lockMutex(mapMutex);
-        std::cout << "here " << config << std::endl;
         TransactionConfig conf(config, txid);
         auto p = std::make_shared<Node>(conf, hostname, hostConfig);
         if constexpr (std::is_base_of_v<TransactionHandler, Node>)

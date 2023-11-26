@@ -11,16 +11,9 @@ public:
     {
         auto completed = this->messages.waitForNextMessageWithTimeout(this->hostConfig.timeout);
         if (!(completed.has_value()) || !(completed->type == RequestType::decisionCompleted))
-        { /*
-             if (request.type == RequestType::willAbort)
-             {
-                 logFinal("ABORT", this->config.txid, request.getParam("hostname"));
-             }
-             else if (request.type == RequestType::willCommit)
-             {
-                 logFinal("COMMIT", this->config.txid, request.getParam("hostname"));
-             }
-             */
+        {
+            // Replication is only performed for COMMITs
+            logFinal("COMMIT", this->config.txid, this->config.coordinator);
         }
         return "";
     }

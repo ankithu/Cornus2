@@ -5,10 +5,9 @@
 #include <vector>
 #include "HostConfig.hpp"
 
-
 struct TransactionConfig
 {
-    TransactionConfig(const std::string& in,TransactionId id):txid(id)
+    TransactionConfig(const std::string &in, TransactionId id) : txid(id)
     {
         std::stringstream ss(in);
         ss >> coordinator;
@@ -30,8 +29,6 @@ struct TransactionConfig
     }
     HostID coordinator;
     std::vector<HostID> participants;
-    //TODO: populate
-    std::vector<HostID> replicators;
     TransactionId txid;
 };
 

@@ -18,7 +18,6 @@ public:
     Decision handleTransaction() override
     {
         // Prepare Phase
-        std::cout << this->config.to_string() << std::endl;
         sendToParticipants("VOTEREQ", this->config.to_string());
         int votes = 0;
 
@@ -48,14 +47,20 @@ public:
                 decision = "ABORT";
             }
         }
-        sendToReplicators("WILL" + decision, this->config.to_string());
+        if (decision == "COMMIT")
+        {
+            sendToReplicators("WILLCOMMIT", this->config.to_string());
+        }
         return decision;
     }
 
     void finishTransaction(Decision decision)
     {
-        logFinal(decision, this->config.txid, this->hostname);
-        sendToReplicators("DECISIONCOMPLETED", "");
+        if (decision == "COMMIT")
+        {
+            logFinal(decision, this->config.txid, this->hostname);
+            sendToReplicators("DECISIONCOMPLETED", "");
+        }
         sendToParticipants(decision, "");
     }
 };

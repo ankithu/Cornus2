@@ -157,7 +157,7 @@ public:
         {
             return itr->second;
         }
-        std::cout << "PARAM IN QUESTION " << param << std::endl;
+        // std::cout << "PARAM IN QUESTION " << param << std::endl;
         assert(false);
         return "";
     }
@@ -553,7 +553,8 @@ private:
         return out;
     }
 
-    void init(const std::string& hostname, const int port){
+    void init(const std::string &hostname, const int port)
+    {
         sockfd = socket(AF_INET, SOCK_STREAM, IPPROTO_IP);
 
         // (2) Create a sockaddr_in to specify remote host and port
@@ -573,7 +574,7 @@ private:
     }
 
 public:
-    TCPClient(const std::string& hostname, const int port)
+    TCPClient(const std::string &hostname, const int port)
     {
         init(hostname, port);
     }
@@ -612,20 +613,20 @@ public:
             perror("Error: Message exceeds maximum length\n");
             return std::nullopt;
         }
-        std::cout << "Ready to send data" << std::endl;
+        // std::cout << "Ready to send data" << std::endl;
         if (!trySendData(sockfd, buffer, message_len))
         {
             return std::nullopt;
         }
 
         // get response
-        std::cout << "waiting on response" << std::endl;
+        // std::cout << "waiting on response" << std::endl;
         ssize_t bytes_received = 0;
         memset(buffer, 0, MAX_MESSAGE_SIZE);
         size_t bufferPointer = 0;
         while (true)
         {
-            std::cout << "receiving bytes" << std::endl;
+            // std::cout << "receiving bytes" << std::endl;
             bytes_received = recv(sockfd, buffer + bufferPointer, MAX_MESSAGE_SIZE - bufferPointer, 0);
             bufferPointer += bytes_received;
             // connection closed.
@@ -633,7 +634,7 @@ public:
             {
                 return std::nullopt;
             }
-            std::cout << "got " << bytes_received << " bytes" << std::endl;
+            // std::cout << "got " << bytes_received << " bytes" << std::endl;
             auto resp = tryDecodeResponse(buffer, bufferPointer);
             if (resp)
             {
