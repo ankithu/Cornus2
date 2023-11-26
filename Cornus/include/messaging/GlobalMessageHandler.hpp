@@ -15,9 +15,21 @@
 #include "../transactionHandlers/Committer.h"
 #include "../messaging/tcp.hpp"
 
+// uncomment whichever one you would like to compile
+#define PAPER_VERSION
+// #define NEW_VERSION
+
+#ifdef PAPER_VERSION
+using TransactionHandler = PaperTransactionHandler;
+using Coordinator = PaperCoordinator;
+using Participant = PaperParticipant<WorkerT>;
+#endif
+
+#ifdef NEW_VERSION
 using TransactionHandler = NewTransactionHandler;
 using Coordinator = NewCoordinator;
 using Participant = NewParticipant<WorkerT>;
+#endif
 
 using TransactionHandlerMapT = std::map<TransactionId, std::shared_ptr<TransactionHandler>>;
 
@@ -26,88 +38,82 @@ using TransactionHandlerMapT = std::map<TransactionId, std::shared_ptr<Transacti
 class GlobalMessageHandler
 {
 public:
-    GlobalMessageHandler(HostConfig &hostConfig) : hostConfig(hostConfig), nodeId(hostConfig.hostNum), server(hostConfig.port , 100)
+    GlobalMessageHandler(HostConfig &hostConfig) : hostConfig(hostConfig), nodeId(hostConfig.hostNum), server(hostConfig.port, 100)
     {
 
         svr.Post("/TRANSACTION", [&](const httplib::Request &req, httplib::Response &res)
-        { onClientRequest(req, res, &handlers); });
-
+                 {std::cout << "A" << std::endl; onClientRequest(req, res, &handlers); });
 
         // handler for below endpoints launches another thread that is independent so ACK response should happen immediately after thread launch
-        server.registerCallback("VOTEREQ", [&](const TCPRequest& req)
-            { std::thread process(&GlobalMessageHandler::onNewRequest<Participant>, this, req, RequestType::voteReq, &handlers); process.detach(); return TCP_OK;});
+        server.registerCallback("VOTEREQ", [&](const TCPRequest &req)
+                                { std::cout << "B" << std::endl;std::thread process(&GlobalMessageHandler::onNewRequest<Participant>, this, req, RequestType::voteReq, &handlers); process.detach(); return TCP_OK; });
 
-        server.registerCallback("VOTEREQ", [&](const TCPRequest& req)
-                 { std::thread process(&GlobalMessageHandler::onNewRequest<Participant>, this, req, RequestType::voteReq, &handlers); process.detach(); return TCP_OK;});
+        server.registerCallback("VOTEYES", [&](const TCPRequest &req)
+                                { std::cout << "C" << std::endl;std::thread process(&GlobalMessageHandler::onOldRequest, this, req, RequestType::voteYes, &handlers); process.detach(); return TCP_OK; });
 
-        server.registerCallback("VOTEYES", [&](const TCPRequest& req)
-                 { std::thread process(&GlobalMessageHandler::onOldRequest, this, req, RequestType::voteYes, &handlers); process.detach(); return TCP_OK;});
-
-        server.registerCallback("ABORT", [&](const TCPRequest& req)
-                 { std::thread process(&GlobalMessageHandler::onOldRequest, this, req, RequestType::Abort, &handlers); process.detach(); return TCP_OK;});
+        server.registerCallback("ABORT", [&](const TCPRequest &req)
+                                { std::thread process(&GlobalMessageHandler::onOldRequest, this, req, RequestType::Abort, &handlers); process.detach(); return TCP_OK; });
 
         server.registerCallback("COMMIT", [&](const TCPRequest &req)
-                 { std::thread process(&GlobalMessageHandler::onOldRequest, this, req, RequestType::Commit, &handlers); process.detach(); return TCP_OK;});
+                                { std::thread process(&GlobalMessageHandler::onOldRequest, this, req, RequestType::Commit, &handlers); process.detach(); return TCP_OK; });
 
-        server.registerCallback("WILLCOMMIT", [&](const TCPRequest& req)
-                 { std::thread process(&GlobalMessageHandler::onNewRequest<Replicator>, this, req, RequestType::willCommit, &replicators); process.detach(); return TCP_OK;});
+        server.registerCallback("WILLCOMMIT", [&](const TCPRequest &req)
+                                { std::thread process(&GlobalMessageHandler::onNewRequest<Replicator>, this, req, RequestType::willCommit, &replicators); process.detach(); return TCP_OK; });
 
         server.registerCallback("WILLABORT", [&](const TCPRequest &req)
-                 { std::thread process(&GlobalMessageHandler::onNewRequest<Replicator>, this, req, RequestType::willAbort, &replicators); process.detach(); return TCP_OK;});
+                                { std::thread process(&GlobalMessageHandler::onNewRequest<Replicator>, this, req, RequestType::willAbort, &replicators); process.detach(); return TCP_OK; });
 
-        server.registerCallback("DECISIONCOMPLETED", [&](const TCPRequest& req)
-                 { std::thread process(&GlobalMessageHandler::onOldRequest, this, req, RequestType::decisionCompleted, &replicators);process.detach(); return TCP_OK;});
+        server.registerCallback("DECISIONCOMPLETED", [&](const TCPRequest &req)
+                                { std::thread process(&GlobalMessageHandler::onOldRequest, this, req, RequestType::decisionCompleted, &replicators);process.detach(); return TCP_OK; });
 
-        server.registerCallback("OVERRIDECOMMIT", [&](const TCPRequest& req)
-                 { std::thread process(&GlobalMessageHandler::onNewRequest<Committer<WorkerT>>, this, req, RequestType::Commit, &committers); process.detach(); return TCP_OK;});
+        server.registerCallback("OVERRIDECOMMIT", [&](const TCPRequest &req)
+                                { std::thread process(&GlobalMessageHandler::onNewRequest<Committer<WorkerT>>, this, req, RequestType::Commit, &committers); process.detach(); return TCP_OK; });
 
         this->hostname = hostConfig.id;
         std::cout << "Starting client http server..." << hostConfig.host << " " << (hostConfig.port + 1) << std::endl;
-        auto httpserverthread = std::thread([this, &hostConfig]() {
+        auto httpserverthread = std::thread([this, &hostConfig]()
+                                            {
             if (!svr.listen(hostConfig.host, hostConfig.port + 1))
             {
                 std::cout << "SERVER FAILED TO START" << std::endl;
-            }
-        });
+            } });
         server.runServer();
         httpserverthread.join();
     }
 
     template <class Node>
-    void onNewRequest(const TCPRequest& req, RequestType type, TransactionHandlerMapT* transactions)
+    void onNewRequest(const TCPRequest &req, RequestType type, TransactionHandlerMapT *transactions)
     {
+        std::cout << "new" << std::endl;
         TransactionId txid = getTxId(req);
-        Request request = Request(type, txid, std::move(req));
-        auto n = createNode<Node>(request, txid, transactions);
-        n->handleTransaction(request);
+        Request request = Request(type, txid);
+        auto n = createNode<Node>(req.getParam("config"), txid, transactions);
+        n->handleTransaction();
         removeFromMap(txid, transactions);
     }
 
-    void onClientRequest(const httplib::Request &req, httplib::Response &res, TransactionHandlerMapT* transactions)
+    void onClientRequest(const httplib::Request &req, httplib::Response &res, TransactionHandlerMapT *transactions)
     {
-        std::cout << "new client request" << std::endl;
+        std::cout << "client" << std::endl;
         TransactionId txid = getUniqueTransactionId();
-        std::cout << "Created transaction id: " << txid << std::endl;
-        Request request = Request(RequestType::transaction, txid, TCPRequest("TRANSACTION", req.body));
-        auto n = createNode<Coordinator>(request, txid, transactions);
-        auto d = n->handleTransaction(request);
-        if constexpr (requires {n->finishTransaction(d);}){
-            std::thread backgroundwork([d, n](){
-                n->finishTransaction(d);
-            });
-            backgroundwork.detach();
-        }
+        std::cout << "before " << req.body << req.get_param_value("config") << std::endl;
+        Request request = Request(RequestType::transaction, txid);
+        auto n = createNode<Coordinator>(req.get_param_value("config"), txid, transactions);
+        auto d = n->handleTransaction();
+#ifdef NEW_VERSION
+        std::thread backgroundwork([d, n]()
+                                   { n->finishTransaction(d); });
+        backgroundwork.detach();
+#endif
 
-        std::cout << "txid: " << txid << " res = " << d << std::endl;
         res.set_content(d, "text/plain");
         removeFromMap(txid, transactions);
     }
 
-
-    void onOldRequest(const TCPRequest& req, RequestType type, TransactionHandlerMapT* transactions)
+    void onOldRequest(const TCPRequest &req, RequestType type, TransactionHandlerMapT *transactions)
     {
         TransactionId txid = getTxId(req);
-        Request request = Request(type, txid, req);
+        Request request = Request(type, txid);
         sendMessage(txid, request, transactions);
     }
 
@@ -123,32 +129,31 @@ private:
     TransactionId getTxId(const TCPRequest &req)
     {
         auto txid_in = req.getParam("txid");
-        if (!txid_in){
-            perror("Can't find txid! \n");
-            throw std::runtime_error("can't find txid");
-        }
-        TransactionId txid = std::stoul(*txid_in);
+        TransactionId txid = std::stoul(txid_in);
         return txid;
     }
 
     template <class Node>
-    std::shared_ptr<Node> createNode(Request request, TransactionId txid, TransactionHandlerMapT* transactions)
+    std::shared_ptr<Node> createNode(std::string config, TransactionId txid, TransactionHandlerMapT *transactions)
     {
         std::unique_lock lockMutex(mapMutex);
-        TransactionConfig conf(request.getParam("config"), txid);
+        std::cout << "here " << config << std::endl;
+        TransactionConfig conf(config, txid);
         auto p = std::make_shared<Node>(conf, hostname, hostConfig);
-        if constexpr(std::is_base_of_v<TransactionHandler, Node>){
+        if constexpr (std::is_base_of_v<TransactionHandler, Node>)
+        {
             (*transactions)[txid] = p;
         }
-        else{
-            std::cout << "bad call: cannot assign " << type_name<Node*>() << " to " << type_name<TransactionHandler*>() << std::endl;
+        else
+        {
+            std::cout << "bad call: cannot assign " << type_name<Node *>() << " to " << type_name<TransactionHandler *>() << std::endl;
             throw std::runtime_error("bad call to create node!");
         }
 
         return p;
     }
 
-    void removeFromMap(TransactionId txid, TransactionHandlerMapT* transactions)
+    void removeFromMap(TransactionId txid, TransactionHandlerMapT *transactions)
     {
         std::unique_lock lockMutex(mapMutex);
         if (transactions->find(txid) != transactions->end())
@@ -157,7 +162,7 @@ private:
         }
     }
 
-    void sendMessage(TransactionId txid, Request request, TransactionHandlerMapT* transactions)
+    void sendMessage(TransactionId txid, Request &request, TransactionHandlerMapT *transactions)
     {
         std::unique_lock lockMutex(mapMutex);
         if (transactions->find(txid) != transactions->end())

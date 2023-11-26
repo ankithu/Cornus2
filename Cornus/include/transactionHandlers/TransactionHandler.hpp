@@ -1,20 +1,12 @@
 #ifndef CORNUS_TRANSACTIONHANDLER_HPP
 #define CORNUS_TRANSACTIONHANDLER_HPP
 
-#include "../messaging/Request.h"
-#include "../messaging/messageQueue.hpp"
-#include <queue>
-#include <condition_variable>
-#include "../types.hpp"
-#include "../config/TransactionConfig.h"
-#include "../messaging/dbms.hpp"
-#include "../worker/workerConcept.hpp"
+#include "Sender.hpp"
 
-
-class PaperTransactionHandler
+class PaperTransactionHandler : public Sender
 {
 public:
-    PaperTransactionHandler(TransactionConfig &config, HostID hostname, HostConfig &hostConfig) : config(config), hostname(hostname), hostConfig(hostConfig)
+    PaperTransactionHandler(TransactionConfig &config, HostID hostname, HostConfig &hostConfig) : Sender(config, hostname, hostConfig)
     {
     }
 
@@ -50,15 +42,7 @@ public:
         messages.push(request);
     }
 
-    virtual Decision handleTransaction(const Request &request) = 0;
-
     virtual ~PaperTransactionHandler() = default;
-
-protected:
-    MessageQueue<Request> messages;
-    TransactionConfig config;
-    HostID hostname;
-    HostConfig &hostConfig;
 };
 
 #endif // CORNUS_TRANSACTIONHANDLER_HPP

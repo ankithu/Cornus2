@@ -17,18 +17,11 @@ enum RequestType
 
 struct Request
 {
-    Request(const RequestType& type_in, const uint64_t& txid, const TCPRequest& req)
-        : type(type_in), txid(txid), req(req){}
-
-    [[nodiscard]] std::string getParam(const std::string&& param) const
-    {
-        auto search = req.getParam(param);
-        return search ? *search : "";
-    }
+    Request(const RequestType &type_in, const uint64_t &txid)
+        : type(type_in), txid(txid) {}
 
     RequestType type;
     uint64_t txid;
-    const TCPRequest req;
 };
 
 #endif // CORNUS_REQUEST_H

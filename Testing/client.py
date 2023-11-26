@@ -21,8 +21,14 @@ import concurrent.futures
 def getHostPort(confFile):
     with open(confFile, 'r') as file:
         conf = json.load(file)
-    #adding 1 to port since the client interface is one port above the internal interface
-    #this is confusing and potentially should be changed by just having two variables in the config
+    if conf["port"] % 2 != 0:
+        print("INVALID .config file: internal ports must be even!")
+        exit(1)
+    return conf["host"] + ":" + str(conf["port"])
+
+def getHostPortPlus1(confFile):
+    with open(confFile, 'r') as file:
+        conf = json.load(file)
     return conf["host"] + ":" + str(conf["port"] + 1)
 
 def generate_transactions(test_file, nodes_file):
@@ -51,8 +57,8 @@ def generate_transactions(test_file, nodes_file):
         for i in range(len(participants)):
             body = body + getHostPort(nodes[participants[i]]) + " "
 
-
-        transactions.append(("http://"+getHostPort(nodes[coordinator]) +"/TRANSACTION", body))
+        #adding 1 because the external port is one above the internal ports
+        transactions.append(("http://"+getHostPortPlus1(nodes[coordinator]) +"/TRANSACTION", body))
     return transactions
 
 def make_request(url, body):

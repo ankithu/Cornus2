@@ -2,7 +2,6 @@
 #define CORNUS_COORDINATOR2_HPP
 
 #include "TransactionHandler2.hpp"
-#include "../utils.hpp"
 
 /*
 TODO:
@@ -16,10 +15,11 @@ public:
     {
     }
 
-    Decision handleTransaction(const Request &client_request) override
+    Decision handleTransaction() override
     {
         // Prepare Phase
-        sendToParticipants("VOTEREQ", client_request.getParam("config"));
+        std::cout << this->config.to_string() << std::endl;
+        sendToParticipants("VOTEREQ", this->config.to_string());
         int votes = 0;
 
         // Voting Phase
@@ -48,7 +48,7 @@ public:
                 decision = "ABORT";
             }
         }
-        sendToReplicators("WILL"+ decision, client_request.getParam("config"));
+        sendToReplicators("WILL" + decision, this->config.to_string());
         return decision;
     }
 
@@ -57,49 +57,6 @@ public:
         logFinal(decision, this->config.txid, this->hostname);
         sendToReplicators("DECISIONCOMPLETED", "");
         sendToParticipants(decision, "");
-    }
-    void abort()
-    {
-        // log abort
-        sendToParticipants("ABORT", "");
-    }
-    void commit()
-    {
-        // log commit
-        sendToParticipants("COMMIT", "");
-    }
-    void sendToReplicators(std::string type, std::string req_config)
-    {
-        ParamsT params;
-        params.emplace("config", req_config);
-        params.emplace("command", "");
-        params.emplace("type", type);
-        params.emplace("txid", std::to_string(this->config.txid));
-        params.emplace("sender", this->hostname);
-        std::vector<std::future<std::optional<TCPResponse>>> futures;
-        for (auto replicator : this->config.replicators)
-        {
-            TCPRequest req(type, params);
-            futures.push_back(sendToHost(replicator, req));
-        }
-        resolveFutures(futures);
-    }
-
-    void sendToParticipants(std::string type, std::string req_config)
-    {
-        ParamsT params;
-        params.emplace("txid", std::to_string(this->config.txid));
-        params.emplace("config", req_config);
-        params.emplace("command", "");
-        params.emplace("type", type);
-        params.emplace("sender", this->hostname);
-        std::vector<std::future<std::optional<TCPResponse>>> futures;
-        for (auto participant : this->config.participants)
-        {
-            TCPRequest req(type, params);
-            futures.push_back(sendToHost(participant, req));
-        }
-        resolveFutures(futures);
     }
 };
 

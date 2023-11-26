@@ -10,10 +10,10 @@ public:
     Committer(TransactionConfig &config, HostID hostname, HostConfig &hostConfig) : NewTransactionHandler(config, hostname, hostConfig), worker()
     {
     }
-    virtual Decision handleTransaction(const Request &start_request) override
+    virtual Decision handleTransaction() override
     {
 
-        worker.COMMIT(start_request.req.request);
+        worker.COMMIT(this->config.to_string());
         return "COMMIT";
     }
 
