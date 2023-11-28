@@ -10,3 +10,9 @@ add_executable(Cornus main.cpp include/transactionHandlers/Sender.hpp include/tr
 add_executable(tcp_test_client include/messaging/test/tcp_test_client.cpp include/messaging/tcp.hpp)
 
 add_executable(tcp_test_server include/messaging/tcp.hpp include/messaging/test/tcp_test_server.cpp)
+
+set(THREADS_PREFER_PTHREAD_FLAG ON)
+find_package(Threads REQUIRED)
+target_link_libraries(Cornus PRIVATE Threads::Threads)
+target_link_libraries(tcp_test_client PRIVATE Threads::Threads)
+target_link_libraries(tcp_test_server PRIVATE Threads::Threads)

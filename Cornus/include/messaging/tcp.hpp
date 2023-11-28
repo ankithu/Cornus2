@@ -65,6 +65,7 @@
 #include <string>
 #include <unordered_map>
 #include <thread>
+#include <optional>
 
 #include <arpa/inet.h>  // htons(), ntohs()
 #include <netdb.h>      // gethostbyname(), struct hostent

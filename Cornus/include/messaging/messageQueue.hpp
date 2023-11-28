@@ -4,6 +4,7 @@
 #include <queue>
 #include <condition_variable>
 #include <mutex>
+#include <optional>
 
 //A thread safe generic message queue
 template <typename T>
