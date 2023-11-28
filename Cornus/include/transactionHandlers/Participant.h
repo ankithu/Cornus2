@@ -53,7 +53,7 @@ public:
             DBMSInterface::LOG_WRITE(decision, this->config.txid, this->hostname, LogType::TRANSACTION);
             if (decision == "COMMIT")
             {
-                worker.COMMIT(this->config.to_string());
+                worker.COMMIT(this->hostname);
             }
             return decision;
         }

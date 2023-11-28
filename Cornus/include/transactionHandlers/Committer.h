@@ -13,7 +13,7 @@ public:
     virtual Decision handleTransaction() override
     {
 
-        worker.COMMIT(this->config.to_string());
+        worker.COMMIT(this->hostname);
         return "COMMIT";
     }
 

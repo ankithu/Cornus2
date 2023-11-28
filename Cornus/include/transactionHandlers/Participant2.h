@@ -16,18 +16,17 @@ public:
     }
     virtual Decision handleTransaction() override
     {
-
         if (!worker.VOTE_REQ(this->config.to_string()))
         {
             sendToCoordinator("ABORT");
             return "ABORT";
         }
-
         // voted yes
         sendToCoordinator("VOTEYES");
         Decision decision;
         // Execution phase
-        auto commit_request = this->messages.waitForNextMessageWithTimeout(this->hostConfig.timeout);
+        // Must wait timeout * 10 to ensure that the replicators have time to finish
+        auto commit_request = this->messages.waitForNextMessageWithTimeout(this->hostConfig.timeout * 10);
         if (commit_request.has_value())
         {
             if (commit_request->type == RequestType::Commit)
@@ -50,7 +49,7 @@ public:
 
         if (decision == "COMMIT")
         {
-            worker.COMMIT(this->config.to_string());
+            worker.COMMIT(this->hostname);
         }
 
         return decision;

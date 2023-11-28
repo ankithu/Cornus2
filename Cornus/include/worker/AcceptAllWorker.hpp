@@ -15,7 +15,7 @@ public:
 
     void COMMIT(const std::string &req)
     {
-        std::cout << "Worker completed commit. " << std::endl;
+        std::cout << "Worker completed commit. " << req << std::endl;
     }
 };
 

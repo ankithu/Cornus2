@@ -20,7 +20,6 @@ public:
         // Prepare Phase
         sendToParticipants("VOTEREQ", this->config.to_string());
         int votes = 0;
-
         // Voting Phase
         this->messages.setTimeoutStart();
         Decision decision = "";
