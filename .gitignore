@@ -6,3 +6,4 @@ DBMS/build/*
 build/*
 .DS_Store
 .vscode/*
+*/Makefile
