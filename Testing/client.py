@@ -94,11 +94,11 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('test', help="File containing JSON requests")
     parser.add_argument('nodes', help="File containing list of nodes host:port")
-    parser.add_argument('concurrent', choices=('True','False', 'true', 'false'))
+    parser.add_argument('-c','--concurrent',action="store_true",help="Enable concurrent requests" )
     args = parser.parse_args()
 
     transactions = generate_transactions(args.test, args.nodes)
-    if (args.concurrent.lower() == "true"):
+    if (args.concurrent):
         send_requests_concurrent(transactions)
     else:
         send_requests_sequential(transactions)
