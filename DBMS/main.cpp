@@ -25,8 +25,13 @@ LogAddress getLogAddress(const httplib::Request& req){
 
 int main(int argc, char** argv){
 
-    if (argc != 2){
+    if (argc != 2 && argc != 3){
         throw std::runtime_error("Usage: ./dbms port");
+    }
+
+    std::string host = "localhost";
+    if (argc == 3){
+        host = std::string(argv[2]);
     }
 
     httplib::Server svr;
@@ -68,5 +73,5 @@ int main(int argc, char** argv){
              });
 
     std::cout << "starting server..." << std::endl;
-    svr.listen("localhost", std::stoi(argv[1]));
+    svr.listen(host, std::stoi(argv[1]));
 }

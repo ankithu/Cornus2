@@ -16,18 +16,23 @@ import sys
 
 clion = False
 BUILD_DIR_NAME = "cmake-build-debug" if clion else "build"
+BUILD_DIR_NAME = "."
 
 def run_executable(command):
     process = subprocess.Popen(command, shell=True)
     process.wait()
 
-def start_nodes(nodes_file):
+def get_node_start_commands(nodes_file):
     with open(nodes_file, 'r') as file:
         nodes = json.load(file)
     
     commands = [f"./../DBMS/{BUILD_DIR_NAME}/DBMS 9000"]
     for node in nodes:
         commands.append(f"./../Cornus/{BUILD_DIR_NAME}/Cornus " + node)
+    return commands
+
+def start_nodes(nodes_file):
+    commands = get_node_start_commands(nodes_file)
     pool = multiprocessing.Pool(processes=len(commands))
     pool.map(run_executable, commands)
     pool.close()
