@@ -14,27 +14,22 @@ public:
     std::string LOG_ONCE(LogAddress &address, std::string &data)
     {
         auto &logPair = getLogPair(address);
-        std::cout << "writing '" << data << "' once on " << address << std::endl;
         auto log_once_timeout = std::chrono::milliseconds(100);
         if (address.type == LogType::DataLog)
         {
             auto res = logPair.dataLog.LOG_ONCE(data);
-            std::cout << "data log returns : " << res << std::endl;
             return res;
         }
         else
         {
             auto res = logPair.transactionLog.LOG_ONCE(data);
-            std::cout << "trans log returns: " << res << std::endl;
             return res;
         }
     }
 
     std::string LOG_READ(LogAddress &address, std::string &data)
     {
-        std::cout << "getting here baby" << std::endl;
         auto &logPair = getLogPair(address);
-        std::cout << "reading from " << address << std::endl;
         auto log_read_timeout = std::chrono::milliseconds(50);
         if (address.type == LogType::DataLog)
         {
@@ -49,7 +44,6 @@ public:
     std::string LOG_WRITE(LogAddress &address, std::string &data)
     {
         auto &logPair = getLogPair(address);
-        std::cout << "writing '" << data << "' to " << address << std::endl;
         auto log_write_timeout = std::chrono::milliseconds(75);
         if (address.type == LogType::DataLog)
         {
