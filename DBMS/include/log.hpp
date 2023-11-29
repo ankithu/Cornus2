@@ -45,16 +45,12 @@ public:
 
     std::string& LOG_ONCE(std::string& data){
         //requires unique writer (no readers allowed)
-        std::cout << "waiting for transaction log lock" << std::endl;
         auto lock = std::unique_lock(decisionMutex);
-        std::cout << "transaction log lock acquired" << std::endl;
         if (decision != "WORKING"){
             //somebody has already logged...
-            std::cout << "decision : " << decision << " already exists" << std::endl;
             return decision;
         }
         checkUndefinedInput(data);
-        std::cout << "setting decision to " << data << std::endl;
         decision = data;
         return decision;
     }

@@ -40,14 +40,12 @@ int main(int argc, char** argv){
     std::string emptyString = "";
 
     svr.Get("/LOG_READ/:txId/:clId/:dOrt", [&](const httplib::Request& req, httplib::Response& res) {
-        std::cout << "INCOMING LOG READ REQUEST" << std::endl;
         auto address = getLogAddress(req);
         res.set_content(manager.LOG_READ(address, emptyString), "text/plain");
     });
 
     svr.Post("/LOG_WRITE/:txId/:clId/:dOrt",
              [&](const httplib::Request &req, httplib::Response &res, const httplib::ContentReader &content_reader) {
-                     std::cout << "INCOMING LOG WRITE REQUEST" << std::endl;
                      std::string body;
                      content_reader([&](const char *data, size_t data_length) {
                          body.append(data, data_length);
@@ -59,7 +57,6 @@ int main(int argc, char** argv){
 
     svr.Post("/LOG_ONCE/:txId/:clId/:dOrt",
              [&](const httplib::Request &req, httplib::Response &res, const httplib::ContentReader &content_reader) {
-                 std::cout << "INCOMING LOG ONCE REQUEST" << std::endl;
                  std::string body;
                  content_reader([&](const char *data, size_t data_length) {
                      body.append(data, data_length);
@@ -68,7 +65,6 @@ int main(int argc, char** argv){
 
                  auto address = getLogAddress(req);
                  auto out = manager.LOG_ONCE(address, body);
-                 std::cout << "Log once res: " << out << std::endl;
                  res.set_content(out, "text/plain");
              });
 
