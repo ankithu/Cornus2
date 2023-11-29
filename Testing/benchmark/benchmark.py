@@ -11,6 +11,7 @@ import threading
 import time
 import concurrent.futures
 import requests
+import random
 
 participants=[] # List of participants by hostId
 timeout=0 #Timeout of the system
@@ -18,8 +19,18 @@ f=1      # Failure
 clion = False
 BUILD_DIR_NAME = "cmake-build-debug" if clion else "build"
 
-def random_test_generator():
-    return
+def generate_random_transactions(participants,n):
+    transactions=[]
+    for i in range(n):
+        size=random.randint(3,len(participants))
+        test=random.sample(range(0,len(participants)), k=size)# generate random 
+        body=""
+        for id in test:
+            assert participants[id]["host_num"]==id
+            body = body + participants[id]["address"] + " "
+        transactions.append(("http://"+participants[test[0]]["external_address"] +"/TRANSACTION", body))    
+    print(transactions)
+    return transactions   
 
 def run_executable(command):
     process = subprocess.Popen(command, shell=True)
@@ -93,6 +104,7 @@ def start_nodes(args,build):
     f=args.f
     participants=[]
     commands=[]
+    random.seed(args.seed)
 
     #Generate Participant and Configurations
     print("Creating Configurations...")
@@ -135,8 +147,11 @@ def start_nodes(args,build):
     time.sleep(1) #Make sure servers start up
     print("Servers Started")
     #Load test cases from file/randomly generate
-    transactions=generate_transactions_from_file(args.test,participants)
-    
+    transactions=[]
+    if args.test==None:
+        transactions=generate_random_transactions(participants,args.num)
+    else:
+        transactions=generate_transactions_from_file(args.test,participants)
     #Run test cases on clients
     with concurrent.futures.ThreadPoolExecutor(max_workers=args.clients) as executor:
         futures = []
@@ -183,8 +198,8 @@ if __name__ == "__main__":
     #Set Test params
     parser.add_argument('--test', required=False,help="File containing JSON requests")
     #Random Test params
-    parser.add_argument('--seed', required=False,help="Seed for random generation")
-    parser.add_argument('--num', required=False,type=int,help="Number of tests")
+    parser.add_argument('--seed', required=False,default=time.time(),help="Seed for random generation")
+    parser.add_argument('--num', required=False,type=int,default=10,help="Number of tests")
     #parser.add_argument('--tsize', required=False,help="Average size of transactions")
 
 
