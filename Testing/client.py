@@ -17,6 +17,7 @@ import argparse
 import json
 import requests
 import concurrent.futures
+import time
 
 def getHostPort(confFile):
     with open(confFile, 'r') as file:
@@ -96,6 +97,9 @@ if __name__ == "__main__":
     parser.add_argument('nodes', help="File containing list of nodes host:port")
     parser.add_argument('-c','--concurrent',action="store_true",help="Enable concurrent requests" )
     args = parser.parse_args()
+
+    time.sleep(4)
+    print("ready to go.")
 
     transactions = generate_transactions(args.test, args.nodes)
     if (args.concurrent):

@@ -74,7 +74,7 @@ public:
     std::string LOG_ONCE(const std::string &request, const TransactionId txId, const HostID &hostId, const LogType logType)
     {
         auto res = cli.Post(getPath("LOG_ONCE", txId, hostId, logType), request, "text/plain");
-        std::cout << res << std::endl;
+        //std::cout << res << std::endl;
         if (res.error() != httplib::Error::Success)
         {
             // ERROR handle TODO
