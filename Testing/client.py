@@ -69,8 +69,11 @@ def make_request(url, body):
     params = {
     'config': body,
     }
-    print(url, params, headers)
+    #print(url, params, headers)
+    start = time.time()
     response = requests.post(url, data=params, headers=headers)
+    end = time.time()
+    print(end - start)
     return response
 
 def send_requests_sequential(transactions):

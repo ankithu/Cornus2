@@ -6,20 +6,29 @@
 #include <vector>
 #include <mutex>
 #include <shared_mutex>
+#include <thread>
 
+
+
+static const int LOG_READ_DELAY_MS = 10;
+static const int LOG_WRITE_DELAY_MS = 10;
+static const int LOG_ONCE_DELAY_MS = 10;
 
 template <class LogImpl>
 class Log {
 public:
     std::string& LOG_READ(std::string& data){
+        std::this_thread::sleep_for(std::chrono::milliseconds(LOG_READ_DELAY_MS));
         return static_cast<LogImpl*>(this)->LOG_READ(data);
     }
 
     std::string& LOG_WRITE(std::string& data){
+        std::this_thread::sleep_for(std::chrono::milliseconds(LOG_WRITE_DELAY_MS));
         return static_cast<LogImpl*>(this)->LOG_WRITE(data);
     }
 
     std::string& LOG_ONCE(std::string& data){
+        std::this_thread::sleep_for(std::chrono::milliseconds(LOG_ONCE_DELAY_MS));
         return static_cast<LogImpl*>(this)->LOG_ONCE(data);
     }
 

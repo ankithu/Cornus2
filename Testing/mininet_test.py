@@ -16,7 +16,9 @@ from time import sleep
 NODE_FILE = "mininet_nodes.json" #TODO use argument
 TEST_CONF = "mininet_test1.json" #TODO use argument
 CONF_OUTPUT_DIR = "mininet_configs" #TODO use argument
-TEST_FILE = "test2.json"
+TEST_FILE = "test1.json"
+LINK_DELAY_MS = 10
+
 
 def gen_config(idx: int, host: str, port: int, all_hosts: List[Dict[str, str]], dbms_address: str, test_conf_file_name: str, output_file: str) -> None:
     with open(test_conf_file_name, 'r') as file:
@@ -57,13 +59,11 @@ class CornusTopology( Topo ):
 
         s = self.addSwitch('s1')
         for host, _ in self.cornus_system_hosts:
-            self.addLink(host, s)
-            self.addLink(s, host)
+            self.addLink(host, s, delay=LINK_DELAY_MS, bw=1000)
 
         #add host for client
         self.client_host = self.addHost(f'host{len(self.cornus_system_hosts)}', ip=f'10.0.0.{len(self.cornus_system_hosts)}')
-        self.addLink(self.client_host, s)
-        self.addLink(s, self.client_host)
+        self.addLink(self.client_host, s, delay=LINK_DELAY_MS, bw=1000)
             
 
 if __name__ == '__main__':
@@ -87,7 +87,6 @@ if __name__ == '__main__':
     for i in range(1, len(topo.cornus_system_hosts)):
         cornus_node = net.get(f"host{i}")
         popens[cornus_node] = cornus_node.popen(f'{topo.cornus_system_hosts[i][1]}')
-        sleep(1)
 
     #CLI(net)
 

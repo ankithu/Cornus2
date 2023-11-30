@@ -600,7 +600,7 @@ public:
 
     std::optional<TCPResponse> sendRequest(TCPRequest &req)
     {
-        std::cout << "Sending request: " << req.endpoint << " " << req.request << std::endl;
+        //std::cout << "Sending request: " << req.endpoint << " " << req.request << std::endl;
         if (!valid)
         {
             perror("Socket not initialized correctly! \n");

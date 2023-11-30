@@ -30,7 +30,7 @@ struct HostConfig
         // deterministically choose the next f + 1 replicators that are greater than it
         if (allOthers.size() < f + 1)
         {
-            std::cout << "ERROR: INVALID CONFIG. NUMBER OF NODES IS LESS THAN F + 1" << std::endl;
+            //std::cout << "ERROR: INVALID CONFIG. NUMBER OF NODES IS LESS THAN F + 1" << std::endl;
             assert(false);
         }
         sort(allOthers.begin(), allOthers.end());
