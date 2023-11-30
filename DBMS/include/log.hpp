@@ -8,8 +8,6 @@
 #include <shared_mutex>
 #include <thread>
 
-
-
 static const int LOG_READ_DELAY_MS = 10;
 static const int LOG_WRITE_DELAY_MS = 10;
 static const int LOG_ONCE_DELAY_MS = 10;
@@ -18,17 +16,14 @@ template <class LogImpl>
 class Log {
 public:
     std::string& LOG_READ(std::string& data){
-        std::this_thread::sleep_for(std::chrono::milliseconds(LOG_READ_DELAY_MS));
         return static_cast<LogImpl*>(this)->LOG_READ(data);
     }
 
     std::string& LOG_WRITE(std::string& data){
-        std::this_thread::sleep_for(std::chrono::milliseconds(LOG_WRITE_DELAY_MS));
         return static_cast<LogImpl*>(this)->LOG_WRITE(data);
     }
 
     std::string& LOG_ONCE(std::string& data){
-        std::this_thread::sleep_for(std::chrono::milliseconds(LOG_ONCE_DELAY_MS));
         return static_cast<LogImpl*>(this)->LOG_ONCE(data);
     }
 
@@ -40,12 +35,14 @@ class TransactionLog : Log<TransactionLog> {
 public:
     std::string& LOG_READ([[maybe_unused]] std::string& data){
         //allows multiple readers
+        std::this_thread::sleep_for(std::chrono::milliseconds(LOG_READ_DELAY_MS));
         auto lock = std::shared_lock(decisionMutex);
         return decision;
     }
 
     std::string& LOG_WRITE(std::string& data){
         //requires unique writer (no readers allowed)
+        std::this_thread::sleep_for(std::chrono::milliseconds(LOG_WRITE_DELAY_MS));
         auto lock = std::unique_lock(decisionMutex);
         checkUndefinedInput(data);
         decision = data;
@@ -54,6 +51,7 @@ public:
 
     std::string& LOG_ONCE(std::string& data){
         //requires unique writer (no readers allowed)
+        std::this_thread::sleep_for(std::chrono::milliseconds(LOG_ONCE_DELAY_MS));
         auto lock = std::unique_lock(decisionMutex);
         if (decision != "WORKING"){
             //somebody has already logged...
@@ -78,11 +76,13 @@ private:
 class DataLog : Log<DataLog> {
 public:
     std::string& LOG_READ(std::string& data){
+        std::this_thread::sleep_for(std::chrono::milliseconds(LOG_WRITE_DELAY_MS));
         auto lock = std::shared_lock(dataLogMutex);
         return dataLogEntries;
     }
 
     std::string& LOG_WRITE(std::string& data){
+        std::this_thread::sleep_for(std::chrono::milliseconds(LOG_WRITE_DELAY_MS));
         auto lock = std::unique_lock(dataLogMutex);
         if (dataLogEntries != ""){
             dataLogEntries += ";";
@@ -92,6 +92,7 @@ public:
     }
 
     std::string& LOG_ONCE(std::string& data){
+        std::this_thread::sleep_for(std::chrono::milliseconds(LOG_ONCE_DELAY_MS));
         throw std::runtime_error("LOG ONCE NOT FOR DATA LOGS!");
     }
 
