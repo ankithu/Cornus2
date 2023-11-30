@@ -2,10 +2,6 @@
 #define CORNUS_COORDINATOR_HPP
 
 #include "TransactionHandler.hpp"
-/*
-TODO:
-- Add callback for timeout in voting phase
-*/
 
 class PaperCoordinator : public PaperTransactionHandler
 {
