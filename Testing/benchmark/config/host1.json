@@ -1,0 +1,31 @@
+{
+ "others": [
+  {
+   "host_id": "localhost:8000"
+  },
+  {
+   "host_id": "localhost:8004"
+  },
+  {
+   "host_id": "localhost:8006"
+  },
+  {
+   "host_id": "localhost:8008"
+  },
+  {
+   "host_id": "localhost:8010"
+  },
+  {
+   "host_id": "localhost:8012"
+  },
+  {
+   "host_id": "localhost:8014"
+  }
+ ],
+ "host": "localhost",
+ "dbms_address": "localhost:9000",
+ "host_num": 1,
+ "port": 8002,
+ "timeout_millis": 100,
+ "f": 1
+}
