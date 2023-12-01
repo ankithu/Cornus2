@@ -17,8 +17,8 @@
 #include <chrono>
 
 // uncomment whichever one you would like to compile
-//#define PAPER_VERSION
-#define NEW_VERSION
+#define PAPER_VERSION
+//#define NEW_VERSION
 
 #ifdef PAPER_VERSION
 using TransactionHandler = PaperTransactionHandler;

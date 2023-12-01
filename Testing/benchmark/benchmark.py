@@ -12,6 +12,7 @@ import time
 import concurrent.futures
 import requests
 import random
+import numpy as np
 
 participants=[] # List of participants by hostId
 timeout=0 #Timeout of the system
@@ -42,10 +43,11 @@ def make_request(url, body):
     params = {
     'config': body,
     }
-    print(url, params, headers)
+    #print(url, params, headers)
     start = time.time()
     response = requests.post(url, data=params, headers=headers)
     end= time.time()
+
     return end-start
 
 def generate_transactions_from_file(test_file, all_participants):
@@ -121,7 +123,7 @@ def start_nodes(args,build):
     delete_files(config_directory)
     #Start DBMS command
     commands.append(f'{DBMS_file} {DBMS_port}')
-
+    configs=[]
     #Create New Configs
     for participant in participants:
         config={}
@@ -141,7 +143,6 @@ def start_nodes(args,build):
         with open(config_file, "w") as write_file:
             json.dump(config, write_file,indent=1)
         commands.append(Cornus_files[build]+" "+config_file) #Launch server instance command
-    
     print("Configs created. Starting Servers...")
     servers=threading.Thread(target=launch_server, args=(commands,)).start() #Kind of sus but need to launch a thread so the subprocesses close on keyboard escape
     time.sleep(1) #Make sure servers start up
@@ -164,8 +165,7 @@ def start_nodes(args,build):
         for future in concurrent.futures.as_completed(futures):
             print(f'Time: {future.result()}')
             times.append(future.result())
-        time.sleep(5)
-        print(times)
+        print(np.median(times),np.mean(times),np.var(times))
     #Collate results
     
     
@@ -190,7 +190,7 @@ if __name__ == "__main__":
     
     #Protocol Config
     parser.add_argument('-f',default=1,type=int,help="Number of nodes which can fail")
-    parser.add_argument('-timeout',default=500,type=int,help="Timeout in milliseconds")
+    parser.add_argument('-timeout',default=100,type=int,help="Timeout in milliseconds")
 
     #Setup
     parser.add_argument('--clients', required=True,type=int,help="Number of concurrent client nodes to launch")
