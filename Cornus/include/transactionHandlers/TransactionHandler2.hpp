@@ -12,7 +12,7 @@ public:
 
     Decision terminationProtocol()
     {
-        Decision prev = DBMSInterface::LOG_READ(this->config.txid, this->hostname, LogType::TRANSACTION);
+        Decision prev = DBMSInterface::LOG_READ(this->config.txid, this->hostname, LogType::TRANSACTION, dbmsClient);
         if (prev == "COMMIT" || prev == "ABORT")
         {
             return prev;
@@ -20,7 +20,7 @@ public:
         else
         {
             Decision decision = "ABORT";
-            DBMSInterface::LOG_WRITE(decision, this->config.txid, this->hostname, LogType::TRANSACTION);
+            DBMSInterface::LOG_WRITE(decision, this->config.txid, this->hostname, LogType::TRANSACTION, dbmsClient);
             return decision;
         }
     }
@@ -34,10 +34,10 @@ public:
 
     void logFinal(Decision decision, TransactionId txid, HostID host)
     {
-        Decision prev = DBMSInterface::LOG_READ(this->config.txid, this->hostname, LogType::TRANSACTION);
+        Decision prev = DBMSInterface::LOG_READ(this->config.txid, this->hostname, LogType::TRANSACTION, dbmsClient);
         if (prev != decision)
         {
-            DBMSInterface::LOG_WRITE(decision, this->config.txid, this->hostname, LogType::TRANSACTION);
+            DBMSInterface::LOG_WRITE(decision, this->config.txid, this->hostname, LogType::TRANSACTION, dbmsClient);
 
             if (prev == "ABORT")
             {

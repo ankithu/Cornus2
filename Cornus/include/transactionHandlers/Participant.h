@@ -24,7 +24,7 @@ public:
             return "ABORT";
         }
 
-        std::string resp = DBMSInterface::LOG_ONCE("VOTEYES", this->config.txid, this->hostname, LogType::TRANSACTION);
+        std::string resp = DBMSInterface::LOG_ONCE("VOTEYES", this->config.txid, this->hostname, LogType::TRANSACTION, dbmsClient);
         if (resp == "VOTEYES")
         {
             sendToCoordinator("VOTEYES");
@@ -50,7 +50,7 @@ public:
             {
                 decision = this->terminationProtocol();
             }
-            DBMSInterface::LOG_WRITE(decision, this->config.txid, this->hostname, LogType::TRANSACTION);
+            DBMSInterface::LOG_WRITE(decision, this->config.txid, this->hostname, LogType::TRANSACTION, dbmsClient);
             if (decision == "COMMIT")
             {
                 worker.COMMIT(this->hostname);

@@ -56,13 +56,20 @@ class CornusTopology( Topo ):
         for i, ip in enumerate(ips):
             gen_config(i, ip, PORT, all_hosts, f"10.0.0.0:{9000}", TEST_CONF, f"{CONF_OUTPUT_DIR}/host{i}.config")
         
+        # for h1_tup, h2_tup in combinations(self.cornus_system_hosts, r=2):
+        #     h1, _ = h1_tup
+        #     h2, _ = h2_tup
+        #     self.addLink(h1, h2, delay=LINK_DELAY_MS, bw=1000)
 
         s = self.addSwitch('s1')
         for host, _ in self.cornus_system_hosts:
-            self.addLink(host, s, delay=LINK_DELAY_MS, bw=1000)
+           self.addLink(host, s, delay=LINK_DELAY_MS, bw=1000)
 
         #add host for client
         self.client_host = self.addHost(f'host{len(self.cornus_system_hosts)}', ip=f'10.0.0.{len(self.cornus_system_hosts)}')
+        # for host, _ in self.cornus_system_hosts:
+        #     self.addLink(host, self.client_host, delay=LINK_DELAY_MS, bw=1000)
+
         self.addLink(self.client_host, s, delay=LINK_DELAY_MS, bw=1000)
             
 
@@ -78,25 +85,25 @@ if __name__ == '__main__':
     net.start()
 
     #start dbms
-    dbms_node = net.get("host0")
-    popens = {}
-    info(topo.dbms_command)
-    popens[dbms_node] = dbms_node.popen(f'{topo.dbms_command} 10.0.0.0')
+    # dbms_node = net.get("host0")
+    # popens = {}
+    # info(topo.dbms_command)
+    # popens[dbms_node] = dbms_node.popen(f'{topo.dbms_command} 10.0.0.0')
 
-    #start cornus nodes
-    for i in range(1, len(topo.cornus_system_hosts)):
-        cornus_node = net.get(f"host{i}")
-        popens[cornus_node] = cornus_node.popen(f'{topo.cornus_system_hosts[i][1]}')
+    # #start cornus nodes
+    # for i in range(1, len(topo.cornus_system_hosts)):
+    #     cornus_node = net.get(f"host{i}")
+    #     popens[cornus_node] = cornus_node.popen(f'{topo.cornus_system_hosts[i][1]}')
 
-    #CLI(net)
+    # #CLI(net)
 
-    client_node = net.get(f"host{len(topo.cornus_system_hosts)}")
-    #client_node.startShell()
-    popens[client_node] = client_node.popen(f'python3 -u client.py {TEST_FILE} {NODE_FILE} -c')
+    # client_node = net.get(f"host{len(topo.cornus_system_hosts)}")
+    # #client_node.startShell()
+    # popens[client_node] = client_node.popen(f'python3 -u client.py {TEST_FILE} {NODE_FILE} -c')
     
-    for host, line in pmonitor( popens ):
-        if host:
-            info( "<%s>: %s" % ( host.name, line ) )
+    # for host, line in pmonitor( popens ):
+    #     if host:
+    #         info( "<%s>: %s" % ( host.name, line ) )
 
     CLI( net )
     net.stop()

@@ -125,6 +125,7 @@ private:
         TransactionId newID = transactionCounter << 16;
         newID += nodeId;
         transactionCounter++;
+        std::cout << "txid: " << newID << std::endl;
         return newID;
     }
 

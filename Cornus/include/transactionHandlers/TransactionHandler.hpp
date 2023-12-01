@@ -14,7 +14,7 @@ public:
     {
         for (auto otherParticipantId : config.participants)
         {
-            std::string resp = DBMSInterface::LOG_ONCE("ABORT", config.txid, otherParticipantId, LogType::TRANSACTION);
+            std::string resp = DBMSInterface::LOG_ONCE("ABORT", config.txid, otherParticipantId, LogType::TRANSACTION, dbmsClient);
             if (resp == "ABORT")
             {
                 return "ABORT";

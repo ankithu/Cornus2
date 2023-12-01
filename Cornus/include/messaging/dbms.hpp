@@ -14,19 +14,19 @@ enum class LogType
 
 // LogImpl now describes any type that has a LOG_ONCE, LOG_WRITE, and LOG_READ function
 template <class T>
-concept LogImpl = requires(T candidateImpl, std::string &r, HostID &h, TransactionId id, LogType t) {
+concept LogImpl = requires(T candidateImpl, std::string &r, HostID &h, TransactionId id, LogType t, httplib::Client& cli) {
     // concept requires that a function defined like this would compile
     // so if the candidate implemenation does not have LOG_ONCE, LOG_WRITE, LOG_READ
     // functions that take in a request whose return time is Response, the concept
     // will not be met and the code won't compile
     {
-        candidateImpl.LOG_ONCE(r, id, h, t)
+        candidateImpl.LOG_ONCE(r, id, h, t, cli)
     } -> std::same_as<std::string>;
     {
-        candidateImpl.LOG_WRITE(r, id, h, t)
+        candidateImpl.LOG_WRITE(r, id, h, t, cli)
     } -> std::same_as<std::string>;
     {
-        candidateImpl.LOG_READ(id, h, t)
+        candidateImpl.LOG_READ(id, h, t, cli)
     } -> std::same_as<std::string>;
 };
 
@@ -36,28 +36,28 @@ template <LogImpl LogImplT>
 class TemplatedRequestInterface
 {
 public:
-    static std::string LOG_ONCE(const std::string &request, const TransactionId txId, const HostID &hostId, const LogType logType)
+    static std::string LOG_ONCE(const std::string &request, const TransactionId txId, const HostID &hostId, const LogType logType, httplib::Client& cli)
     {
-        auto l = std::unique_lock(httpMut);
-        return logImpl->LOG_ONCE(request, txId, hostId, logType);
+        //auto l = std::unique_lock(httpMut);
+        return logImpl->LOG_ONCE(request, txId, hostId, logType, cli);
     }
 
-    static std::string LOG_WRITE(const std::string &request, const TransactionId txId, const HostID &hostId, const LogType logType)
+    static std::string LOG_WRITE(const std::string &request, const TransactionId txId, const HostID &hostId, const LogType logType, httplib::Client& cli)
     {
-        auto l = std::unique_lock(httpMut);
-        return logImpl->LOG_WRITE(request, txId, hostId, logType);
+        //auto l = std::unique_lock(httpMut);
+        return logImpl->LOG_WRITE(request, txId, hostId, logType, cli);
     }
 
-    static std::string LOG_READ(const TransactionId txId, const HostID &hostId, const LogType logType)
+    static std::string LOG_READ(const TransactionId txId, const HostID &hostId, const LogType logType, httplib::Client& cli)
     {
-        auto l = std::unique_lock(httpMut);
-        return logImpl->LOG_READ(txId, hostId, logType);
+        //auto l = std::unique_lock(httpMut);
+        return logImpl->LOG_READ(txId, hostId, logType, cli);
     }
 
     static void init(const HostConfig &hostConfig)
     {
-        auto l = std::unique_lock(httpMut);
-        logImpl = std::make_unique<LogImplT>(LogImplT(hostConfig.dbmsAddress));
+        //auto l = std::unique_lock(httpMut);
+        logImpl = std::make_unique<LogImplT>();
     }
 
 private:
@@ -69,9 +69,9 @@ private:
 class SimulatedDBMSImpl
 {
 public:
-    explicit SimulatedDBMSImpl(const std::string &address) : dbmsAddress(address), cli(dbmsAddress) {}
+    explicit SimulatedDBMSImpl() {}
 
-    std::string LOG_ONCE(const std::string &request, const TransactionId txId, const HostID &hostId, const LogType logType)
+    std::string LOG_ONCE(const std::string &request, const TransactionId txId, const HostID &hostId, const LogType logType, httplib::Client& cli)
     {
         auto res = cli.Post(getPath("LOG_ONCE", txId, hostId, logType), request, "text/plain");
         //std::cout << res << std::endl;
@@ -82,7 +82,7 @@ public:
         return res->body;
     }
 
-    std::string LOG_WRITE(const std::string &request, const TransactionId txId, const HostID &hostId, const LogType logType)
+    std::string LOG_WRITE(const std::string &request, const TransactionId txId, const HostID &hostId, const LogType logType, httplib::Client& cli)
     {
         auto res = cli.Post(getPath("LOG_WRITE", txId, hostId, logType), request, "text/plain");
         if (res.error() != httplib::Error::Success)
@@ -92,7 +92,7 @@ public:
         return res->body;
     }
 
-    std::string LOG_READ(const TransactionId txId, const HostID &hostId, const LogType logType)
+    std::string LOG_READ(const TransactionId txId, const HostID &hostId, const LogType logType, httplib::Client& cli)
     {
         auto res = cli.Get(getPath("LOG_READ", txId, hostId, logType));
         if (res.error() != httplib::Error::Success)
@@ -107,9 +107,6 @@ private:
     {
         return "/" + endpoint + "/" + std::to_string(txId) + "/" + hostId + "/" + (logType == LogType::DATA ? "DATA" : "TRANSACTION");
     }
-    // TODO set this
-    std::string dbmsAddress;
-    httplib::Client cli;
 };
 
 // potentially add additional implementations for other DBMS interfaces
