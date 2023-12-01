@@ -16,7 +16,7 @@
 class Sender
 {
 public:
-    Sender(TransactionConfig &config, HostID hostname, HostConfig &hostConfig) : config(config), hostname(hostname), hostConfig(hostConfig)
+    Sender(TransactionConfig &config, HostID hostname, HostConfig &hostConfig) : config(config), hostname(hostname), hostConfig(hostConfig), dbmsClient(hostConfig.dbmsAddress)
     {
     }
 
@@ -74,6 +74,7 @@ protected:
     HostID hostname;
     HostConfig &hostConfig;
     std::unordered_map<HostID, std::unique_ptr<TCPClient>> clients;
+    httplib::Client dbmsClient;
 };
 
 #endif

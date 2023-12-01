@@ -41,6 +41,7 @@ def generate_transactions(test_file, nodes_file):
         nodes = json.load(file)
 
     for request in request_list:
+        print(request)
         coordinator = request["coordinator"]
         participants = request["participants"]
         if coordinator in participants:
