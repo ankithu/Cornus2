@@ -15,11 +15,12 @@ def make_request(url):
     }
     start = time.time()
     failed = False
-    try:
-        response = requests.post(url, data="COMMIT", headers=headers)
-    except: 
-        failed = True
-        print("CONNECTION REFUSED: ", url)
+    response = None
+    while response is None:
+        try:
+            response = requests.post(url, data="COMMIT", headers=headers)
+        except: 
+            pass
     end = time.time()
     latency = end - start
     return (latency, failed)
