@@ -5,21 +5,6 @@
   },
   {
    "host_id": "localhost:8004"
-  },
-  {
-   "host_id": "localhost:8006"
-  },
-  {
-   "host_id": "localhost:8008"
-  },
-  {
-   "host_id": "localhost:8010"
-  },
-  {
-   "host_id": "localhost:8012"
-  },
-  {
-   "host_id": "localhost:8014"
   }
  ],
  "host": "localhost",

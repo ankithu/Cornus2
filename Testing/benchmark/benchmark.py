@@ -30,7 +30,7 @@ def generate_random_transactions(participants,n):
             assert participants[id]["host_num"]==id
             body = body + participants[id]["address"] + " "
         transactions.append(("http://"+participants[test[0]]["external_address"] +"/TRANSACTION", body))    
-    print(transactions)
+    #print(transactions)
     return transactions   
 
 def run_executable(command):
@@ -187,8 +187,8 @@ if __name__ == "__main__":
     parser.add_argument('-v2',action="store_true", help="Enable Cornus2 protocol")
     parser.add_argument('--fake',action="store_true", help="Enable Cornus2 protocol")
     #DBMS
-    parser.add_argument('--DBMSport', required=False,type=int,default=9000,help="DBMS port")
-    parser.add_argument('--DBMSdelay', required=False,type=int,default=10,help="DBMS delay")
+    parser.add_argument('--DBMS_port', required=False,type=int,default=9000,help="DBMS port")
+    parser.add_argument('--DBMS_delay', required=False,type=int,default=10,help="DBMS delay")
     
     #Protocol Config
     parser.add_argument('-f',default=1,type=int,help="Number of nodes which can fail")
@@ -196,7 +196,8 @@ if __name__ == "__main__":
 
     #Setup
     parser.add_argument('--clients', required=True,type=int,help="Number of concurrent client nodes to launch")
-    parser.add_argument('--results', required=False,default="output.txt", help="Output file for results")
+    #parser.add_argument('--output', required=False,default="output.txt", help="Output file for results")
+
     #Set Test params
     parser.add_argument('--test', required=False,help="File containing JSON requests")
     #Random Test params
@@ -204,12 +205,13 @@ if __name__ == "__main__":
     parser.add_argument('--num', required=False,type=int,default=10,help="Number of tests")
     #parser.add_argument('--tsize', required=False,help="Average size of transactions")
 
-
+        
     args = parser.parse_args()
+    print(args) 
     build=0
     if(args.v2):
         build=1
     elif args.fake:
         build=2
     start_nodes(args,build)
-    print(args)
+    
