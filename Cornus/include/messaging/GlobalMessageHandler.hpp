@@ -114,11 +114,7 @@ public:
         removeFromMap(txid, transactions);
         auto clock_end = std::chrono::high_resolution_clock::now();
         auto time_span = duration_cast<std::chrono::duration<double>>(clock_end - clock_start);
-<<<<<<< HEAD
         std::cout << "txid: " << txid << ", latency: " << time_span.count() << ", cur_time: " << std::chrono::system_clock::now() << std::endl;
-=======
-        std::cout << "processed in " << time_span.count() << std::endl;
->>>>>>> 280c067ddd02b790b94575a9d51c67f478b5930f
     }
 
     void onOldRequest(const TCPRequest &req, RequestType type, TransactionHandlerMapT *transactions)
