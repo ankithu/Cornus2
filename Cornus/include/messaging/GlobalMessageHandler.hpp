@@ -17,8 +17,8 @@
 #include <chrono>
 
 // uncomment whichever one you would like to compile
-#define PAPER_VERSION
-//#define NEW_VERSION
+// #define PAPER_VERSION
+#define NEW_VERSION
 
 #ifdef PAPER_VERSION
 using TransactionHandler = PaperTransactionHandler;
@@ -68,6 +68,12 @@ public:
                                 { std::thread process(&GlobalMessageHandler::onNewRequest<Committer<WorkerT>>, this, req, RequestType::Commit, &committers); process.detach(); return TCP_OK; });
 
         this->hostname = hostConfig.id;
+#ifdef PAPER_VERSION
+        std::cout << "PAPER VERSION" << std::endl;
+#endif
+#ifdef NEW_VERSION
+        std::cout << "NEW VERSION" << std::endl;
+#endif
         std::cout << "Starting client http server..." << hostConfig.host << " " << (hostConfig.port + 100) << std::endl;
         auto httpserverthread = std::thread([this, &hostConfig]()
                                             {
@@ -94,7 +100,7 @@ public:
         auto clock_start = std::chrono::high_resolution_clock::now();
 
         TransactionId txid = getUniqueTransactionId();
-        //std::cout << "before " << req.body << req.get_param_value("config") << std::endl;
+        // std::cout << "before " << req.body << req.get_param_value("config") << std::endl;
         Request request = Request(RequestType::transaction, txid);
         auto n = createNode<Coordinator>(req.get_param_value("config"), txid, transactions);
         auto d = n->handleTransaction();
@@ -109,7 +115,6 @@ public:
         auto clock_end = std::chrono::high_resolution_clock::now();
         auto time_span = duration_cast<std::chrono::duration<double>>(clock_end - clock_start);
         std::cout << "processed in " << time_span.count() << std::endl;
-
     }
 
     void onOldRequest(const TCPRequest &req, RequestType type, TransactionHandlerMapT *transactions)
