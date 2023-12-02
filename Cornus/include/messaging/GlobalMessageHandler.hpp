@@ -68,6 +68,12 @@ public:
                                 { std::thread process(&GlobalMessageHandler::onNewRequest<Committer<WorkerT>>, this, req, RequestType::Commit, &committers); process.detach(); return TCP_OK; });
 
         this->hostname = hostConfig.id;
+#ifdef PAPER_VERSION
+        std::cout << "PAPER VERSION" << std::endl;
+#endif
+#ifdef NEW_VERSION
+        std::cout << "NEW VERSION" << std::endl;
+#endif
         std::cout << "Starting client http server..." << hostConfig.host << " " << (hostConfig.port + 100) << std::endl;
         auto httpserverthread = std::thread([this, &hostConfig]()
                                             {
@@ -94,7 +100,7 @@ public:
         auto clock_start = std::chrono::high_resolution_clock::now();
 
         TransactionId txid = getUniqueTransactionId();
-        //std::cout << "before " << req.body << req.get_param_value("config") << std::endl;
+        // std::cout << "before " << req.body << req.get_param_value("config") << std::endl;
         Request request = Request(RequestType::transaction, txid);
         auto n = createNode<Coordinator>(req.get_param_value("config"), txid, transactions);
         auto d = n->handleTransaction();
@@ -108,7 +114,11 @@ public:
         removeFromMap(txid, transactions);
         auto clock_end = std::chrono::high_resolution_clock::now();
         auto time_span = duration_cast<std::chrono::duration<double>>(clock_end - clock_start);
+<<<<<<< HEAD
         std::cout << "txid: " << txid << ", latency: " << time_span.count() << ", cur_time: " << std::chrono::system_clock::now() << std::endl;
+=======
+        std::cout << "processed in " << time_span.count() << std::endl;
+>>>>>>> 280c067ddd02b790b94575a9d51c67f478b5930f
     }
 
     void onOldRequest(const TCPRequest &req, RequestType type, TransactionHandlerMapT *transactions)
