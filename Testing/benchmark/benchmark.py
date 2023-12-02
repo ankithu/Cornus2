@@ -98,9 +98,10 @@ def start_nodes(args,build):
     port_stride=2
     host="localhost"
     DBMS_host="localhost"
-    DBMS_port=9000
+    DBMS_port=args.DBMS_port
     config_directory="./config"
     DBMS_file="./DBMS/DBMS"
+    DBMS_delay=args.DBMS_delay
     Cornus_files=["./Cornus/Cornus","./Cornus2/Cornus","./Cornus/Cornus_fake"]
     timeout=args.timeout
     f=args.f
@@ -122,7 +123,7 @@ def start_nodes(args,build):
     #Create Configs
     delete_files(config_directory)
     #Start DBMS command
-    commands.append(f'{DBMS_file} {DBMS_port}')
+    commands.append(f'{DBMS_file} {DBMS_port} {DBMS_delay}')
     configs=[]
     #Create New Configs
     for participant in participants:
@@ -186,8 +187,8 @@ if __name__ == "__main__":
     parser.add_argument('-v2',action="store_true", help="Enable Cornus2 protocol")
     parser.add_argument('--fake',action="store_true", help="Enable Cornus2 protocol")
     #DBMS
-    parser.add_argument('--DBMSport', required=False,type=int,help="DBMS port")
-    
+    parser.add_argument('--DBMSport', required=False,type=int,default=9000,help="DBMS port")
+    parser.add_argument('--DBMSdelay', required=False,type=int,default=10,help="DBMS delay")
     
     #Protocol Config
     parser.add_argument('-f',default=1,type=int,help="Number of nodes which can fail")
