@@ -29,19 +29,27 @@ LogAddress getLogAddress(const httplib::Request &req)
 int main(int argc, char **argv)
 {
 
-    if (argc != 2 && argc != 3)
+    if (argc != 2 && argc != 3 && argc != 4)
     {
-        throw std::runtime_error("Usage: ./dbms port");
+        throw std::runtime_error("Usage: ./dbms port latency ip");
     }
 
     std::string host = "localhost";
+    int latency = 10.0;
     if (argc == 3)
     {
-        host = std::string(argv[2]);
+        latency = atoi(argv[2]);
+    }
+    else if (argc == 4){
+        host = std::string(argv[3]);
+        latency = atoi(argv[2]);
     }
 
+
     httplib::Server svr;
-    LogManager manager;
+    // svr.set_keep_alive_max_count(20);
+    // svr.set_keep_alive_timeout(5);
+    LogManager manager(latency);
 
     std::string emptyString = "";
 

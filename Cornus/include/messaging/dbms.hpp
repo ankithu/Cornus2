@@ -77,6 +77,7 @@ public:
         //std::cout << res << std::endl;
         if (res.error() != httplib::Error::Success)
         {
+            std::cout << "failed log, crashing..." << std::endl;
             // ERROR handle TODO
         }
         return res->body;
@@ -87,6 +88,7 @@ public:
         auto res = cli.Post(getPath("LOG_WRITE", txId, hostId, logType), request, "text/plain");
         if (res.error() != httplib::Error::Success)
         {
+            std::cout << "failed log, crashing..." << std::endl;
             // ERROR handle TODO
         }
         return res->body;
@@ -97,6 +99,7 @@ public:
         auto res = cli.Get(getPath("LOG_READ", txId, hostId, logType));
         if (res.error() != httplib::Error::Success)
         {
+            std::cout << "failed log, crashing..." << std::endl;
             // ERROR handle TODO
         }
         return res->body;

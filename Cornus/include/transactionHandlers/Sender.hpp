@@ -18,6 +18,7 @@ class Sender
 public:
     Sender(TransactionConfig &config, HostID hostname, HostConfig &hostConfig) : config(config), hostname(hostname), hostConfig(hostConfig), dbmsClient(hostConfig.dbmsAddress)
     {
+        //dbmsClient.set_keep_alive(true);
     }
 
     void sendToParticipants(std::string type, std::string req_config)

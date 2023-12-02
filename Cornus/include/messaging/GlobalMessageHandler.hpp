@@ -17,8 +17,8 @@
 #include <chrono>
 
 // uncomment whichever one you would like to compile
-#define PAPER_VERSION
-//#define NEW_VERSION
+//#define PAPER_VERSION
+#define NEW_VERSION
 
 #ifdef PAPER_VERSION
 using TransactionHandler = PaperTransactionHandler;
@@ -108,8 +108,7 @@ public:
         removeFromMap(txid, transactions);
         auto clock_end = std::chrono::high_resolution_clock::now();
         auto time_span = duration_cast<std::chrono::duration<double>>(clock_end - clock_start);
-        std::cout << "processed in " << time_span.count() << std::endl;
-
+        std::cout << "txid: " << txid << ", latency: " << time_span.count() << ", cur_time: " << std::chrono::system_clock::now() << std::endl;
     }
 
     void onOldRequest(const TCPRequest &req, RequestType type, TransactionHandlerMapT *transactions)
@@ -125,7 +124,6 @@ private:
         TransactionId newID = transactionCounter << 16;
         newID += nodeId;
         transactionCounter++;
-        std::cout << "txid: " << newID << std::endl;
         return newID;
     }
 

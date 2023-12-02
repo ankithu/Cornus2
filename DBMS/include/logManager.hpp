@@ -11,8 +11,11 @@
 class LogManager
 {
 public:
+    LogManager(int latency) : latency(latency) {}
+
     std::string LOG_ONCE(LogAddress &address, std::string &data)
     {
+        std::this_thread::sleep_for(std::chrono::milliseconds(latency));
         auto &logPair = getLogPair(address);
         auto log_once_timeout = std::chrono::milliseconds(100);
         if (address.type == LogType::DataLog)
@@ -29,6 +32,7 @@ public:
 
     std::string LOG_READ(LogAddress &address, std::string &data)
     {
+        std::this_thread::sleep_for(std::chrono::milliseconds(latency));
         auto &logPair = getLogPair(address);
         auto log_read_timeout = std::chrono::milliseconds(50);
         if (address.type == LogType::DataLog)
@@ -43,6 +47,7 @@ public:
 
     std::string LOG_WRITE(LogAddress &address, std::string &data)
     {
+        std::this_thread::sleep_for(std::chrono::milliseconds(latency));
         auto &logPair = getLogPair(address);
         auto log_write_timeout = std::chrono::milliseconds(75);
         if (address.type == LogType::DataLog)
@@ -70,6 +75,7 @@ private:
 
     TransactionLogStore_t logs;
     std::mutex logMutex;
+    int latency;
 };
 
 #endif // DBMS_LOGMANAGER_HPP
