@@ -16,7 +16,7 @@ This folder contains external libraries that we make use of such as http and jso
 
 ### include/messaging
 
-This folder handles the GlobalMessageHandler, our custom implemented TCP library, and other files related to messaging. The GlobalMessageHandler is the primary driver for each node that forwards messages to the appropriate transaction handler (Coordinator, Participant, Replicator, or Committer). We opted to implement our own TCP library because publically available HTTP libraries did not offer the multithread and performance guaruntees that we needed.
+This folder handles the GlobalMessageHandler, our custom implemented TCP library, and other files related to messaging. The GlobalMessageHandler is the primary driver for each node that forwards messages to the appropriate transaction handler (Coordinator, Participant, Replicator, or Committer). We opted to implement our own TCP library because publically available HTTP libraries did not offer the multithread and performance guarantees that we needed.
 
 ### transactionHandlers
 
@@ -30,13 +30,13 @@ This folder contains the work that the application would do to decide how to vot
 
 ### include
 
-This folder contains our simulated DBMS implementation that is capable over performing writes, reads, and log once. It is contacted over HTTP and includes a configurable delay so that it can be made to mimic real DBMS like Azure or Redis.
+This folder contains our simulated DBMS implementation that is capable of performing writes, reads, and log once. It is contacted over HTTP and includes a configurable delay so that it can be made to mimic real DBMS like Azure or Redis.
 
 ## Testing
 
 ### basic
 
-This folder contains python scripts and basic test casesthat were used to debug both the paper and new versions of the Cornus Protocol.
+This folder contains python scripts and basic test cases that were used to debug both the paper and new versions of the Cornus Protocol.
 
 ### benchmark
 
