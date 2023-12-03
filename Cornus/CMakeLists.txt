@@ -3,7 +3,8 @@ project(Cornus)
 
 set(CMAKE_CXX_STANDARD 23)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS} -g")
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS} -O3")
 
 add_executable(Cornus main.cpp include/transactionHandlers/Sender.hpp include/transactionHandlers/TransactionHandler.hpp include/transactionHandlers/Coordinator.h include/transactionHandlers/Committer.h include/transactionHandlers/Participant.h include/transactionHandlers/TransactionHandler2.hpp include/transactionHandlers/Coordinator2.h include/transactionHandlers/Participant2.h include/messaging/messageQueue.hpp include/messaging/GlobalMessageHandler.hpp include/lib/httplib.hpp include/config/TransactionConfig.h include/types.hpp include/messaging/dbms.hpp include/messaging/Response.hpp include/config/HostConfig.hpp include/lib/json.hpp include/worker/workerConcept.hpp include/worker/AcceptAllWorker.hpp include/messaging/tcp.hpp include/utils.hpp include/lib/timer.hpp)
 
