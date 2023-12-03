@@ -1,7 +1,7 @@
 """
 Purpose: Makes a series of client transaction requests and prints the responses
 
-Running the script: python3 client.py test1.json nodes.json True
+Running the script: python3 client.py test1.json nodes.json -c
 
 The test file is an array where each element is a transaction request of the following form: 
 { "coordinator": index int, "participants": [index int, ...], "operation": string }

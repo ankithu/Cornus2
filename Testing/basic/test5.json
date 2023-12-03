@@ -1,0 +1,6 @@
+[
+  { "coordinator": 0, "participants": [1, 2, 3] },
+  { "coordinator": 4, "participants": [0, 1, 2, 3, 5] },
+  { "coordinator": 2, "participants": [0, 3, 5] },
+  { "coordinator": 1, "participants": [2, 3, 5] }
+]
