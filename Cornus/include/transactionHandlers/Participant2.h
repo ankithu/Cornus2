@@ -16,19 +16,23 @@ public:
     }
     virtual Decision handleTransaction() override
     {
+        watch.record("start");
         if (!worker.VOTE_REQ(this->config.to_string()))
         {
             sendToCoordinator("ABORT");
             return "ABORT";
         }
         // voted yes
+        watch.record("responding-yes");
         sendToCoordinator("VOTEYES");
+        watch.record("sent-yes");
         Decision decision;
         // Execution phase
         // Must wait timeout * 10 to ensure that the replicators have time to finish
         auto commit_request = this->messages.waitForNextMessageWithTimeout(this->hostConfig.timeout * 10);
         if (commit_request.has_value())
         {
+            watch.record("received-decision");
             if (commit_request->type == RequestType::Commit)
             {
                 decision = "COMMIT";
@@ -51,6 +55,7 @@ public:
         {
             worker.COMMIT(this->hostname);
         }
+        watch.record("commited");
 
         return decision;
     }

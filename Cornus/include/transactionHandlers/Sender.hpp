@@ -12,6 +12,7 @@
 #include "../messaging/dbms.hpp"
 #include "../worker/workerConcept.hpp"
 #include "../utils.hpp"
+#include "../lib/timer.hpp"
 
 class Sender
 {
@@ -76,6 +77,8 @@ protected:
     HostConfig &hostConfig;
     std::unordered_map<HostID, std::unique_ptr<TCPClient>> clients;
     httplib::Client dbmsClient;
+public:
+    EventTimer watch;
 };
 
 #endif

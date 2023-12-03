@@ -12,8 +12,10 @@ public:
 
     Decision handleTransaction() override
     {
+        watch.record("start-coord");
         // Prepare Phase
         sendToParticipants("VOTEREQ", this->config.to_string());
+        watch.record("sent-vote-reqs");
         int votes = 0;
 
         // Voting Phase
@@ -27,6 +29,7 @@ public:
                 if (p_request->type == RequestType::voteYes)
                 {
                     votes++;
+                    watch.record("recv-vote-" + std::to_string(votes));
                     if (votes == this->config.participants.size())
                     {
                         decision = "COMMIT";
@@ -42,7 +45,9 @@ public:
                 decision = this->terminationProtocol();
             }
         }
+        watch.record("decided");
         sendToParticipants(decision, "");
+        watch.record("decision-sent");
         return decision;
     }
 };

@@ -92,6 +92,9 @@ public:
         Request request = Request(type, txid);
         auto n = createNode<Node>(req.getParam("config"), txid, transactions);
         n->handleTransaction();
+        std::cout << "txid: " << txid;
+        n->watch.dump(std::cout);
+        std::cout << std::endl;
         removeFromMap(txid, transactions);
     }
 
@@ -104,6 +107,7 @@ public:
         Request request = Request(RequestType::transaction, txid);
         auto n = createNode<Coordinator>(req.get_param_value("config"), txid, transactions);
         auto d = n->handleTransaction();
+        auto w = std::move(n->watch);
 #ifdef NEW_VERSION
         std::thread backgroundwork([d, n]()
                                    { n->finishTransaction(d); });
@@ -115,7 +119,9 @@ public:
         auto clock_end = std::chrono::high_resolution_clock::now();
         auto time_span = duration_cast<std::chrono::duration<double>>(clock_end - clock_start);
         const std::time_t t_c = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-        std::cout << "txid: " << txid << ", latency: " << time_span.count() << ", cur_time: " << std::ctime(&t_c)<< std::endl;
+        std::cout << "txid: " << txid << ", latency: " << time_span.count() << ", cur_time: " << std::ctime(&t_c);
+        w.dump(std::cout);
+        std::cout << std::endl;
     }
 
     void onOldRequest(const TCPRequest &req, RequestType type, TransactionHandlerMapT *transactions)
