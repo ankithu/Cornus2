@@ -146,7 +146,7 @@ def start_nodes(args,build):
         commands.append(Cornus_files[build]+" "+config_file) #Launch server instance command
     print("Configs created. Starting Servers...")
     servers=threading.Thread(target=launch_server, args=(commands,)).start() #Kind of sus but need to launch a thread so the subprocesses close on keyboard escape
-    time.sleep(1) #Make sure servers start up
+    time.sleep(2) #Make sure servers start up
     print("Servers Started")
     #Load test cases from file/randomly generate
     transactions=[]
@@ -164,9 +164,9 @@ def start_nodes(args,build):
             futures.append(executor.submit(make_request, url=transaction[0], body=transaction[1]))
 
         for future in concurrent.futures.as_completed(futures):
-            print(f'Time: {future.result()}')
+            #print(f'Time: {future.result()}')
             times.append(future.result())
-        print(np.median(times),np.mean(times),np.var(times))
+        #print(np.median(times),np.mean(times),np.var(times))
     #Collate results
     
     

@@ -19,7 +19,14 @@ class Sender
 public:
     Sender(TransactionConfig &config, HostID hostname, HostConfig &hostConfig) : config(config), hostname(hostname), hostConfig(hostConfig), dbmsClient(hostConfig.dbmsAddress)
     {
-        //dbmsClient.set_keep_alive(true);
+        // dbmsClient.set_keep_alive(true);
+    }
+
+    ~Sender()
+    {
+        std::cout << "txid: " << config.txid << " ";
+        watch.dump(std::cout);
+        std::cout << std::endl;
     }
 
     void sendToParticipants(std::string type, std::string req_config)
@@ -77,6 +84,7 @@ protected:
     HostConfig &hostConfig;
     std::unordered_map<HostID, std::unique_ptr<TCPClient>> clients;
     httplib::Client dbmsClient;
+
 public:
     EventTimer watch;
 };

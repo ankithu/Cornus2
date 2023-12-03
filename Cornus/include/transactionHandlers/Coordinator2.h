@@ -18,7 +18,7 @@ public:
     Decision handleTransaction() override
     {
         // Prepare Phase
-        watch.record("start");
+        watch.record("start-coordinator");
         sendToParticipants("VOTEREQ", this->config.to_string());
         watch.record("sent-vote-reqs");
         int votes = 0;
@@ -49,11 +49,10 @@ public:
                 decision = "ABORT";
             }
         }
-        watch.record("decided" + std::to_string(votes));
+        watch.record("decided");
         if (decision == "COMMIT")
         {
             sendToReplicators("WILLCOMMIT", this->config.to_string());
-            watch.record("sent-will-commit" + std::to_string(votes));
         }
         return decision;
     }
@@ -66,6 +65,7 @@ public:
             sendToReplicators("DECISIONCOMPLETED", "");
         }
         sendToParticipants(decision, "");
+        watch.record("decision-sent");
     }
 };
 

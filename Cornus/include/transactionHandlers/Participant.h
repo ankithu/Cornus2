@@ -17,25 +17,24 @@ public:
     }
     virtual Decision handleTransaction() override
     {
-        watch.record("start");
+        watch.record("start-participant");
         if (!worker.VOTE_REQ(this->config.to_string()))
         {
             sendToCoordinator("ABORT");
             return "ABORT";
         }
-        watch.record("sending-log");
         std::string resp = DBMSInterface::LOG_ONCE("VOTEYES", this->config.txid, this->hostname, LogType::TRANSACTION, dbmsClient);
-        watch.record("finished-log");
         if (resp == "VOTEYES")
         {
-            watch.record("voting-yes");
+            watch.record("responding-yes");
             sendToCoordinator("VOTEYES");
+            watch.record("sent-yes");
             Decision decision;
             // Execution phase
             auto commit_request = this->messages.waitForNextMessageWithTimeout(this->hostConfig.timeout);
-            watch.record("received-resp");
             if (commit_request.has_value())
             {
+                watch.record("received-decision");
                 if (commit_request->type == RequestType::Commit)
                 {
                     decision = "COMMIT";
@@ -46,7 +45,7 @@ public:
                 }
                 else
                 {
-                    // TODO: message at wrong time
+                    assert(false);
                 }
             }
             else
@@ -57,7 +56,7 @@ public:
             if (decision == "COMMIT")
             {
                 worker.COMMIT(this->hostname);
-                watch.record("commited");
+                watch.record("committed");
             }
             return decision;
         }

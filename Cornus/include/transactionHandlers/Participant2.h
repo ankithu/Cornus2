@@ -16,7 +16,7 @@ public:
     }
     virtual Decision handleTransaction() override
     {
-        watch.record("start");
+        watch.record("start-participant");
         if (!worker.VOTE_REQ(this->config.to_string()))
         {
             sendToCoordinator("ABORT");
@@ -54,8 +54,8 @@ public:
         if (decision == "COMMIT")
         {
             worker.COMMIT(this->hostname);
+            watch.record("committed");
         }
-        watch.record("commited");
 
         return decision;
     }

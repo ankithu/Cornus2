@@ -12,7 +12,7 @@ public:
 
     Decision handleTransaction() override
     {
-        watch.record("start-coord");
+        watch.record("start-coordinator");
         // Prepare Phase
         sendToParticipants("VOTEREQ", this->config.to_string());
         watch.record("sent-vote-reqs");

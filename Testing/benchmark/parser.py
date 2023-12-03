@@ -1,4 +1,10 @@
+"""
+To run:
+python3 parser.py --file output.txt
+"""
+
 import re
+import argparse
 
 def clean_txid_lines(txid_lines):
     cleaned_lines = []
@@ -27,19 +33,28 @@ def extract_txid_lines(file_path):
     except Exception as e:
         print(f"An error occurred: {e}")
 
-file_path = 'output.txt'
-txid_lines = extract_txid_lines(file_path)
+def parse(file_path):
+    txid_lines = extract_txid_lines(file_path)
 
-if txid_lines:
-    #print("Original lines starting with 'txid':")
-    #for line in txid_lines:
-    #    print(line)
+    if txid_lines:
+        #print("Original lines starting with 'txid':")
+        #for line in txid_lines:
+        #    print(line)
 
-    cleaned_lines = clean_txid_lines(txid_lines)
-    #print("\nCleaned lines:")
-    #for cleaned_line in cleaned_lines:
-    #    print(cleaned_line)
+        cleaned_lines = clean_txid_lines(txid_lines)
+        #print("\nCleaned lines:")
+        #for cleaned_line in cleaned_lines:
+        #    print(cleaned_line)
 
-    extracted_numbers = extract_numbers_after_first_comma(cleaned_lines)
-    print("\nExtracted internal total latencies:")
-    print(extracted_numbers)
+        extracted_numbers = extract_numbers_after_first_comma(cleaned_lines)
+        print("\nExtracted internal total latencies:")
+        print(extracted_numbers)
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    #Setup
+    parser.add_argument('--file', required=True,help="Output file to run the parser on")
+
+    args = parser.parse_args()
+    parse(args.file)
+    
