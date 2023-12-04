@@ -24,6 +24,7 @@ public:
 
     ~Sender()
     {
+        auto l = std::unique_lock<std::mutex>(global_cout_mutex);
         std::cout << "txid: " << config.txid << " ";
         watch.dump(std::cout);
         std::cout << std::endl;

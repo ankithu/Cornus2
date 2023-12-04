@@ -3,6 +3,8 @@
 
 #include <future>
 
+std::mutex global_cout_mutex;
+
 template <typename T>
 void resolveFutures(std::vector<std::future<T>>& futs){
     for (auto& f : futs){

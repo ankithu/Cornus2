@@ -17,8 +17,8 @@
 #include <chrono>
 
 // uncomment whichever one you would like to compile
-// #define PAPER_VERSION
-#define NEW_VERSION
+#define PAPER_VERSION
+// #define NEW_VERSION
 
 #ifdef PAPER_VERSION
 using TransactionHandler = PaperTransactionHandler;
@@ -115,7 +115,10 @@ public:
         auto clock_end = std::chrono::high_resolution_clock::now();
         auto time_span = duration_cast<std::chrono::duration<double>>(clock_end - clock_start);
         const std::time_t t_c = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-        std::cout << "txid: " << txid << ", latency: " << time_span.count() << ", cur_time: " << std::ctime(&t_c) << std::endl;
+        {
+            auto l = std::unique_lock<std::mutex>(global_cout_mutex);
+            std::cout << "txid: " << txid << ", latency: " << time_span.count() << ", cur_time: " << std::ctime(&t_c) << std::endl;
+        }
     }
 
     void onOldRequest(const TCPRequest &req, RequestType type, TransactionHandlerMapT *transactions)
