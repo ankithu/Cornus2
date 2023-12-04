@@ -16,10 +16,10 @@ X_axis = np.arange(len(nodes))
 
 import matplotlib.pyplot as plt
 plt.bar(X_axis - 0.2, v1_1 * 1000, 0.4, color=(1, 0, 0, 0.4), hatch="//", edgecolor='black', label="Cornus 1, Sending VoteReq") 
-plt.bar(X_axis + 0.2, v2_1 * 1000, 0.4, color=(0, 0, 1, 0.4), hatch="//", edgecolor='black', label="Cornus 2, Sending VoteReq")  
 plt.bar(X_axis - 0.2, v1_2 * 1000, 0.4,bottom=(v1_1*1000), color=(1, 0, 0, 0.7), hatch="--", edgecolor='black', label="Cornus 1, Receiving Votes") 
+plt.bar(X_axis - 0.2, v1_3 * 1000, 0.4,bottom=(v1_1 + v1_2 )*1000, color=(1, 0, 0, 1), hatch="xx", edgecolor='black', label="Cornus 1, Sending Decision")
+plt.bar(X_axis + 0.2, v2_1 * 1000, 0.4, color=(0, 0, 1, 0.4), hatch="//", edgecolor='black', label="Cornus 2, Sending VoteReq")   
 plt.bar(X_axis + 0.2, v2_2 * 1000, 0.4, bottom=(v2_1*1000), color=(0, 0, 1, 0.7), hatch="--", edgecolor='black', label="Cornus 2, Receiving Votes")
-plt.bar(X_axis - 0.2, v1_3 * 1000, 0.4,bottom=(v1_1 + v1_2 )*1000, color=(1, 0, 0, 1), hatch="xx", edgecolor='black', label="Cornus 1, Sending Decision") 
 plt.bar(X_axis + 0.2, v2_3 * 1000, 0.4, bottom=(v2_1 + v2_2)*1000, color=(0, 0, 1, 1), hatch="xx", edgecolor='black', label="Cornus 2, Sending Decision")
 plt.bar(X_axis - 0.2, 0.6, 0.4, bottom=(v1_m * 1000)-0.3, color=(0, 1, 0, 1), edgecolor='black', label="Client Latency End") 
 plt.bar(X_axis + 0.2, 0.6, 0.4, bottom=(v2_m * 1000)-0.3, color=(0, 1, 0, 1), edgecolor='black')  
