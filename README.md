@@ -42,7 +42,7 @@ This folder contains python scripts and basic test cases that were used to debug
 
 This folder contains python scripts used to perform the benchmarking presented in our final report.
 
-# How to run Cornus and benchmarks
+# How to run Cornus
 
 Note: our testing and benchmarking were done on a Ubuntu 20 machine with a relatively large amount of computing resources. Performance and compatibility beyond this has not been tested. 
 
