@@ -102,7 +102,7 @@ def start_nodes(args,build):
     config_directory="./config"
     DBMS_file="./DBMS/DBMS"
     DBMS_delay=args.DBMS_delay
-    Cornus_files=["./Cornus/Cornus","./Cornus2/Cornus","./Cornus/Cornus_fake"]
+    Cornus_files=["./Cornus/Cornus","./Cornus2/Cornus","./Cornus/Cornus_fake","./C2PC/2PC"]
     timeout=args.timeout
     f=args.f
     participants=[]
@@ -186,6 +186,7 @@ if __name__ == "__main__":
     parser.add_argument('--nodes', required=True,type=int,help="Number of nodes to launch")
     parser.add_argument('-v2',action="store_true", help="Enable Cornus2 protocol")
     parser.add_argument('--fake',action="store_true", help="Enable Cornus2 protocol")
+    parser.add_argument('--tpc',action="store_true", help="Enable 2PC")
     #DBMS
     parser.add_argument('--DBMS_port', required=False,type=int,default=9000,help="DBMS port")
     parser.add_argument('--DBMS_delay', required=False,type=int,default=10,help="DBMS delay")
@@ -213,5 +214,7 @@ if __name__ == "__main__":
         build=1
     elif args.fake:
         build=2
+    elif args.tpc:
+        build=3
     start_nodes(args,build)
     
