@@ -1,4 +1,4 @@
-# Growing Corn(us) Faster
+# Cornus 2: Growing Corn(us) Faster
 
 by Ankith Udupa, Anurag Bangera, Luke Lesh
 
