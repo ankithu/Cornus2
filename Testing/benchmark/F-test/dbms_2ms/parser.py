@@ -5,6 +5,7 @@ python3 parser.py --file output.txt
 
 import re
 import argparse
+import numpy as np
 
 def clean_txid_lines(txid_lines):
     cleaned_lines = []
