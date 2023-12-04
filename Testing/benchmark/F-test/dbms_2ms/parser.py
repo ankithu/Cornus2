@@ -5,6 +5,7 @@ python3 parser.py --file output.txt
 
 import re
 import argparse
+import numpy as np
 
 def clean_txid_lines(txid_lines):
     cleaned_lines = []
@@ -47,7 +48,6 @@ def parse(file_path):
         #    print(cleaned_line)
 
         extracted_numbers = extract_numbers_after_first_comma(cleaned_lines)
-        print("\nExtracted internal total latencies:")
         print("\nExtracted internal total latencies:")
         print("total: ", len(extracted_numbers))
         print("median: ", np.median(extracted_numbers))
