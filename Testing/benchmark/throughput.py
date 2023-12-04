@@ -1,11 +1,13 @@
 """
 To run:
-python3 parser.py --file output.txt
+python3 parser.py --dir logdir
 """
 
 import re
 import argparse
 import numpy as np
+from os import listdir
+from os.path import isfile, join
 
 def clean_txid_lines(txid_lines):
     cleaned_lines = []
@@ -27,11 +29,11 @@ def extract_dates(lines):
     extracted_numbers = []
     for line in lines:
         # Find the decimal number after the first comma using regular expression
-        match = re.search(r'cur_time: .+', line)
+        match = re.search(r'cur_time_nanos: .+', line)
         if match:
             full = match.group()
-            match = re.search(r'[0-9][0-9]:[0-9][0-9]:[0-9][0-9]', full)
-            extracted_numbers.append(match.group())
+            t = int(full.split(':')[1][1:])
+            extracted_numbers.append(t)
     return extracted_numbers
 
 def extract_txid_lines(file_path):
@@ -60,20 +62,33 @@ def parse(file_path):
 
         extracted_numbers = extract_numbers_after_first_comma(cleaned_lines)
         extracted_dates = extract_dates(txid_lines)
-        print(extracted_dates)
-        print("\nExtracted internal total latencies:")
-        print(np.median(extracted_numbers),np.mean(extracted_numbers),np.std(extracted_numbers), np.percentile(extracted_numbers, 99))
-        print("total: ", len(extracted_numbers))
-        print("median: ", np.median(extracted_numbers))
-        print("mean: ",np.mean(extracted_numbers))
-        print("standard deviation: ",np.std(extracted_numbers))
-        print("99%: ",np.percentile(extracted_numbers, 99))
+
+        #print(extracted_dates)
+        total_time_sec = float((max(extracted_dates) - min(extracted_dates))) / 1e9
+        total_requests = len(extracted_dates)
+        
+
+        #print("\nExtracted internal total latencies:")
+        #print(np.median(extracted_numbers),np.mean(extracted_numbers),np.std(extracted_numbers), np.percentile(extracted_numbers, 99))
+        # print("total: ", len(extracted_numbers))
+        # print("median: ", np.median(extracted_numbers))
+
+        # print("mean: ",np.mean(extracted_numbers))
+        # print("standard deviation: ",np.std(extracted_numbers))
+        # print("99%: ",np.percentile(extracted_numbers, 99))
+        print(f"({total_requests / total_time_sec}, {np.median(extracted_numbers)}),")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     #Setup
-    parser.add_argument('--file', required=True,help="Output file to run the parser on")
+    parser.add_argument('--dir', required=True,help="Output file to run the parser on (comma seperated)")
 
     args = parser.parse_args()
-    parse(args.file)
+    directory = args.dir
+    onlyfiles = [directory + "/" + f for f in listdir(directory) if isfile(join(directory, f))]
+    print("OUTPUT: (Throughput (req/sec), Median latency (seconds))")
+    print("[")
+    for file in onlyfiles:
+        parse(file)
+    print("]")
     
