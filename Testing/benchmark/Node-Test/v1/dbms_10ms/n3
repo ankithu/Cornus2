@@ -1,0 +1,515 @@
+Namespace(DBMS_delay=10, DBMS_port=9000, clients=1, f=1, fake=False, nodes=3, num=100, seed=1701655827.5977397, test=None, timeout=100, v2=False)
+Creating Configurations...
+All files deleted successfully.
+Configs created. Starting Servers...
+PAPER VERSION
+Starting client http server...localhost 8104
+starting server...
+PAPER VERSION
+Starting client http server...localhost 8100
+PAPER VERSION
+Starting client http server...localhost 8102
+Server listening on port 8000...
+txid: 0, latency: 0.0173351, cur_time: Sun Dec  3 21:10:29 2023
+
+txid: 0 EventSummary: {{start-coordinator to sent-vote-reqs=0.00256113}{sent-vote-reqs to recv-vote-1=0.0129055}{recv-vote-1 to recv-vote-2=0.00061547}{recv-vote-2 to decided=1.263e-06}{decided to decision-sent=0.000954149}}
+Server listening on port 8002...
+txid: 0 EventSummary: {{start-participant to responding-yes=0.0124175}{responding-yes to sent-yes=0.00073705}{sent-yes to received-decision=0.000386859}{received-decision to committed=0.0123091}}
+Server listening on port 8004...
+txid: 0 EventSummary: {{start-participant to responding-yes=0.012459}{responding-yes to sent-yes=0.000842929}{sent-yes to received-decision=0.00106761}{received-decision to committed=0.0122816}}
+txid: 2, latency: 0.0165729, cur_time: Sun Dec  3 21:10:29 2023
+
+txid: 2 EventSummary: {{start-coordinator to sent-vote-reqs=0.00257871}{sent-vote-reqs to recv-vote-1=0.0124128}{recv-vote-1 to recv-vote-2=0.000690773}{recv-vote-2 to decided=6.61e-07}{decided to decision-sent=0.000857888}}
+txid: 2 EventSummary: {{start-participant to responding-yes=0.0121285}{responding-yes to sent-yes=0.000683438}{sent-yes to received-decision=0.00114242}{received-decision to committed=0.0121982}}
+txid: 2 EventSummary: {{start-participant to responding-yes=0.0122523}{responding-yes to sent-yes=0.000648182}{sent-yes to received-decision=0.000298062}{received-decision to committed=0.0123728}}
+txid: 65538, latency: 0.0164691, cur_time: Sun Dec  3 21:10:29 2023
+
+txid: 65538 EventSummary: {{start-coordinator to sent-vote-reqs=0.00242184}{sent-vote-reqs to recv-vote-1=0.0125021}{recv-vote-1 to recv-vote-2=0.000607596}{recv-vote-2 to decided=9.62e-07}{decided to decision-sent=0.000908953}}
+txid: 65538 EventSummary: {{start-participant to responding-yes=0.0121114}{responding-yes to sent-yes=0.000893685}{sent-yes to received-decision=0.0011333}{received-decision to committed=0.0122093}}
+txid: 65538 EventSummary: {{start-participant to responding-yes=0.0123604}{responding-yes to sent-yes=0.000742981}{sent-yes to received-decision=0.000308862}{received-decision to committed=0.0122082}}
+txid: 1, latency: 0.0161798, cur_time: Sun Dec  3 21:10:29 2023
+
+txid: 1 EventSummary: {{start-coordinator to sent-vote-reqs=0.00228941}{sent-vote-reqs to recv-vote-1=0.0125927}{recv-vote-1 to recv-vote-2=0.000357894}{recv-vote-2 to decided=8.82e-07}{decided to decision-sent=0.000910607}}
+txid: 1 EventSummary: {{start-participant to responding-yes=0.0121045}{responding-yes to sent-yes=0.000709788}{sent-yes to received-decision=0.000343197}{received-decision to committed=0.0122753}}
+txid: 1 EventSummary: {{start-participant to responding-yes=0.0123243}{responding-yes to sent-yes=0.000746908}{sent-yes to received-decision=0.00071568}{received-decision to committed=0.0124062}}
+txid: 65537, latency: 0.0162595, cur_time: Sun Dec  3 21:10:29 2023
+
+txid: 65537 EventSummary: {{start-coordinator to sent-vote-reqs=0.00249142}{sent-vote-reqs to recv-vote-1=0.0121639}{recv-vote-1 to recv-vote-2=0.000789498}{recv-vote-2 to decided=7.71e-07}{decided to decision-sent=0.000792094}}
+txid: 65537 EventSummary: {{start-participant to responding-yes=0.012156}{responding-yes to sent-yes=0.000737701}{sent-yes to received-decision=0.000227659}{received-decision to committed=0.0121469}}
+txid: 65537 EventSummary: {{start-participant to responding-yes=0.0121167}{responding-yes to sent-yes=0.000682487}{sent-yes to received-decision=0.00102851}{received-decision to committed=0.0122856}}
+txid: 65536, latency: 0.0161894, cur_time: Sun Dec  3 21:10:29 2023
+
+txid: 65536 EventSummary: {{start-coordinator to sent-vote-reqs=0.00226415}{sent-vote-reqs to recv-vote-1=0.0123981}{recv-vote-1 to recv-vote-2=0.000547182}{recv-vote-2 to decided=6.91e-07}{decided to decision-sent=0.000952456}}
+txid: 65536 EventSummary: {{start-participant to responding-yes=0.0121378}{responding-yes to sent-yes=0.000725007}{sent-yes to received-decision=0.000289616}{received-decision to committed=0.0120276}}
+txid: 65536 EventSummary: {{start-participant to responding-yes=0.0121043}{responding-yes to sent-yes=0.000759282}{sent-yes to received-decision=0.000854681}{received-decision to committed=0.0122762}}
+txid: 131074, latency: 0.0159262, cur_time: Sun Dec  3 21:10:29 2023
+
+txid: 131074 EventSummary: {{start-coordinator to sent-vote-reqs=0.00221513}{sent-vote-reqs to recv-vote-1=0.0123676}{recv-vote-1 to recv-vote-2=0.000516213}{recv-vote-2 to decided=5.71e-07}{decided to decision-sent=0.000799317}}
+txid: 131074 EventSummary: {{start-participant to responding-yes=0.0121114}{responding-yes to sent-yes=0.000614769}{sent-yes to received-decision=0.000261082}{received-decision to committed=0.0120434}}
+txid: 131074 EventSummary: {{start-participant to responding-yes=0.0121446}{responding-yes to sent-yes=0.000688458}{sent-yes to received-decision=0.000724306}{received-decision to committed=0.0123962}}
+txid: 131072, latency: 0.0159956, cur_time: Sun Dec  3 21:10:29 2023
+
+txid: 131072 EventSummary: {{start-coordinator to sent-vote-reqs=0.0022503}{sent-vote-reqs to recv-vote-1=0.0123998}{recv-vote-1 to recv-vote-2=0.000530731}{recv-vote-2 to decided=8.02e-07}{decided to decision-sent=0.000788506}}
+txid: 131072 EventSummary: {{start-participant to responding-yes=0.012104}{responding-yes to sent-yes=0.000608036}{sent-yes to received-decision=0.000283014}{received-decision to committed=0.0122182}}
+txid: 131072 EventSummary: {{start-participant to responding-yes=0.0121897}{responding-yes to sent-yes=0.000748221}{sent-yes to received-decision=0.000765924}{received-decision to committed=0.012189}}
+txid: 131073, latency: 0.0158554, cur_time: Sun Dec  3 21:10:29 2023
+
+txid: 131073 EventSummary: {{start-coordinator to sent-vote-reqs=0.0020934}{sent-vote-reqs to recv-vote-1=0.0123726}{recv-vote-1 to recv-vote-2=0.000529698}{recv-vote-2 to decided=1.032e-06}{decided to decision-sent=0.000835636}}
+txid: 131073 EventSummary: {{start-participant to responding-yes=0.0120603}{responding-yes to sent-yes=0.000692816}{sent-yes to received-decision=0.000274908}{received-decision to committed=0.0121389}}
+txid: 131073 EventSummary: {{start-participant to responding-yes=0.0121225}{responding-yes to sent-yes=0.000741237}{sent-yes to received-decision=0.000797123}{received-decision to committed=0.0121372}}
+txid: 196610, latency: 0.0159946, cur_time: Sun Dec  3 21:10:29 2023
+
+txid: 196610 EventSummary: {{start-coordinator to sent-vote-reqs=0.00227581}{sent-vote-reqs to recv-vote-1=0.0124609}{recv-vote-1 to recv-vote-2=0.000319292}{recv-vote-2 to decided=8.62e-07}{decided to decision-sent=0.000911698}}
+txid: 196610 EventSummary: {{start-participant to responding-yes=0.0119413}{responding-yes to sent-yes=0.000629878}{sent-yes to received-decision=0.000351452}{received-decision to committed=0.0121176}}
+txid: 196610 EventSummary: {{start-participant to responding-yes=0.0123286}{responding-yes to sent-yes=0.000700621}{sent-yes to received-decision=0.000686344}{received-decision to committed=0.0121193}}
+txid: 196608, latency: 0.0160017, cur_time: Sun Dec  3 21:10:29 2023
+
+txid: 196608 EventSummary: {{start-coordinator to sent-vote-reqs=0.00225966}{sent-vote-reqs to recv-vote-1=0.0122979}{recv-vote-1 to recv-vote-2=0.000596515}{recv-vote-2 to decided=7.01e-07}{decided to decision-sent=0.000822642}}
+txid: 196608 EventSummary: {{start-participant to responding-yes=0.0121219}{responding-yes to sent-yes=0.000692857}{sent-yes to received-decision=0.000804206}{received-decision to committed=0.0121938}}
+txid: 196608 EventSummary: {{start-participant to responding-yes=0.0121309}{responding-yes to sent-yes=0.00071077}{sent-yes to received-decision=0.000223912}{received-decision to committed=0.0123018}}
+txid: 262146, latency: 0.0162343, cur_time: Sun Dec  3 21:10:29 2023
+
+txid: 262146 EventSummary: {{start-coordinator to sent-vote-reqs=0.00233912}{sent-vote-reqs to recv-vote-1=0.012073}{recv-vote-1 to recv-vote-2=0.000942777}{recv-vote-2 to decided=8.02e-07}{decided to decision-sent=0.000855122}}
+txid: 262146 EventSummary: {{start-participant to responding-yes=0.0120632}{responding-yes to sent-yes=0.000736559}{sent-yes to received-decision=0.00118615}{received-decision to committed=0.0121422}}
+txid: 262146 EventSummary: {{start-participant to responding-yes=0.012176}{responding-yes to sent-yes=0.00064678}{sent-yes to received-decision=0.000316176}{received-decision to committed=0.0122662}}
+txid: 196609, latency: 0.0158809, cur_time: Sun Dec  3 21:10:29 2023
+
+txid: 196609 EventSummary: {{start-coordinator to sent-vote-reqs=0.00214981}{sent-vote-reqs to recv-vote-1=0.0123654}{recv-vote-1 to recv-vote-2=0.000470207}{recv-vote-2 to decided=8.81e-07}{decided to decision-sent=0.000868628}}
+txid: 196609 EventSummary: {{start-participant to responding-yes=0.0119535}{responding-yes to sent-yes=0.000641339}{sent-yes to received-decision=0.00106361}{received-decision to committed=0.0119924}}
+txid: 196609 EventSummary: {{start-participant to responding-yes=0.0120554}{responding-yes to sent-yes=0.000650998}{sent-yes to received-decision=0.000334881}{received-decision to committed=0.0121934}}
+txid: 262144, latency: 0.0160441, cur_time: Sun Dec  3 21:10:29 2023
+
+txid: 262144 EventSummary: {{start-coordinator to sent-vote-reqs=0.00226248}{sent-vote-reqs to recv-vote-1=0.0123551}{recv-vote-1 to recv-vote-2=0.000566879}{recv-vote-2 to decided=8.02e-07}{decided to decision-sent=0.000835064}}
+txid: 262144 EventSummary: {{start-participant to responding-yes=0.0120542}{responding-yes to sent-yes=0.000659233}{sent-yes to received-decision=0.00102236}{received-decision to committed=0.0120496}}
+txid: 262144 EventSummary: {{start-participant to responding-yes=0.0121003}{responding-yes to sent-yes=0.00069506}{sent-yes to received-decision=0.000241405}{received-decision to committed=0.0120779}}
+txid: 327682, latency: 0.0158958, cur_time: Sun Dec  3 21:10:29 2023
+
+txid: 327682 EventSummary: {{start-coordinator to sent-vote-reqs=0.00211393}{sent-vote-reqs to recv-vote-1=0.01261}{recv-vote-1 to recv-vote-2=0.00034501}{recv-vote-2 to decided=8.52e-07}{decided to decision-sent=0.000807823}}
+txid: 327682 EventSummary: {{start-participant to responding-yes=0.012103}{responding-yes to sent-yes=0.00103899}{sent-yes to received-decision=0.000529678}{received-decision to committed=0.0121621}}
+txid: 327682 EventSummary: {{start-participant to responding-yes=0.0121048}{responding-yes to sent-yes=0.00069504}{sent-yes to received-decision=0.000224954}{received-decision to committed=0.0121136}}
+txid: 327680, latency: 0.0161392, cur_time: Sun Dec  3 21:10:29 2023
+
+txid: 327680 EventSummary: {{start-coordinator to sent-vote-reqs=0.00224464}{sent-vote-reqs to recv-vote-1=0.0123546}{recv-vote-1 to recv-vote-2=0.000583761}{recv-vote-2 to decided=6.91e-07}{decided to decision-sent=0.000934542}}
+txid: 327680 EventSummary: {{start-participant to responding-yes=0.0121965}{responding-yes to sent-yes=0.000690632}{sent-yes to received-decision=0.000268095}{received-decision to committed=0.0120762}}
+txid: 327680 EventSummary: {{start-participant to responding-yes=0.012289}{responding-yes to sent-yes=0.000659423}{sent-yes to received-decision=0.000940734}{received-decision to committed=0.012035}}
+txid: 262145, latency: 0.0159583, cur_time: Sun Dec  3 21:10:29 2023
+
+txid: 262145 EventSummary: {{start-coordinator to sent-vote-reqs=0.00222042}{sent-vote-reqs to recv-vote-1=0.0121645}{recv-vote-1 to recv-vote-2=0.00064724}{recv-vote-2 to decided=6.52e-07}{decided to decision-sent=0.000906258}}
+txid: 262145 EventSummary: {{start-participant to responding-yes=0.01204}{responding-yes to sent-yes=0.000662639}{sent-yes to received-decision=0.000910647}{received-decision to committed=0.0120525}}
+txid: 262145 EventSummary: {{start-participant to responding-yes=0.0120139}{responding-yes to sent-yes=0.000718214}{sent-yes to received-decision=0.000271933}{received-decision to committed=0.0121563}}
+txid: 393216, latency: 0.0160792, cur_time: Sun Dec  3 21:10:29 2023
+
+txid: 393216 EventSummary: {{start-coordinator to sent-vote-reqs=0.00228603}{sent-vote-reqs to recv-vote-1=0.012409}{recv-vote-1 to recv-vote-2=0.000478212}{recv-vote-2 to decided=8.81e-07}{decided to decision-sent=0.00088025}}
+txid: 393216 EventSummary: {{start-participant to responding-yes=0.0121586}{responding-yes to sent-yes=0.000676405}{sent-yes to received-decision=0.000309724}{received-decision to committed=0.0121825}}
+txid: 393216 EventSummary: {{start-participant to responding-yes=0.0122099}{responding-yes to sent-yes=0.000743862}{sent-yes to received-decision=0.000786643}{received-decision to committed=0.0122278}}
+txid: 327681, latency: 0.0161049, cur_time: Sun Dec  3 21:10:30 2023
+
+txid: 327681 EventSummary: {{start-coordinator to sent-vote-reqs=0.0023334}{sent-vote-reqs to recv-vote-1=0.0124116}{recv-vote-1 to recv-vote-2=0.000432245}{recv-vote-2 to decided=8.02e-07}{decided to decision-sent=0.000905216}}
+txid: 327681 EventSummary: {{start-participant to responding-yes=0.0123216}{responding-yes to sent-yes=0.00073196}{sent-yes to received-decision=0.000781483}{received-decision to committed=0.0121263}}
+txid: 327681 EventSummary: {{start-participant to responding-yes=0.0121087}{responding-yes to sent-yes=0.00071075}{sent-yes to received-decision=0.000289236}{received-decision to committed=0.012224}}
+txid: 393218, latency: 0.016037, cur_time: Sun Dec  3 21:10:30 2023
+
+txid: 393218 EventSummary: {{start-coordinator to sent-vote-reqs=0.00236292}{sent-vote-reqs to recv-vote-1=0.0125585}{recv-vote-1 to recv-vote-2=0.000310876}{recv-vote-2 to decided=5.91e-07}{decided to decision-sent=0.000777997}}
+txid: 393218 EventSummary: {{start-participant to responding-yes=0.0125534}{responding-yes to sent-yes=0.000697916}{sent-yes to received-decision=0.000485615}{received-decision to committed=0.0121716}}
+txid: 393218 EventSummary: {{start-participant to responding-yes=0.0121142}{responding-yes to sent-yes=0.000675243}{sent-yes to received-decision=0.000253458}{received-decision to committed=0.0121206}}
+txid: 458752, latency: 0.0158486, cur_time: Sun Dec  3 21:10:30 2023
+
+txid: 458752 EventSummary: {{start-coordinator to sent-vote-reqs=0.00223833}{sent-vote-reqs to recv-vote-1=0.0122757}{recv-vote-1 to recv-vote-2=0.000429199}{recv-vote-2 to decided=8.02e-07}{decided to decision-sent=0.000878336}}
+txid: 458752 EventSummary: {{start-participant to responding-yes=0.01199}{responding-yes to sent-yes=0.000683228}{sent-yes to received-decision=0.000289536}{received-decision to committed=0.0120179}}
+txid: 458752 EventSummary: {{start-participant to responding-yes=0.0120666}{responding-yes to sent-yes=0.000743081}{sent-yes to received-decision=0.000666828}{received-decision to committed=0.012108}}
+txid: 393217, latency: 0.0157876, cur_time: Sun Dec  3 21:10:30 2023
+
+txid: 393217 EventSummary: {{start-coordinator to sent-vote-reqs=0.00224764}{sent-vote-reqs to recv-vote-1=0.0122076}{recv-vote-1 to recv-vote-2=0.000485896}{recv-vote-2 to decided=7.82e-07}{decided to decision-sent=0.000826809}}
+txid: 393217 EventSummary: {{start-participant to responding-yes=0.0119582}{responding-yes to sent-yes=0.000626702}{sent-yes to received-decision=0.000756807}{received-decision to committed=0.0121436}}
+txid: 393217 EventSummary: {{start-participant to responding-yes=0.0119914}{responding-yes to sent-yes=0.000631591}{sent-yes to received-decision=0.000274037}{received-decision to committed=0.0121424}}
+txid: 524288, latency: 0.016166, cur_time: Sun Dec  3 21:10:30 2023
+
+txid: 524288 EventSummary: {{start-coordinator to sent-vote-reqs=0.00230163}{sent-vote-reqs to recv-vote-1=0.0124833}{recv-vote-1 to recv-vote-2=0.000434719}{recv-vote-2 to decided=8.92e-07}{decided to decision-sent=0.000926096}}
+txid: 524288 EventSummary: {{start-participant to responding-yes=0.012063}{responding-yes to sent-yes=0.000714207}{sent-yes to received-decision=0.000284085}{received-decision to committed=0.0122158}}
+txid: 524288 EventSummary: {{start-participant to responding-yes=0.0122747}{responding-yes to sent-yes=0.000741417}{sent-yes to received-decision=0.000759673}{received-decision to committed=0.0122143}}
+txid: 458753, latency: 0.0161236, cur_time: Sun Dec  3 21:10:30 2023
+
+txid: 458753 EventSummary: {{start-coordinator to sent-vote-reqs=0.00231812}{sent-vote-reqs to recv-vote-1=0.0120555}{recv-vote-1 to recv-vote-2=0.000898754}{recv-vote-2 to decided=6.61e-07}{decided to decision-sent=0.000829855}}
+txid: 458753 EventSummary: {{start-participant to responding-yes=0.0121119}{responding-yes to sent-yes=0.000665174}{sent-yes to received-decision=0.00026492}{received-decision to committed=0.0120298}}
+txid: 458753 EventSummary: {{start-participant to responding-yes=0.0120681}{responding-yes to sent-yes=0.000669222}{sent-yes to received-decision=0.00116295}{received-decision to committed=0.0120583}}
+txid: 589824, latency: 0.0156617, cur_time: Sun Dec  3 21:10:30 2023
+
+txid: 589824 EventSummary: {{start-coordinator to sent-vote-reqs=0.00199134}{sent-vote-reqs to recv-vote-1=0.0121762}{recv-vote-1 to recv-vote-2=0.000602717}{recv-vote-2 to decided=9.92e-07}{decided to decision-sent=0.00087019}}
+txid: 589824 EventSummary: {{start-participant to responding-yes=0.0120146}{responding-yes to sent-yes=0.00072133}{sent-yes to received-decision=0.000865452}{received-decision to committed=0.0124086}}
+txid: 589824 EventSummary: {{start-participant to responding-yes=0.0120082}{responding-yes to sent-yes=0.000708526}{sent-yes to received-decision=0.000318521}{received-decision to committed=0.012361}}
+txid: 458754, latency: 0.0159926, cur_time: Sun Dec  3 21:10:30 2023
+
+txid: 458754 EventSummary: {{start-coordinator to sent-vote-reqs=0.00221861}{sent-vote-reqs to recv-vote-1=0.0123004}{recv-vote-1 to recv-vote-2=0.000586946}{recv-vote-2 to decided=9.22e-07}{decided to decision-sent=0.000867406}}
+txid: 458754 EventSummary: {{start-participant to responding-yes=0.0121367}{responding-yes to sent-yes=0.000667428}{sent-yes to received-decision=0.000296088}{received-decision to committed=0.0120978}}
+txid: 458754 EventSummary: {{start-participant to responding-yes=0.0120952}{responding-yes to sent-yes=0.000755585}{sent-yes to received-decision=0.000839583}{received-decision to committed=0.0124185}}
+txid: 655360, latency: 0.0160155, cur_time: Sun Dec  3 21:10:30 2023
+
+txid: 655360 EventSummary: {{start-coordinator to sent-vote-reqs=0.00231095}{sent-vote-reqs to recv-vote-1=0.0123294}{recv-vote-1 to recv-vote-2=0.000429189}{recv-vote-2 to decided=8.01e-07}{decided to decision-sent=0.00092252}}
+txid: 655360 EventSummary: {{start-participant to responding-yes=0.0122051}{responding-yes to sent-yes=0.000696163}{sent-yes to received-decision=0.000743392}{received-decision to committed=0.0122479}}
+txid: 655360 EventSummary: {{start-participant to responding-yes=0.0119724}{responding-yes to sent-yes=0.000684721}{sent-yes to received-decision=0.000299655}{received-decision to committed=0.0122511}}
+txid: 524289, latency: 0.0157963, cur_time: Sun Dec  3 21:10:30 2023
+
+txid: 524289 EventSummary: {{start-coordinator to sent-vote-reqs=0.00214485}{sent-vote-reqs to recv-vote-1=0.0123065}{recv-vote-1 to recv-vote-2=0.000466279}{recv-vote-2 to decided=1.062e-06}{decided to decision-sent=0.000851465}}
+txid: 524289 EventSummary: {{start-participant to responding-yes=0.0120387}{responding-yes to sent-yes=0.000601605}{sent-yes to received-decision=0.000298823}{received-decision to committed=0.0121016}}
+txid: 524289 EventSummary: {{start-participant to responding-yes=0.0121388}{responding-yes to sent-yes=0.000692676}{sent-yes to received-decision=0.000692636}{received-decision to committed=0.012174}}
+txid: 589825, latency: 0.0161321, cur_time: Sun Dec  3 21:10:30 2023
+
+txid: 589825 EventSummary: {{start-coordinator to sent-vote-reqs=0.00230509}{sent-vote-reqs to recv-vote-1=0.0122298}{recv-vote-1 to recv-vote-2=0.000728754}{recv-vote-2 to decided=7.91e-07}{decided to decision-sent=0.00084338}}
+txid: 589825 EventSummary: {{start-participant to responding-yes=0.0121908}{responding-yes to sent-yes=0.000738583}{sent-yes to received-decision=0.000992451}{received-decision to committed=0.0121607}}
+txid: 589825 EventSummary: {{start-participant to responding-yes=0.0121495}{responding-yes to sent-yes=0.000725478}{sent-yes to received-decision=0.000264769}{received-decision to committed=0.0121516}}
+txid: 655361, latency: 0.0159837, cur_time: Sun Dec  3 21:10:30 2023
+
+txid: 655361 EventSummary: {{start-coordinator to sent-vote-reqs=0.0021749}{sent-vote-reqs to recv-vote-1=0.0122507}{recv-vote-1 to recv-vote-2=0.000676326}{recv-vote-2 to decided=8.31e-07}{decided to decision-sent=0.000855162}}
+txid: 655361 EventSummary: {{start-participant to responding-yes=0.0121418}{responding-yes to sent-yes=0.000688368}{sent-yes to received-decision=0.00090129}{received-decision to committed=0.0120653}}
+txid: 655361 EventSummary: {{start-participant to responding-yes=0.0121027}{responding-yes to sent-yes=0.000695281}{sent-yes to received-decision=0.000270911}{received-decision to committed=0.0121488}}
+txid: 524290, latency: 0.0158244, cur_time: Sun Dec  3 21:10:30 2023
+
+txid: 524290 EventSummary: {{start-coordinator to sent-vote-reqs=0.00234279}{sent-vote-reqs to recv-vote-1=0.0122155}{recv-vote-1 to recv-vote-2=0.000425221}{recv-vote-2 to decided=8.12e-07}{decided to decision-sent=0.000819585}}
+txid: 524290 EventSummary: {{start-participant to responding-yes=0.01211}{responding-yes to sent-yes=0.000664233}{sent-yes to received-decision=0.000683699}{received-decision to committed=0.0120725}}
+txid: 524290 EventSummary: {{start-participant to responding-yes=0.0119888}{responding-yes to sent-yes=0.0006259}{sent-yes to received-decision=0.000341825}{received-decision to committed=0.0121506}}
+txid: 720896, latency: 0.0161374, cur_time: Sun Dec  3 21:10:30 2023
+
+txid: 720896 EventSummary: {{start-coordinator to sent-vote-reqs=0.00227409}{sent-vote-reqs to recv-vote-1=0.0121901}{recv-vote-1 to recv-vote-2=0.000770363}{recv-vote-2 to decided=9.01e-07}{decided to decision-sent=0.000877535}}
+txid: 720896 EventSummary: {{start-participant to responding-yes=0.0120271}{responding-yes to sent-yes=0.000724255}{sent-yes to received-decision=0.00118169}{received-decision to committed=0.0121445}}
+txid: 720896 EventSummary: {{start-participant to responding-yes=0.0121545}{responding-yes to sent-yes=0.000662228}{sent-yes to received-decision=0.000284657}{received-decision to committed=0.0122959}}
+txid: 786432, latency: 0.0160557, cur_time: Sun Dec  3 21:10:30 2023
+
+txid: 786432 EventSummary: {{start-coordinator to sent-vote-reqs=0.00231861}{sent-vote-reqs to recv-vote-1=0.0122621}{recv-vote-1 to recv-vote-2=0.000559945}{recv-vote-2 to decided=8.12e-07}{decided to decision-sent=0.000895378}}
+txid: 786432 EventSummary: {{start-participant to responding-yes=0.0122304}{responding-yes to sent-yes=0.000717563}{sent-yes to received-decision=0.000756376}{received-decision to committed=0.0121439}}
+txid: 786432 EventSummary: {{start-participant to responding-yes=0.0120627}{responding-yes to sent-yes=0.000679421}{sent-yes to received-decision=0.000268095}{received-decision to committed=0.012258}}
+txid: 720897, latency: 0.0159546, cur_time: Sun Dec  3 21:10:30 2023
+
+txid: 720897 EventSummary: {{start-coordinator to sent-vote-reqs=0.00218214}{sent-vote-reqs to recv-vote-1=0.0123368}{recv-vote-1 to recv-vote-2=0.000454658}{recv-vote-2 to decided=7.91e-07}{decided to decision-sent=0.000953818}}
+txid: 720897 EventSummary: {{start-participant to responding-yes=0.0120941}{responding-yes to sent-yes=0.00067905}{sent-yes to received-decision=0.000881803}{received-decision to committed=0.0120492}}
+txid: 720897 EventSummary: {{start-participant to responding-yes=0.0120321}{responding-yes to sent-yes=0.00062028}{sent-yes to received-decision=0.000384174}{received-decision to committed=0.0121136}}
+txid: 851968, latency: 0.0160727, cur_time: Sun Dec  3 21:10:30 2023
+
+txid: 851968 EventSummary: {{start-coordinator to sent-vote-reqs=0.00219992}{sent-vote-reqs to recv-vote-1=0.0126111}{recv-vote-1 to recv-vote-2=0.000323009}{recv-vote-2 to decided=1.002e-06}{decided to decision-sent=0.000911508}}
+txid: 851968 EventSummary: {{start-participant to responding-yes=0.012149}{responding-yes to sent-yes=0.000685412}{sent-yes to received-decision=0.000375268}{received-decision to committed=0.0121833}}
+txid: 851968 EventSummary: {{start-participant to responding-yes=0.0123577}{responding-yes to sent-yes=0.000740165}{sent-yes to received-decision=0.000682417}{received-decision to committed=0.0122333}}
+txid: 786433, latency: 0.016434, cur_time: Sun Dec  3 21:10:30 2023
+
+txid: 786433 EventSummary: {{start-coordinator to sent-vote-reqs=0.00241445}{sent-vote-reqs to recv-vote-1=0.0126061}{recv-vote-1 to recv-vote-2=0.000410624}{recv-vote-2 to decided=8.81e-07}{decided to decision-sent=0.00097599}}
+txid: 786433 EventSummary: {{start-participant to responding-yes=0.0121381}{responding-yes to sent-yes=0.000721781}{sent-yes to received-decision=0.000372983}{received-decision to committed=0.0124947}}
+txid: 786433 EventSummary: {{start-participant to responding-yes=0.0125449}{responding-yes to sent-yes=0.000781544}{sent-yes to received-decision=0.000766996}{received-decision to committed=0.012563}}
+txid: 851969, latency: 0.0162055, cur_time: Sun Dec  3 21:10:30 2023
+
+txid: 851969 EventSummary: {{start-coordinator to sent-vote-reqs=0.00229287}{sent-vote-reqs to recv-vote-1=0.0124936}{recv-vote-1 to recv-vote-2=0.000528616}{recv-vote-2 to decided=7.22e-07}{decided to decision-sent=0.000865712}}
+txid: 851969 EventSummary: {{start-participant to responding-yes=0.0122124}{responding-yes to sent-yes=0.000703987}{sent-yes to received-decision=0.000280188}{received-decision to committed=0.0124758}}
+txid: 851969 EventSummary: {{start-participant to responding-yes=0.0120843}{responding-yes to sent-yes=0.00072661}{sent-yes to received-decision=0.000935874}{received-decision to committed=0.0124941}}
+txid: 589826, latency: 0.0161094, cur_time: Sun Dec  3 21:10:30 2023
+
+txid: 589826 EventSummary: {{start-coordinator to sent-vote-reqs=0.00221625}{sent-vote-reqs to recv-vote-1=0.01271}{recv-vote-1 to recv-vote-2=0.00029711}{recv-vote-2 to decided=9.12e-07}{decided to decision-sent=0.000865451}}
+txid: 589826 EventSummary: {{start-participant to responding-yes=0.0122003}{responding-yes to sent-yes=0.000686926}{sent-yes to received-decision=0.000346142}{received-decision to committed=0.0122639}}
+txid: 589826 EventSummary: {{start-participant to responding-yes=0.012471}{responding-yes to sent-yes=0.000762628}{sent-yes to received-decision=0.000614328}{received-decision to committed=0.0122976}}
+txid: 917504, latency: 0.0163316, cur_time: Sun Dec  3 21:10:30 2023
+
+txid: 917504 EventSummary: {{start-coordinator to sent-vote-reqs=0.00229661}{sent-vote-reqs to recv-vote-1=0.0126804}{recv-vote-1 to recv-vote-2=0.000470087}{recv-vote-2 to decided=8.71e-07}{decided to decision-sent=0.000861965}}
+txid: 917504 EventSummary: {{start-participant to responding-yes=0.0123719}{responding-yes to sent-yes=0.000757569}{sent-yes to received-decision=0.000239221}{received-decision to committed=0.0123875}}
+txid: 917504 EventSummary: {{start-participant to responding-yes=0.0122516}{responding-yes to sent-yes=0.000778508}{sent-yes to received-decision=0.000977974}{received-decision to committed=0.0123837}}
+txid: 655362, latency: 0.0163208, cur_time: Sun Dec  3 21:10:30 2023
+
+txid: 655362 EventSummary: {{start-coordinator to sent-vote-reqs=0.00232894}{sent-vote-reqs to recv-vote-1=0.0126436}{recv-vote-1 to recv-vote-2=0.000390076}{recv-vote-2 to decided=9.01e-07}{decided to decision-sent=0.000933891}}
+txid: 655362 EventSummary: {{start-participant to responding-yes=0.0124678}{responding-yes to sent-yes=0.000781723}{sent-yes to received-decision=0.000800219}{received-decision to committed=0.0121373}}
+txid: 655362 EventSummary: {{start-participant to responding-yes=0.0120849}{responding-yes to sent-yes=0.000786623}{sent-yes to received-decision=0.00032338}{received-decision to committed=0.0121821}}
+txid: 720898, latency: 0.0165177, cur_time: Sun Dec  3 21:10:30 2023
+
+txid: 720898 EventSummary: {{start-coordinator to sent-vote-reqs=0.00250276}{sent-vote-reqs to recv-vote-1=0.0124792}{recv-vote-1 to recv-vote-2=0.000556319}{recv-vote-2 to decided=9.72e-07}{decided to decision-sent=0.000957345}}
+txid: 720898 EventSummary: {{start-participant to responding-yes=0.0122896}{responding-yes to sent-yes=0.000796913}{sent-yes to received-decision=0.000906289}{received-decision to committed=0.012256}}
+txid: 720898 EventSummary: {{start-participant to responding-yes=0.0122615}{responding-yes to sent-yes=0.000733172}{sent-yes to received-decision=0.000399744}{received-decision to committed=0.0122445}}
+txid: 917505, latency: 0.0164054, cur_time: Sun Dec  3 21:10:30 2023
+
+txid: 917505 EventSummary: {{start-coordinator to sent-vote-reqs=0.00237759}{sent-vote-reqs to recv-vote-1=0.0128312}{recv-vote-1 to recv-vote-2=0.000285237}{recv-vote-2 to decided=6.92e-07}{decided to decision-sent=0.000883335}}
+txid: 917505 EventSummary: {{start-participant to responding-yes=0.012336}{responding-yes to sent-yes=0.000699529}{sent-yes to received-decision=0.000331385}{received-decision to committed=0.0122371}}
+txid: 917505 EventSummary: {{start-participant to responding-yes=0.012641}{responding-yes to sent-yes=0.00076867}{sent-yes to received-decision=0.000630548}{received-decision to committed=0.0122299}}
+txid: 983040, latency: 0.0162362, cur_time: Sun Dec  3 21:10:30 2023
+
+txid: 983040 EventSummary: {{start-coordinator to sent-vote-reqs=0.00228591}{sent-vote-reqs to recv-vote-1=0.0128323}{recv-vote-1 to recv-vote-2=0.000234011}{recv-vote-2 to decided=9.02e-07}{decided to decision-sent=0.000863418}}
+txid: 983040 EventSummary: {{start-participant to responding-yes=0.0125487}{responding-yes to sent-yes=0.000778498}{sent-yes to received-decision=0.000508339}{received-decision to committed=0.0121856}}
+txid: 983040 EventSummary: {{start-participant to responding-yes=0.0122203}{responding-yes to sent-yes=0.000739204}{sent-yes to received-decision=0.000281861}{received-decision to committed=0.0121932}}
+txid: 983041, latency: 0.01631, cur_time: Sun Dec  3 21:10:30 2023
+
+txid: 983041 EventSummary: {{start-coordinator to sent-vote-reqs=0.0023875}{sent-vote-reqs to recv-vote-1=0.0127585}{recv-vote-1 to recv-vote-2=0.000278335}{recv-vote-2 to decided=8.52e-07}{decided to decision-sent=0.000863989}}
+txid: 983041 EventSummary: {{start-participant to responding-yes=0.0121495}{responding-yes to sent-yes=0.00078502}{sent-yes to received-decision=0.000314513}{received-decision to committed=0.0124589}}
+txid: 983041 EventSummary: {{start-participant to responding-yes=0.0123131}{responding-yes to sent-yes=0.000788617}{sent-yes to received-decision=0.000548654}{received-decision to committed=0.0125774}}
+txid: 786434, latency: 0.0164346, cur_time: Sun Dec  3 21:10:30 2023
+
+txid: 786434 EventSummary: {{start-coordinator to sent-vote-reqs=0.0024772}{sent-vote-reqs to recv-vote-1=0.0127039}{recv-vote-1 to recv-vote-2=0.000327147}{recv-vote-2 to decided=9.21e-07}{decided to decision-sent=0.000901981}}
+txid: 786434 EventSummary: {{start-participant to responding-yes=0.0125163}{responding-yes to sent-yes=0.000849902}{sent-yes to received-decision=0.000623846}{received-decision to committed=0.012308}}
+txid: 786434 EventSummary: {{start-participant to responding-yes=0.0121712}{responding-yes to sent-yes=0.000756827}{sent-yes to received-decision=0.000341754}{received-decision to committed=0.0123124}}
+txid: 1048577, latency: 0.0163507, cur_time: Sun Dec  3 21:10:30 2023
+
+txid: 1048577 EventSummary: {{start-coordinator to sent-vote-reqs=0.00234527}{sent-vote-reqs to recv-vote-1=0.0127572}{recv-vote-1 to recv-vote-2=0.000316667}{recv-vote-2 to decided=8.92e-07}{decided to decision-sent=0.000909375}}
+txid: 1048577 EventSummary: {{start-participant to responding-yes=0.012553}{responding-yes to sent-yes=0.000831257}{sent-yes to received-decision=0.000582669}{received-decision to committed=0.0122654}}
+txid: 1048577 EventSummary: {{start-participant to responding-yes=0.0122149}{responding-yes to sent-yes=0.000765743}{sent-yes to received-decision=0.000321497}{received-decision to committed=0.0123251}}
+txid: 1048576, latency: 0.016082, cur_time: Sun Dec  3 21:10:30 2023
+
+txid: 1048576 EventSummary: {{start-coordinator to sent-vote-reqs=0.00219997}{sent-vote-reqs to recv-vote-1=0.0126435}{recv-vote-1 to recv-vote-2=0.000306839}{recv-vote-2 to decided=8.21e-07}{decided to decision-sent=0.000910607}}
+txid: 1048576 EventSummary: {{start-participant to responding-yes=0.0121576}{responding-yes to sent-yes=0.000709017}{sent-yes to received-decision=0.000342706}{received-decision to committed=0.0121696}}
+txid: 1048576 EventSummary: {{start-participant to responding-yes=0.0123836}{responding-yes to sent-yes=0.000831999}{sent-yes to received-decision=0.000567149}{received-decision to committed=0.0122116}}
+txid: 1114112, latency: 0.0164914, cur_time: Sun Dec  3 21:10:30 2023
+
+txid: 1114112 EventSummary: {{start-coordinator to sent-vote-reqs=0.00268322}{sent-vote-reqs to recv-vote-1=0.0123628}{recv-vote-1 to recv-vote-2=0.000564504}{recv-vote-2 to decided=9.02e-07}{decided to decision-sent=0.000860913}}
+txid: 1114112 EventSummary: {{start-participant to responding-yes=0.0123636}{responding-yes to sent-yes=0.000755014}{sent-yes to received-decision=0.000830947}{received-decision to committed=0.0122221}}
+txid: 1114112 EventSummary: {{start-participant to responding-yes=0.0121674}{responding-yes to sent-yes=0.000703085}{sent-yes to received-decision=0.000332898}{received-decision to committed=0.0122392}}
+txid: 1114113, latency: 0.0162162, cur_time: Sun Dec  3 21:10:30 2023
+
+txid: 1114113 EventSummary: {{start-coordinator to sent-vote-reqs=0.0022731}{sent-vote-reqs to recv-vote-1=0.0123683}{recv-vote-1 to recv-vote-2=0.000674612}{recv-vote-2 to decided=8.61e-07}{decided to decision-sent=0.00087521}}
+txid: 1114113 EventSummary: {{start-participant to responding-yes=0.0122038}{responding-yes to sent-yes=0.000734825}{sent-yes to received-decision=0.00025956}{received-decision to committed=0.0122224}}
+txid: 1114113 EventSummary: {{start-participant to responding-yes=0.0122189}{responding-yes to sent-yes=0.00071034}{sent-yes to received-decision=0.00100146}{received-decision to committed=0.0122402}}
+txid: 1179648, latency: 0.0163818, cur_time: Sun Dec  3 21:10:30 2023
+
+txid: 1179648 EventSummary: {{start-coordinator to sent-vote-reqs=0.00228375}{sent-vote-reqs to recv-vote-1=0.0128206}{recv-vote-1 to recv-vote-2=0.00029688}{recv-vote-2 to decided=9.91e-07}{decided to decision-sent=0.000957836}}
+txid: 1179648 EventSummary: {{start-participant to responding-yes=0.0125692}{responding-yes to sent-yes=0.000797193}{sent-yes to received-decision=0.00061522}{received-decision to committed=0.0122907}}
+txid: 1179648 EventSummary: {{start-participant to responding-yes=0.0123063}{responding-yes to sent-yes=0.000724325}{sent-yes to received-decision=0.000300086}{received-decision to committed=0.0123783}}
+txid: 1245184, latency: 0.0165543, cur_time: Sun Dec  3 21:10:30 2023
+
+txid: 1245184 EventSummary: {{start-coordinator to sent-vote-reqs=0.00247649}{sent-vote-reqs to recv-vote-1=0.0125112}{recv-vote-1 to recv-vote-2=0.000621673}{recv-vote-2 to decided=8.61e-07}{decided to decision-sent=0.000919594}}
+txid: 1245184 EventSummary: {{start-participant to responding-yes=0.0124485}{responding-yes to sent-yes=0.00088046}{sent-yes to received-decision=0.000961323}{received-decision to committed=0.0122028}}
+txid: 1245184 EventSummary: {{start-participant to responding-yes=0.0123207}{responding-yes to sent-yes=0.000772597}{sent-yes to received-decision=0.000320243}{received-decision to committed=0.0122198}}
+txid: 851970, latency: 0.0162398, cur_time: Sun Dec  3 21:10:30 2023
+
+txid: 851970 EventSummary: {{start-coordinator to sent-vote-reqs=0.00232732}{sent-vote-reqs to recv-vote-1=0.0126157}{recv-vote-1 to recv-vote-2=0.000408961}{recv-vote-2 to decided=9.52e-07}{decided to decision-sent=0.000861545}}
+txid: 851970 EventSummary: {{start-participant to responding-yes=0.0124032}{responding-yes to sent-yes=0.000791342}{sent-yes to received-decision=0.000748752}{received-decision to committed=0.0124391}}
+txid: 851970 EventSummary: {{start-participant to responding-yes=0.0122005}{responding-yes to sent-yes=0.000702454}{sent-yes to received-decision=0.000345051}{received-decision to committed=0.012447}}
+txid: 1179649, latency: 0.0165113, cur_time: Sun Dec  3 21:10:30 2023
+
+txid: 1179649 EventSummary: {{start-coordinator to sent-vote-reqs=0.00253959}{sent-vote-reqs to recv-vote-1=0.0125897}{recv-vote-1 to recv-vote-2=0.000447985}{recv-vote-2 to decided=1.182e-06}{decided to decision-sent=0.000908814}}
+txid: 1179649 EventSummary: {{start-participant to responding-yes=0.0121839}{responding-yes to sent-yes=0.000738302}{sent-yes to received-decision=0.000329541}{received-decision to committed=0.0124066}}
+txid: 1179649 EventSummary: {{start-participant to responding-yes=0.0122622}{responding-yes to sent-yes=0.000781383}{sent-yes to received-decision=0.000782856}{received-decision to committed=0.0125439}}
+txid: 917506, latency: 0.0161485, cur_time: Sun Dec  3 21:10:30 2023
+
+txid: 917506 EventSummary: {{start-coordinator to sent-vote-reqs=0.00224317}{sent-vote-reqs to recv-vote-1=0.0127037}{recv-vote-1 to recv-vote-2=0.000229693}{recv-vote-2 to decided=1.272e-06}{decided to decision-sent=0.000945022}}
+txid: 917506 EventSummary: {{start-participant to responding-yes=0.0121181}{responding-yes to sent-yes=0.000693548}{sent-yes to received-decision=0.000382141}{received-decision to committed=0.0120908}}
+txid: 917506 EventSummary: {{start-participant to responding-yes=0.0124066}{responding-yes to sent-yes=0.000727181}{sent-yes to received-decision=0.000609169}{received-decision to committed=0.0121613}}
+txid: 983042, latency: 0.0161268, cur_time: Sun Dec  3 21:10:30 2023
+
+txid: 983042 EventSummary: {{start-coordinator to sent-vote-reqs=0.0023157}{sent-vote-reqs to recv-vote-1=0.0127606}{recv-vote-1 to recv-vote-2=0.000134273}{recv-vote-2 to decided=1.523e-06}{decided to decision-sent=0.000891781}}
+txid: 983042 EventSummary: {{start-participant to responding-yes=0.0121437}{responding-yes to sent-yes=0.000639556}{sent-yes to received-decision=0.000358847}{received-decision to committed=0.0121798}}
+txid: 983042 EventSummary: {{start-participant to responding-yes=0.0125949}{responding-yes to sent-yes=0.000751006}{sent-yes to received-decision=0.000428298}{received-decision to committed=0.0122374}}
+txid: 1310720, latency: 0.0162424, cur_time: Sun Dec  3 21:10:30 2023
+
+txid: 1310720 EventSummary: {{start-coordinator to sent-vote-reqs=0.00243432}{sent-vote-reqs to recv-vote-1=0.0124503}{recv-vote-1 to recv-vote-2=0.000409903}{recv-vote-2 to decided=7.62e-07}{decided to decision-sent=0.000924673}}
+txid: 1310720 EventSummary: {{start-participant to responding-yes=0.0123245}{responding-yes to sent-yes=0.000767767}{sent-yes to received-decision=0.00069451}{received-decision to committed=0.0124658}}
+txid: 1310720 EventSummary: {{start-participant to responding-yes=0.0121057}{responding-yes to sent-yes=0.000734695}{sent-yes to received-decision=0.000299365}{received-decision to committed=0.0125305}}
+txid: 1245185, latency: 0.0160399, cur_time: Sun Dec  3 21:10:30 2023
+
+txid: 1245185 EventSummary: {{start-coordinator to sent-vote-reqs=0.00228825}{sent-vote-reqs to recv-vote-1=0.012699}{recv-vote-1 to recv-vote-2=0.000158008}{recv-vote-2 to decided=9.32e-07}{decided to decision-sent=0.000873397}}
+txid: 1245185 EventSummary: {{start-participant to responding-yes=0.0122999}{responding-yes to sent-yes=0.000773598}{sent-yes to received-decision=0.000432826}{received-decision to committed=0.0124188}}
+txid: 1245185 EventSummary: {{start-participant to responding-yes=0.0120878}{responding-yes to sent-yes=0.000725909}{sent-yes to received-decision=0.000287442}{received-decision to committed=0.0124212}}
+txid: 1376256, latency: 0.0160898, cur_time: Sun Dec  3 21:10:30 2023
+
+txid: 1376256 EventSummary: {{start-coordinator to sent-vote-reqs=0.00227156}{sent-vote-reqs to recv-vote-1=0.0125549}{recv-vote-1 to recv-vote-2=0.000366761}{recv-vote-2 to decided=7.12e-07}{decided to decision-sent=0.00087538}}
+txid: 1376256 EventSummary: {{start-participant to responding-yes=0.0121503}{responding-yes to sent-yes=0.000746458}{sent-yes to received-decision=0.000231516}{received-decision to committed=0.0122145}}
+txid: 1376256 EventSummary: {{start-participant to responding-yes=0.0123253}{responding-yes to sent-yes=0.000754513}{sent-yes to received-decision=0.000660465}{received-decision to committed=0.012221}}
+txid: 1441792, latency: 0.0163388, cur_time: Sun Dec  3 21:10:30 2023
+
+txid: 1441792 EventSummary: {{start-coordinator to sent-vote-reqs=0.00240542}{sent-vote-reqs to recv-vote-1=0.0125892}{recv-vote-1 to recv-vote-2=0.000418278}{recv-vote-2 to decided=7.02e-07}{decided to decision-sent=0.000899896}}
+txid: 1441792 EventSummary: {{start-participant to responding-yes=0.0121962}{responding-yes to sent-yes=0.000770072}{sent-yes to received-decision=0.000260912}{received-decision to committed=0.0122239}}
+txid: 1441792 EventSummary: {{start-participant to responding-yes=0.0124809}{responding-yes to sent-yes=0.000783397}{sent-yes to received-decision=0.000735006}{received-decision to committed=0.0121907}}
+txid: 1048578, latency: 0.0162743, cur_time: Sun Dec  3 21:10:30 2023
+
+txid: 1048578 EventSummary: {{start-coordinator to sent-vote-reqs=0.00225996}{sent-vote-reqs to recv-vote-1=0.0125211}{recv-vote-1 to recv-vote-2=0.00053013}{recv-vote-2 to decided=1.092e-06}{decided to decision-sent=0.000941715}}
+txid: 1048578 EventSummary: {{start-participant to responding-yes=0.0122829}{responding-yes to sent-yes=0.000754934}{sent-yes to received-decision=0.000916357}{received-decision to committed=0.0121902}}
+txid: 1048578 EventSummary: {{start-participant to responding-yes=0.0122685}{responding-yes to sent-yes=0.000739434}{sent-yes to received-decision=0.000382281}{received-decision to committed=0.0122379}}
+txid: 1310721, latency: 0.0161774, cur_time: Sun Dec  3 21:10:30 2023
+
+txid: 1310721 EventSummary: {{start-coordinator to sent-vote-reqs=0.0022871}{sent-vote-reqs to recv-vote-1=0.0125961}{recv-vote-1 to recv-vote-2=0.000379605}{recv-vote-2 to decided=8.72e-07}{decided to decision-sent=0.000893825}}
+txid: 1310721 EventSummary: {{start-participant to responding-yes=0.0124046}{responding-yes to sent-yes=0.000730818}{sent-yes to received-decision=0.000736459}{received-decision to committed=0.0124501}}
+txid: 1310721 EventSummary: {{start-participant to responding-yes=0.0121068}{responding-yes to sent-yes=0.000772868}{sent-yes to received-decision=0.000297861}{received-decision to committed=0.0125422}}
+txid: 1114114, latency: 0.0163838, cur_time: Sun Dec  3 21:10:30 2023
+
+txid: 1114114 EventSummary: {{start-coordinator to sent-vote-reqs=0.00230292}{sent-vote-reqs to recv-vote-1=0.0126179}{recv-vote-1 to recv-vote-2=0.000533907}{recv-vote-2 to decided=7.91e-07}{decided to decision-sent=0.000909946}}
+txid: 1114114 EventSummary: {{start-participant to responding-yes=0.0123027}{responding-yes to sent-yes=0.00067343}{sent-yes to received-decision=0.000418228}{received-decision to committed=0.0125182}}
+txid: 1114114 EventSummary: {{start-participant to responding-yes=0.012276}{responding-yes to sent-yes=0.000858398}{sent-yes to received-decision=0.000945723}{received-decision to committed=0.0125596}}
+txid: 1507328, latency: 0.0160967, cur_time: Sun Dec  3 21:10:30 2023
+
+txid: 1507328 EventSummary: {{start-coordinator to sent-vote-reqs=0.00223962}{sent-vote-reqs to recv-vote-1=0.012696}{recv-vote-1 to recv-vote-2=0.000239271}{recv-vote-2 to decided=8.11e-07}{decided to decision-sent=0.000900819}}
+txid: 1507328 EventSummary: {{start-participant to responding-yes=0.0124982}{responding-yes to sent-yes=0.00080615}{sent-yes to received-decision=0.000491967}{received-decision to committed=0.0125111}}
+txid: 1507328 EventSummary: {{start-participant to responding-yes=0.0121072}{responding-yes to sent-yes=0.000736118}{sent-yes to received-decision=0.00028635}{received-decision to committed=0.01253}}
+txid: 1179650, latency: 0.0164714, cur_time: Sun Dec  3 21:10:30 2023
+
+txid: 1179650 EventSummary: {{start-coordinator to sent-vote-reqs=0.00237173}{sent-vote-reqs to recv-vote-1=0.0127428}{recv-vote-1 to recv-vote-2=0.000364317}{recv-vote-2 to decided=8.92e-07}{decided to decision-sent=0.000966482}}
+txid: 1179650 EventSummary: {{start-participant to responding-yes=0.0122426}{responding-yes to sent-yes=0.000788427}{sent-yes to received-decision=0.000330002}{received-decision to committed=0.0124661}}
+txid: 1179650 EventSummary: {{start-participant to responding-yes=0.0125214}{responding-yes to sent-yes=0.000801581}{sent-yes to received-decision=0.000750856}{received-decision to committed=0.0125364}}
+txid: 1376257, latency: 0.0163884, cur_time: Sun Dec  3 21:10:30 2023
+
+txid: 1376257 EventSummary: {{start-coordinator to sent-vote-reqs=0.00230077}{sent-vote-reqs to recv-vote-1=0.0126335}{recv-vote-1 to recv-vote-2=0.000532694}{recv-vote-2 to decided=8.72e-07}{decided to decision-sent=0.000899646}}
+txid: 1376257 EventSummary: {{start-participant to responding-yes=0.0124637}{responding-yes to sent-yes=0.000787525}{sent-yes to received-decision=0.000866965}{received-decision to committed=0.0123917}}
+txid: 1376257 EventSummary: {{start-participant to responding-yes=0.0123211}{responding-yes to sent-yes=0.000672448}{sent-yes to received-decision=0.000405895}{received-decision to committed=0.0124567}}
+txid: 1441793, latency: 0.0164847, cur_time: Sun Dec  3 21:10:30 2023
+
+txid: 1441793 EventSummary: {{start-coordinator to sent-vote-reqs=0.00246876}{sent-vote-reqs to recv-vote-1=0.0122246}{recv-vote-1 to recv-vote-2=0.000878998}{recv-vote-2 to decided=8.81e-07}{decided to decision-sent=0.000885941}}
+txid: 1441793 EventSummary: {{start-participant to responding-yes=0.0123102}{responding-yes to sent-yes=0.000730247}{sent-yes to received-decision=0.000325875}{received-decision to committed=0.0121448}}
+txid: 1441793 EventSummary: {{start-participant to responding-yes=0.0120272}{responding-yes to sent-yes=0.000724757}{sent-yes to received-decision=0.00132611}{received-decision to committed=0.0122597}}
+txid: 1507329, latency: 0.0162764, cur_time: Sun Dec  3 21:10:31 2023
+
+txid: 1507329 EventSummary: {{start-coordinator to sent-vote-reqs=0.00242287}{sent-vote-reqs to recv-vote-1=0.0124953}{recv-vote-1 to recv-vote-2=0.000414642}{recv-vote-2 to decided=8.81e-07}{decided to decision-sent=0.00091757}}
+txid: 1507329 EventSummary: {{start-participant to responding-yes=0.0124808}{responding-yes to sent-yes=0.00078509}{sent-yes to received-decision=0.000756516}{received-decision to committed=0.0122164}}
+txid: 1507329 EventSummary: {{start-participant to responding-yes=0.012121}{responding-yes to sent-yes=0.00073174}{sent-yes to received-decision=0.000298763}{received-decision to committed=0.012241}}
+txid: 1572865, latency: 0.0162619, cur_time: Sun Dec  3 21:10:31 2023
+
+txid: 1572865 EventSummary: {{start-coordinator to sent-vote-reqs=0.0023013}{sent-vote-reqs to recv-vote-1=0.0126953}{recv-vote-1 to recv-vote-2=0.000336023}{recv-vote-2 to decided=8.22e-07}{decided to decision-sent=0.000910086}}
+txid: 1572865 EventSummary: {{start-participant to responding-yes=0.0122215}{responding-yes to sent-yes=0.000740816}{sent-yes to received-decision=0.000353627}{received-decision to committed=0.0125759}}
+txid: 1572865 EventSummary: {{start-participant to responding-yes=0.0123919}{responding-yes to sent-yes=0.000774811}{sent-yes to received-decision=0.000756546}{received-decision to committed=0.0126775}}
+txid: 1245186, latency: 0.0163174, cur_time: Sun Dec  3 21:10:31 2023
+
+txid: 1245186 EventSummary: {{start-coordinator to sent-vote-reqs=0.00246829}{sent-vote-reqs to recv-vote-1=0.0125419}{recv-vote-1 to recv-vote-2=0.000383292}{recv-vote-2 to decided=7.62e-07}{decided to decision-sent=0.000900498}}
+txid: 1245186 EventSummary: {{start-participant to responding-yes=0.0122605}{responding-yes to sent-yes=0.00075333}{sent-yes to received-decision=0.000719587}{received-decision to committed=0.0123576}}
+txid: 1245186 EventSummary: {{start-participant to responding-yes=0.0122044}{responding-yes to sent-yes=0.000760164}{sent-yes to received-decision=0.000253928}{received-decision to committed=0.0124259}}
+txid: 1572864, latency: 0.0163517, cur_time: Sun Dec  3 21:10:31 2023
+
+txid: 1572864 EventSummary: {{start-coordinator to sent-vote-reqs=0.00243416}{sent-vote-reqs to recv-vote-1=0.0127358}{recv-vote-1 to recv-vote-2=0.000305496}{recv-vote-2 to decided=6.91e-07}{decided to decision-sent=0.000851265}}
+txid: 1572864 EventSummary: {{start-participant to responding-yes=0.0122348}{responding-yes to sent-yes=0.000718815}{sent-yes to received-decision=0.000300436}{received-decision to committed=0.012488}}
+txid: 1572864 EventSummary: {{start-participant to responding-yes=0.0125417}{responding-yes to sent-yes=0.000771204}{sent-yes to received-decision=0.000584401}{received-decision to committed=0.0125242}}
+txid: 1638401, latency: 0.0163613, cur_time: Sun Dec  3 21:10:31 2023
+
+txid: 1638401 EventSummary: {{start-coordinator to sent-vote-reqs=0.00228488}{sent-vote-reqs to recv-vote-1=0.0127805}{recv-vote-1 to recv-vote-2=0.000427606}{recv-vote-2 to decided=7.91e-07}{decided to decision-sent=0.000846596}}
+txid: 1638401 EventSummary: {{start-participant to responding-yes=0.0125239}{responding-yes to sent-yes=0.000759562}{sent-yes to received-decision=0.00075862}{received-decision to committed=0.0122091}}
+txid: 1638401 EventSummary: {{start-participant to responding-yes=0.0124302}{responding-yes to sent-yes=0.000709608}{sent-yes to received-decision=0.000295357}{received-decision to committed=0.0121949}}
+txid: 1703937, latency: 0.0163701, cur_time: Sun Dec  3 21:10:31 2023
+
+txid: 1703937 EventSummary: {{start-coordinator to sent-vote-reqs=0.0024339}{sent-vote-reqs to recv-vote-1=0.0123473}{recv-vote-1 to recv-vote-2=0.000675324}{recv-vote-2 to decided=7.41e-07}{decided to decision-sent=0.000888525}}
+txid: 1703937 EventSummary: {{start-participant to responding-yes=0.0123743}{responding-yes to sent-yes=0.000792855}{sent-yes to received-decision=0.000941225}{received-decision to committed=0.0122088}}
+txid: 1703937 EventSummary: {{start-participant to responding-yes=0.0122832}{responding-yes to sent-yes=0.000740165}{sent-yes to received-decision=0.000280028}{received-decision to committed=0.0122218}}
+txid: 1638400, latency: 0.0162015, cur_time: Sun Dec  3 21:10:31 2023
+
+txid: 1638400 EventSummary: {{start-coordinator to sent-vote-reqs=0.00226221}{sent-vote-reqs to recv-vote-1=0.0124321}{recv-vote-1 to recv-vote-2=0.000565446}{recv-vote-2 to decided=8.22e-07}{decided to decision-sent=0.000919904}}
+txid: 1638400 EventSummary: {{start-participant to responding-yes=0.0122163}{responding-yes to sent-yes=0.000715459}{sent-yes to received-decision=0.000272674}{received-decision to committed=0.012471}}
+txid: 1638400 EventSummary: {{start-participant to responding-yes=0.012171}{responding-yes to sent-yes=0.000791251}{sent-yes to received-decision=0.000871534}{received-decision to committed=0.0124737}}
+txid: 1703936, latency: 0.0161655, cur_time: Sun Dec  3 21:10:31 2023
+
+txid: 1703936 EventSummary: {{start-coordinator to sent-vote-reqs=0.00224971}{sent-vote-reqs to recv-vote-1=0.0127359}{recv-vote-1 to recv-vote-2=0.000262334}{recv-vote-2 to decided=8.92e-07}{decided to decision-sent=0.000893525}}
+txid: 1703936 EventSummary: {{start-participant to responding-yes=0.0121446}{responding-yes to sent-yes=0.000756967}{sent-yes to received-decision=0.000284948}{received-decision to committed=0.0125346}}
+txid: 1703936 EventSummary: {{start-participant to responding-yes=0.0125591}{responding-yes to sent-yes=0.000752689}{sent-yes to received-decision=0.000584733}{received-decision to committed=0.0125347}}
+txid: 1310722, latency: 0.0163379, cur_time: Sun Dec  3 21:10:31 2023
+
+txid: 1310722 EventSummary: {{start-coordinator to sent-vote-reqs=0.00232354}{sent-vote-reqs to recv-vote-1=0.012738}{recv-vote-1 to recv-vote-2=0.000324953}{recv-vote-2 to decided=1.042e-06}{decided to decision-sent=0.000925875}}
+txid: 1310722 EventSummary: {{start-participant to responding-yes=0.0121692}{responding-yes to sent-yes=0.000736999}{sent-yes to received-decision=0.000399924}{received-decision to committed=0.0121608}}
+txid: 1310722 EventSummary: {{start-participant to responding-yes=0.0124782}{responding-yes to sent-yes=0.000858108}{sent-yes to received-decision=0.00064168}{received-decision to committed=0.0122231}}
+txid: 1769473, latency: 0.0165043, cur_time: Sun Dec  3 21:10:31 2023
+
+txid: 1769473 EventSummary: {{start-coordinator to sent-vote-reqs=0.00248474}{sent-vote-reqs to recv-vote-1=0.0126051}{recv-vote-1 to recv-vote-2=0.000521834}{recv-vote-2 to decided=7.31e-07}{decided to decision-sent=0.000866184}}
+txid: 1769473 EventSummary: {{start-participant to responding-yes=0.0125509}{responding-yes to sent-yes=0.000783056}{sent-yes to received-decision=0.000830025}{received-decision to committed=0.0124048}}
+txid: 1769473 EventSummary: {{start-participant to responding-yes=0.0122977}{responding-yes to sent-yes=0.000742019}{sent-yes to received-decision=0.000241346}{received-decision to committed=0.0124381}}
+txid: 1376258, latency: 0.0165251, cur_time: Sun Dec  3 21:10:31 2023
+
+txid: 1376258 EventSummary: {{start-coordinator to sent-vote-reqs=0.00241638}{sent-vote-reqs to recv-vote-1=0.0126329}{recv-vote-1 to recv-vote-2=0.000541882}{recv-vote-2 to decided=9.22e-07}{decided to decision-sent=0.0009125}}
+txid: 1376258 EventSummary: {{start-participant to responding-yes=0.0123516}{responding-yes to sent-yes=0.000756666}{sent-yes to received-decision=0.000330854}{received-decision to committed=0.012321}}
+txid: 1376258 EventSummary: {{start-participant to responding-yes=0.0121794}{responding-yes to sent-yes=0.000783617}{sent-yes to received-decision=0.00106416}{received-decision to committed=0.0123346}}
+txid: 1835009, latency: 0.0163289, cur_time: Sun Dec  3 21:10:31 2023
+
+txid: 1835009 EventSummary: {{start-coordinator to sent-vote-reqs=0.00235093}{sent-vote-reqs to recv-vote-1=0.0127704}{recv-vote-1 to recv-vote-2=0.000229693}{recv-vote-2 to decided=8.71e-07}{decided to decision-sent=0.000952296}}
+txid: 1835009 EventSummary: {{start-participant to responding-yes=0.0124036}{responding-yes to sent-yes=0.000954149}{sent-yes to received-decision=0.000470107}{received-decision to committed=0.0122074}}
+txid: 1835009 EventSummary: {{start-participant to responding-yes=0.0122083}{responding-yes to sent-yes=0.00068921}{sent-yes to received-decision=0.000368745}{received-decision to committed=0.0121522}}
+txid: 1769472, latency: 0.0160891, cur_time: Sun Dec  3 21:10:31 2023
+
+txid: 1769472 EventSummary: {{start-coordinator to sent-vote-reqs=0.00225684}{sent-vote-reqs to recv-vote-1=0.0124138}{recv-vote-1 to recv-vote-2=0.000503449}{recv-vote-2 to decided=9.02e-07}{decided to decision-sent=0.000893965}}
+txid: 1769472 EventSummary: {{start-participant to responding-yes=0.0121865}{responding-yes to sent-yes=0.000737821}{sent-yes to received-decision=0.000815337}{received-decision to committed=0.0122232}}
+txid: 1769472 EventSummary: {{start-participant to responding-yes=0.012127}{responding-yes to sent-yes=0.000715319}{sent-yes to received-decision=0.000326585}{received-decision to committed=0.0122128}}
+txid: 1835008, latency: 0.0161227, cur_time: Sun Dec  3 21:10:31 2023
+
+txid: 1835008 EventSummary: {{start-coordinator to sent-vote-reqs=0.00226744}{sent-vote-reqs to recv-vote-1=0.0125464}{recv-vote-1 to recv-vote-2=0.000308792}{recv-vote-2 to decided=8.91e-07}{decided to decision-sent=0.000974307}}
+txid: 1835008 EventSummary: {{start-participant to responding-yes=0.0121256}{responding-yes to sent-yes=0.000707434}{sent-yes to received-decision=0.000402038}{received-decision to committed=0.0123782}}
+txid: 1835008 EventSummary: {{start-participant to responding-yes=0.012311}{responding-yes to sent-yes=0.000767867}{sent-yes to received-decision=0.000651378}{received-decision to committed=0.0125031}}
+txid: 1441794, latency: 0.0160394, cur_time: Sun Dec  3 21:10:31 2023
+
+txid: 1441794 EventSummary: {{start-coordinator to sent-vote-reqs=0.00230973}{sent-vote-reqs to recv-vote-1=0.0125289}{recv-vote-1 to recv-vote-2=0.000312198}{recv-vote-2 to decided=9.42e-07}{decided to decision-sent=0.000867215}}
+txid: 1441794 EventSummary: {{start-participant to responding-yes=0.012075}{responding-yes to sent-yes=0.000721781}{sent-yes to received-decision=0.000332407}{received-decision to committed=0.0124082}}
+txid: 1441794 EventSummary: {{start-participant to responding-yes=0.0122805}{responding-yes to sent-yes=0.00081104}{sent-yes to received-decision=0.000597536}{received-decision to committed=0.0125658}}
+txid: 1507330, latency: 0.0161832, cur_time: Sun Dec  3 21:10:31 2023
+
+txid: 1507330 EventSummary: {{start-coordinator to sent-vote-reqs=0.00220549}{sent-vote-reqs to recv-vote-1=0.0124028}{recv-vote-1 to recv-vote-2=0.00063073}{recv-vote-2 to decided=6.61e-07}{decided to decision-sent=0.000923291}}
+txid: 1507330 EventSummary: {{start-participant to responding-yes=0.0122076}{responding-yes to sent-yes=0.000736058}{sent-yes to received-decision=0.000313441}{received-decision to committed=0.0124719}}
+txid: 1507330 EventSummary: {{start-participant to responding-yes=0.0121931}{responding-yes to sent-yes=0.000757028}{sent-yes to received-decision=0.000917519}{received-decision to committed=0.0124902}}
+txid: 1900545, latency: 0.0163606, cur_time: Sun Dec  3 21:10:31 2023
+
+txid: 1900545 EventSummary: {{start-coordinator to sent-vote-reqs=0.00240414}{sent-vote-reqs to recv-vote-1=0.0127953}{recv-vote-1 to recv-vote-2=0.000215566}{recv-vote-2 to decided=7.92e-07}{decided to decision-sent=0.000920726}}
+txid: 1900545 EventSummary: {{start-participant to responding-yes=0.0125888}{responding-yes to sent-yes=0.000910566}{sent-yes to received-decision=0.000582739}{received-decision to committed=0.0122701}}
+txid: 1900545 EventSummary: {{start-participant to responding-yes=0.012242}{responding-yes to sent-yes=0.000751466}{sent-yes to received-decision=0.000343648}{received-decision to committed=0.0122766}}
+txid: 1900544, latency: 0.0161445, cur_time: Sun Dec  3 21:10:31 2023
+
+txid: 1900544 EventSummary: {{start-coordinator to sent-vote-reqs=0.00220651}{sent-vote-reqs to recv-vote-1=0.0128186}{recv-vote-1 to recv-vote-2=0.000159751}{recv-vote-2 to decided=9.02e-07}{decided to decision-sent=0.000935564}}
+txid: 1900544 EventSummary: {{start-participant to responding-yes=0.012195}{responding-yes to sent-yes=0.000746337}{sent-yes to received-decision=0.000338839}{received-decision to committed=0.0121274}}
+txid: 1900544 EventSummary: {{start-participant to responding-yes=0.012431}{responding-yes to sent-yes=0.000811641}{sent-yes to received-decision=0.000518036}{received-decision to committed=0.0121606}}
+txid: 1966080, latency: 0.01615, cur_time: Sun Dec  3 21:10:31 2023
+
+txid: 1966080 EventSummary: {{start-coordinator to sent-vote-reqs=0.00247876}{sent-vote-reqs to recv-vote-1=0.0128193}{recv-vote-1 to recv-vote-2=1.352e-06}{recv-vote-2 to decided=6.61e-07}{decided to decision-sent=0.000830396}}
+txid: 1966080 EventSummary: {{start-participant to responding-yes=0.0121125}{responding-yes to sent-yes=0.000669703}{sent-yes to received-decision=0.000311978}{received-decision to committed=0.0124092}}
+txid: 1966080 EventSummary: {{start-participant to responding-yes=0.0122995}{responding-yes to sent-yes=0.000804577}{sent-yes to received-decision=0.000434289}{received-decision to committed=0.0124778}}
+txid: 2031616, latency: 0.0160979, cur_time: Sun Dec  3 21:10:31 2023
+
+txid: 2031616 EventSummary: {{start-coordinator to sent-vote-reqs=0.00230152}{sent-vote-reqs to recv-vote-1=0.0123034}{recv-vote-1 to recv-vote-2=0.000589181}{recv-vote-2 to decided=7.11e-07}{decided to decision-sent=0.000879198}}
+txid: 2031616 EventSummary: {{start-participant to responding-yes=0.012125}{responding-yes to sent-yes=0.000791843}{sent-yes to received-decision=0.00093858}{received-decision to committed=0.0125232}}
+txid: 2031616 EventSummary: {{start-participant to responding-yes=0.0120829}{responding-yes to sent-yes=0.00075838}{sent-yes to received-decision=0.000269668}{received-decision to committed=0.0126074}}
+txid: 1966081, latency: 0.0161526, cur_time: Sun Dec  3 21:10:31 2023
+
+txid: 1966081 EventSummary: {{start-coordinator to sent-vote-reqs=0.0022347}{sent-vote-reqs to recv-vote-1=0.0123079}{recv-vote-1 to recv-vote-2=0.000668911}{recv-vote-2 to decided=7.21e-07}{decided to decision-sent=0.000920977}}
+txid: 1966081 EventSummary: {{start-participant to responding-yes=0.0121503}{responding-yes to sent-yes=0.000759712}{sent-yes to received-decision=0.000978746}{received-decision to committed=0.0123196}}
+txid: 1966081 EventSummary: {{start-participant to responding-yes=0.012191}{responding-yes to sent-yes=0.000738382}{sent-yes to received-decision=0.000301709}{received-decision to committed=0.0122878}}
+txid: 2031617, latency: 0.0161346, cur_time: Sun Dec  3 21:10:31 2023
+
+txid: 2031617 EventSummary: {{start-coordinator to sent-vote-reqs=0.00225158}{sent-vote-reqs to recv-vote-1=0.0123096}{recv-vote-1 to recv-vote-2=0.000649265}{recv-vote-2 to decided=8.71e-07}{decided to decision-sent=0.000904586}}
+txid: 2031617 EventSummary: {{start-participant to responding-yes=0.0121391}{responding-yes to sent-yes=0.000745055}{sent-yes to received-decision=0.00029211}{received-decision to committed=0.0122762}}
+txid: 2031617 EventSummary: {{start-participant to responding-yes=0.0121266}{responding-yes to sent-yes=0.000751296}{sent-yes to received-decision=0.00102403}{received-decision to committed=0.012311}}
+txid: 2097152, latency: 0.0161646, cur_time: Sun Dec  3 21:10:31 2023
+
+txid: 2097152 EventSummary: {{start-coordinator to sent-vote-reqs=0.00230922}{sent-vote-reqs to recv-vote-1=0.0125033}{recv-vote-1 to recv-vote-2=0.000445901}{recv-vote-2 to decided=9.12e-07}{decided to decision-sent=0.000883936}}
+txid: 2097152 EventSummary: {{start-participant to responding-yes=0.0121774}{responding-yes to sent-yes=0.000692125}{sent-yes to received-decision=0.000303372}{received-decision to committed=0.0121382}}
+txid: 2097152 EventSummary: {{start-participant to responding-yes=0.0123738}{responding-yes to sent-yes=0.000767868}{sent-yes to received-decision=0.000770122}{received-decision to committed=0.0123358}}
+txid: 2097153, latency: 0.01623, cur_time: Sun Dec  3 21:10:31 2023
+
+txid: 2097153 EventSummary: {{start-coordinator to sent-vote-reqs=0.00244114}{sent-vote-reqs to recv-vote-1=0.0120874}{recv-vote-1 to recv-vote-2=0.000783848}{recv-vote-2 to decided=8.01e-07}{decided to decision-sent=0.000893415}}
+txid: 2097153 EventSummary: {{start-participant to responding-yes=0.0120957}{responding-yes to sent-yes=0.000704799}{sent-yes to received-decision=0.00106107}{received-decision to committed=0.0123097}}
+txid: 2097153 EventSummary: {{start-participant to responding-yes=0.0120777}{responding-yes to sent-yes=0.000734054}{sent-yes to received-decision=0.000227499}{received-decision to committed=0.0124226}}
+txid: 2162689, latency: 0.0162771, cur_time: Sun Dec  3 21:10:31 2023
+
+txid: 2162689 EventSummary: {{start-coordinator to sent-vote-reqs=0.00222658}{sent-vote-reqs to recv-vote-1=0.0126306}{recv-vote-1 to recv-vote-2=0.000505313}{recv-vote-2 to decided=8.71e-07}{decided to decision-sent=0.000887914}}
+txid: 2162689 EventSummary: {{start-participant to responding-yes=0.0123243}{responding-yes to sent-yes=0.000714808}{sent-yes to received-decision=0.000284156}{received-decision to committed=0.0123725}}
+txid: 2162689 EventSummary: {{start-participant to responding-yes=0.0122493}{responding-yes to sent-yes=0.000752218}{sent-yes to received-decision=0.00100508}{received-decision to committed=0.0123808}}
+txid: 1572866, latency: 0.016374, cur_time: Sun Dec  3 21:10:31 2023
+
+txid: 1572866 EventSummary: {{start-coordinator to sent-vote-reqs=0.00235211}{sent-vote-reqs to recv-vote-1=0.0124986}{recv-vote-1 to recv-vote-2=0.000528016}{recv-vote-2 to decided=9.22e-07}{decided to decision-sent=0.000973365}}
+txid: 1572866 EventSummary: {{start-participant to responding-yes=0.0124404}{responding-yes to sent-yes=0.000746577}{sent-yes to received-decision=0.000889097}{received-decision to committed=0.0121774}}
+txid: 1572866 EventSummary: {{start-participant to responding-yes=0.0121923}{responding-yes to sent-yes=0.000719346}{sent-yes to received-decision=0.000382511}{received-decision to committed=0.0121796}}
+txid: 1638402, latency: 0.0164479, cur_time: Sun Dec  3 21:10:31 2023
+
+txid: 1638402 EventSummary: {{start-coordinator to sent-vote-reqs=0.00217922}{sent-vote-reqs to recv-vote-1=0.0128255}{recv-vote-1 to recv-vote-2=0.000489663}{recv-vote-2 to decided=9.72e-07}{decided to decision-sent=0.000927749}}
+txid: 1638402 EventSummary: {{start-participant to responding-yes=0.0121753}{responding-yes to sent-yes=0.000853208}{sent-yes to received-decision=0.00109538}{received-decision to committed=0.0121999}}
+txid: 1638402 EventSummary: {{start-participant to responding-yes=0.0124296}{responding-yes to sent-yes=0.000729335}{sent-yes to received-decision=0.000320634}{received-decision to committed=0.0122058}}
+txid: 2228225, latency: 0.0162058, cur_time: Sun Dec  3 21:10:31 2023
+
+txid: 2228225 EventSummary: {{start-coordinator to sent-vote-reqs=0.00220226}{sent-vote-reqs to recv-vote-1=0.0125312}{recv-vote-1 to recv-vote-2=0.000481668}{recv-vote-2 to decided=1.082e-06}{decided to decision-sent=0.00096551}}
+txid: 2228225 EventSummary: {{start-participant to responding-yes=0.0121337}{responding-yes to sent-yes=0.000792164}{sent-yes to received-decision=0.000373894}{received-decision to committed=0.0125138}}
+txid: 2228225 EventSummary: {{start-participant to responding-yes=0.0123804}{responding-yes to sent-yes=0.0008114}{sent-yes to received-decision=0.000838411}{received-decision to committed=0.0126317}}
+txid: 2162688, latency: 0.0163189, cur_time: Sun Dec  3 21:10:31 2023
+
+txid: 2162688 EventSummary: {{start-coordinator to sent-vote-reqs=0.00247262}{sent-vote-reqs to recv-vote-1=0.0124172}{recv-vote-1 to recv-vote-2=0.000492559}{recv-vote-2 to decided=9.12e-07}{decided to decision-sent=0.000911328}}
+txid: 2162688 EventSummary: {{start-participant to responding-yes=0.0121245}{responding-yes to sent-yes=0.000738452}{sent-yes to received-decision=0.000293263}{received-decision to committed=0.0121801}}
+txid: 2162688 EventSummary: {{start-participant to responding-yes=0.012279}{responding-yes to sent-yes=0.000800349}{sent-yes to received-decision=0.000795039}{received-decision to committed=0.0123245}}
+txid: 1703938, latency: 0.0163534, cur_time: Sun Dec  3 21:10:31 2023
+
+txid: 1703938 EventSummary: {{start-coordinator to sent-vote-reqs=0.00226622}{sent-vote-reqs to recv-vote-1=0.012406}{recv-vote-1 to recv-vote-2=0.00081183}{recv-vote-2 to decided=6.72e-07}{decided to decision-sent=0.000848429}}
+txid: 1703938 EventSummary: {{start-participant to responding-yes=0.0124772}{responding-yes to sent-yes=0.000710109}{sent-yes to received-decision=0.000263397}{received-decision to committed=0.0120389}}
+txid: 1703938 EventSummary: {{start-participant to responding-yes=0.0120927}{responding-yes to sent-yes=0.000767888}{sent-yes to received-decision=0.00124457}{received-decision to committed=0.0122038}}
+txid: 2228224, latency: 0.016262, cur_time: Sun Dec  3 21:10:31 2023
+
+txid: 2228224 EventSummary: {{start-coordinator to sent-vote-reqs=0.0023639}{sent-vote-reqs to recv-vote-1=0.0125918}{recv-vote-1 to recv-vote-2=0.000325594}{recv-vote-2 to decided=7.92e-07}{decided to decision-sent=0.00095464}}
+txid: 2228224 EventSummary: {{start-participant to responding-yes=0.0121125}{responding-yes to sent-yes=0.000666035}{sent-yes to received-decision=0.000372312}{received-decision to committed=0.0122362}}
+txid: 2228224 EventSummary: {{start-participant to responding-yes=0.0125091}{responding-yes to sent-yes=0.000743742}{sent-yes to received-decision=0.000692857}{received-decision to committed=0.0122463}}
+txid: 2293760, latency: 0.0160789, cur_time: Sun Dec  3 21:10:31 2023
+
+txid: 2293760 EventSummary: {{start-coordinator to sent-vote-reqs=0.00230612}{sent-vote-reqs to recv-vote-1=0.0122834}{recv-vote-1 to recv-vote-2=0.000602215}{recv-vote-2 to decided=1.343e-06}{decided to decision-sent=0.00085963}}
+txid: 2293760 EventSummary: {{start-participant to responding-yes=0.0121782}{responding-yes to sent-yes=0.000693176}{sent-yes to received-decision=0.000858649}{received-decision to committed=0.0125055}}
+txid: 2293760 EventSummary: {{start-participant to responding-yes=0.0121437}{responding-yes to sent-yes=0.000671546}{sent-yes to received-decision=0.000305727}{received-decision to committed=0.0124784}}
+txid: 1769474, latency: 0.0159568, cur_time: Sun Dec  3 21:10:31 2023
+
+txid: 1769474 EventSummary: {{start-coordinator to sent-vote-reqs=0.0023024}{sent-vote-reqs to recv-vote-1=0.0120807}{recv-vote-1 to recv-vote-2=0.000595342}{recv-vote-2 to decided=8.32e-07}{decided to decision-sent=0.000954419}}
+txid: 1769474 EventSummary: {{start-participant to responding-yes=0.0119688}{responding-yes to sent-yes=0.000697766}{sent-yes to received-decision=0.000295066}{received-decision to committed=0.0123598}}
+txid: 1769474 EventSummary: {{start-participant to responding-yes=0.0120712}{responding-yes to sent-yes=0.000723003}{sent-yes to received-decision=0.000891601}{received-decision to committed=0.0123374}}
+txid: 1835010, latency: 0.0160862, cur_time: Sun Dec  3 21:10:31 2023
+
+txid: 1835010 EventSummary: {{start-coordinator to sent-vote-reqs=0.00223899}{sent-vote-reqs to recv-vote-1=0.0122472}{recv-vote-1 to recv-vote-2=0.000666236}{recv-vote-2 to decided=9.32e-07}{decided to decision-sent=0.000909675}}
+Servers Started
+txid: 1835010 EventSummary: {{start-participant to responding-yes=0.0120993}{responding-yes to sent-yes=0.00073763}{sent-yes to received-decision=0.00031249}{received-decision to committed=0.0122727}}
+txid: 1835010 EventSummary: {{start-participant to responding-yes=0.01211}{responding-yes to sent-yes=0.000681154}{sent-yes to received-decision=0.00102676}{received-decision to committed=0.0122684}}
