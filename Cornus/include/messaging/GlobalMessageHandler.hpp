@@ -117,7 +117,10 @@ public:
         const std::time_t t_c = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
         {
             auto l = std::unique_lock<std::mutex>(global_cout_mutex);
-            std::cout << "txid: " << txid << ", latency: " << time_span.count() << ", cur_time: " << std::ctime(&t_c) << std::endl;
+            std::cout << "txid: " << txid << ", latency: " << time_span.count()
+                <<", cur_time_nanos: " <<
+                std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count()
+                << std::endl;
         }
     }
 
