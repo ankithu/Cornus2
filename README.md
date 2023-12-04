@@ -8,19 +8,19 @@ by Ankith Udupa, Anurag Bangera, Luke Lesh
 
 ### Cornus/include/config
 
-This folder contains files that handle configuration of each node on start up.
+This folder contains code for data structures that read and maintain the configuration of nodes and transaction handlers.
 
 ### Cornus/include/lib
 
-This folder contains external libraries that we make use of such as http and json.
+This folder contains external libraries that we make use of such as http and json. It also contains our custom timer library that allows for efficient collection of timestamp breakdowns across a transaction.
 
 ### Cornus/include/messaging
 
-This folder handles the GlobalMessageHandler, our custom-implemented TCP library, and other files related to messaging. The GlobalMessageHandler is the primary driver for each node that forwards messages to the appropriate transaction handler (Coordinator, Participant, Replicator, or Committer). We opted to implement our own TCP library because publically available HTTP libraries did not offer the multithread and performance guarantees that we needed.
+This folder handles the GlobalMessageHandler, our custom-implemented TCP library, and other files related to messaging. The GlobalMessageHandler is the primary driver for each node that forwards messages to the appropriate transaction handler (Coordinator, Participant, Replicator, or Committer). We opted to implement our own TCP library because publically available HTTP libraries did not offer the multithread and performance guarantees that we needed. It also contains a test directory which contains test programs for the TCP library. 
 
 ### Cornus/transactionHandlers
 
-This folder contains the primary implementations of the paper version of Cornus and our new version of Cornus. In the paper version of Cornus, there are two types of transaction handler: Coordinator and Participant. Our new version has four types: Coordinator2, Participant2, Replicator, and Committer. It also includes some parent classes (Sender and TransactionHandler) which we use for common functionality inheritance.
+This folder contains the primary implementations of the paper version of Cornus and our new version of Cornus. In the paper version of Cornus, there are two types of transaction handlers: Coordinator and Participant. Our new version has four types: Coordinator2, Participant2, Replicator, and Committer. It also includes some parent classes (Sender and TransactionHandler) which we use for common functionality inheritance.
 
 ### Cornus/worker
 
@@ -42,7 +42,7 @@ This folder contains python scripts and basic test cases that were used to debug
 
 This folder contains python scripts used to perform the benchmarking presented in our final report.
 
-# How to run
+# How to run Cornus and benchmarks
 
 Note: our testing and benchmarking were done on a Ubuntu 20 machine with a relatively large amount of computing resources. Performance and compatibility beyond this has not been tested. 
 
