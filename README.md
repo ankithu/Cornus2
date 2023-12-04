@@ -24,7 +24,7 @@ This folder contains the primary implementations of the paper version of Cornus 
 
 ### Cornus/worker
 
-This folder contains the work that the application would do to decide how to vote and what action to do on committing. We have provided a trivial worker that always votes yes for benchmarking.
+This folder contains the work that the application would do to decide how to vote and what action to do on committing. We have provided a trivial worker that always votes yes for benchmarking. However, future work could include expanding this worker to perfom simple reads and writes to a key-value store to allow evaluation from publically available benchmarks.
 
 ## DBMS
 
@@ -125,12 +125,14 @@ $ sudo tc qdisc del dev lo root
 
 Before we can run the benchmarking script we need to send the binaries for Cornus and the DBMS into locations that the bechmarking script can run them from.
 
-Edit line 20 and 21 `Cornus/include/messaging/GlobalMessageHandler.hpp` to enable either the Paper or New version of the protocol then compile. Then copy the binary from the build directory into either `Testing/benchmark/Conrus` or `Testing/benchmark/Cornus2` depending on which one you have compiled (you will probably want to do this for both).
+Edit line 20 and 21 `Cornus/include/messaging/GlobalMessageHandler.hpp` to enable either the Paper or New version of the protocol then compile. Then copy the binary from the build directory into either `Testing/benchmark/Cornus` or `Testing/benchmark/Cornus2` depending on which one you have compiled (you will probably want to do this for both).
 
-Now navigate to Testing/benchmark. You can run the benchmarking script to start up a specified number of Cornus nodes in the desired configuration and send requests from a specified number of concurrent clients.
+Now navigate to Testing/benchmark. You can run the benchmarking script to start up a specified number of Cornus nodes in the desired configuration and send requests from a specified number of concurrent clients. Full information about parameters for the testing script can be found by running `python3 benchmark.py --help` 
 
 ```
-$ python3 benchmark.py --nodes <num_nodes> --clients <num_clients> -f <f> <-v2> --num <num_requests>
+$ python3 benchmark.py --nodes <num_nodes> --clients <num_clients> -f <f> <-v2> --num <num_requests> //Generic
+$ python3 benchmark.py --num 10     //Run Cornus
+$ python3 benchmark.py --num 10 -v2 //Run Cornus2
 ```
 
 The raw output of this script will just be all of the nodes' logs, so it may be more useful to redirect the output into a file for analysis later.

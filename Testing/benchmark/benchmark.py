@@ -183,7 +183,7 @@ def launch_server(commands):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     #Setup
-    parser.add_argument('--nodes', required=True,type=int,help="Number of nodes to launch")
+    parser.add_argument('--nodes', required=False,default=3,type=int,help="Number of nodes to launch")
     parser.add_argument('-v2',action="store_true", help="Enable Cornus2 protocol")
     parser.add_argument('--fake',action="store_true", help="Enable Cornus2 protocol")
     parser.add_argument('--tpc',action="store_true", help="Enable 2PC")
@@ -196,7 +196,7 @@ if __name__ == "__main__":
     parser.add_argument('-timeout',default=100,type=int,help="Timeout in milliseconds")
 
     #Setup
-    parser.add_argument('--clients', required=True,type=int,help="Number of concurrent client nodes to launch")
+    parser.add_argument('--clients', required=False,default=1,type=int,help="Number of concurrent client nodes to launch")
     #parser.add_argument('--output', required=False,default="output.txt", help="Output file for results")
 
     #Set Test params
