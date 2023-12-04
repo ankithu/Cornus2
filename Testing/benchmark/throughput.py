@@ -23,6 +23,17 @@ def extract_numbers_after_first_comma(cleaned_lines):
             extracted_numbers.append(float(match.group(1)))
     return extracted_numbers
 
+def extract_dates(lines):
+    extracted_numbers = []
+    for line in lines:
+        # Find the decimal number after the first comma using regular expression
+        match = re.search(r'cur_time: .+', line)
+        if match:
+            full = match.group()
+            match = re.search(r'[0-9][0-9]:[0-9][0-9]:[0-9][0-9]', full)
+            extracted_numbers.append(match.group())
+    return extracted_numbers
+
 def extract_txid_lines(file_path):
     try:
         with open(file_path, 'r') as file:
@@ -48,6 +59,8 @@ def parse(file_path):
         #    print(cleaned_line)
 
         extracted_numbers = extract_numbers_after_first_comma(cleaned_lines)
+        extracted_dates = extract_dates(txid_lines)
+        print(extracted_dates)
         print("\nExtracted internal total latencies:")
         print(np.median(extracted_numbers),np.mean(extracted_numbers),np.std(extracted_numbers), np.percentile(extracted_numbers, 99))
         print("total: ", len(extracted_numbers))
