@@ -27,15 +27,15 @@ struct HostConfig
         timeout = std::chrono::milliseconds(data["timeout_millis"].get<uint64_t>());
         f = data["f"].get<size_t>();
 
-        // deterministically choose the next f + 1 replicators that are greater than it
-        if (allOthers.size() < f + 1)
+        // deterministically choose the next f replicators that are greater than it
+        if (allOthers.size() < f)
         {
-            //std::cout << "ERROR: INVALID CONFIG. NUMBER OF NODES IS LESS THAN F + 1" << std::endl;
+            // std::cout << "ERROR: INVALID CONFIG. NUMBER OF NODES IS LESS THAN F" << std::endl;
             assert(false);
         }
         sort(allOthers.begin(), allOthers.end());
         int i = 0;
-        int count = f + 1;
+        int count = f;
         while (i < allOthers.size() && allOthers[i] < id)
         {
             i++;
