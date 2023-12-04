@@ -48,7 +48,7 @@ def parse(file_path):
 
         extracted_numbers = extract_numbers_after_first_comma(cleaned_lines)
         print("\nExtracted internal total latencies:")
-        print("\nExtracted internal total latencies:")
+        print(np.median(extracted_numbers),np.mean(extracted_numbers),np.std(extracted_numbers), np.percentile(extracted_numbers, 99))
         print("total: ", len(extracted_numbers))
         print("median: ", np.median(extracted_numbers))
         print("mean: ",np.mean(extracted_numbers))
