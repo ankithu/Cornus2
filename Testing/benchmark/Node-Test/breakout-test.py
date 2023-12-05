@@ -20,7 +20,7 @@ plt.xticks(X_axis, nodes)
 plt.xlabel("Protocol Version")
 plt.ylim([0, 32])
 plt.ylabel("Median Transaction Latency (ms)")
-plt.title("Transaction Latency Breakdown")
+plt.title("Coordinator Transaction Latency Breakdown")
 plt.legend()
 plt.show()
 
